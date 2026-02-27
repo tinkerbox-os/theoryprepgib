@@ -57,11 +57,12 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
 .welcome-hero{text-align:center;padding:40px 0}
 .welcome-hero h2{font-size:1.75rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .welcome-hero p{color:var(--text-secondary);margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto}
-.welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0;text-align:left}
-.feature{background:transparent;border-radius:0;padding:12px 8px;border-left:3px solid var(--border);cursor:default;pointer-events:none}
-.feature-icon{font-size:1.5rem;margin-bottom:6px}
-.feature-title{font-weight:600;font-size:.9rem}
-.feature-desc{color:var(--text-secondary);font-size:.8rem}
+.welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:24px 0;text-align:left}
+.feature{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,#f0f4ff,#f5f3ff);border-radius:10px;padding:12px 14px;cursor:default;pointer-events:none;border:1px solid rgba(139,92,246,.1)}
+.feature-icon{font-size:1.25rem;flex-shrink:0;line-height:1}
+.feature-body{display:flex;flex-direction:column}
+.feature-title{font-weight:600;font-size:.8rem;color:var(--text);line-height:1.3}
+.feature-desc{color:var(--text-secondary);font-size:.72rem;line-height:1.4;margin-top:2px}
 .mode-select{display:flex;flex-direction:column;gap:12px;margin:20px 0}
 .mode-btn{padding:16px;border-radius:12px;border:2px solid var(--border);background:var(--card);cursor:pointer;text-align:left;transition:all .2s}
 .mode-btn:hover{border-color:var(--primary);background:#eff6ff}
@@ -108,10 +109,10 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
     <p>205 official questions from the Gibraltar Department of Transport question bank. Practice until you know them all.</p>
   </div>
   <div class="welcome-features">
-    <div class="feature"><div class="feature-icon">&#x1F3AF;</div><div class="feature-title">Smart Review</div><div class="feature-desc">Wrong answers come back until you get them right</div></div>
-    <div class="feature"><div class="feature-icon">&#x1F4CA;</div><div class="feature-title">Track Progress</div><div class="feature-desc">See your mastery grow with each round</div></div>
-    <div class="feature"><div class="feature-icon">&#x1F504;</div><div class="feature-title">Spaced Rounds</div><div class="feature-desc">Missed questions repeat in the next round</div></div>
-    <div class="feature"><div class="feature-icon">&#x1F4BE;</div><div class="feature-title">Auto-Save</div><div class="feature-desc">Progress saved in your browser automatically</div></div>
+    <div class="feature"><div class="feature-icon">&#x1F3AF;</div><div class="feature-body"><div class="feature-title">Smart Review</div><div class="feature-desc">Wrong answers come back until you get them right</div></div></div>
+    <div class="feature"><div class="feature-icon">&#x1F4CA;</div><div class="feature-body"><div class="feature-title">Track Progress</div><div class="feature-desc">See your mastery grow with each round</div></div></div>
+    <div class="feature"><div class="feature-icon">&#x1F504;</div><div class="feature-body"><div class="feature-title">Spaced Rounds</div><div class="feature-desc">Missed questions repeat in the next round</div></div></div>
+    <div class="feature"><div class="feature-icon">&#x1F4BE;</div><div class="feature-body"><div class="feature-title">Auto-Save</div><div class="feature-desc">Progress saved in your browser automatically</div></div></div>
   </div>
   <div class="mode-select">
     <div class="mode-btn" onclick="startFullPractice()">
