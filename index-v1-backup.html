@@ -27,14 +27,14 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
 .q-text{font-size:1.1rem;font-weight:600;line-height:1.5;margin-bottom:20px}
 .options{display:flex;flex-direction:column;gap:10px}
 .option{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;background:var(--card);-webkit-tap-highlight-color:transparent;user-select:none}
-@media(hover:hover){.option:hover:not(.disabled){border-color:var(--primary);background:#eff6ff}}
+.option:hover:not(.disabled){border-color:var(--primary);background:#eff6ff}
 .option.selected{border-color:var(--primary);background:#eff6ff}
 .option.correct-answer{border-color:var(--correct);background:var(--correct-bg)}
 .option.wrong-answer{border-color:var(--wrong);background:var(--wrong-bg)}
 .option.disabled{cursor:default;opacity:.85}
-@media(hover:hover){.option.disabled:hover{border-color:var(--border);background:var(--card)}
+.option.disabled:hover{border-color:var(--border);background:var(--card)}
 .option.disabled.correct-answer:hover{border-color:var(--correct);background:var(--correct-bg)}
-.option.disabled.wrong-answer:hover{border-color:var(--wrong);background:var(--wrong-bg)}}
+.option.disabled.wrong-answer:hover{border-color:var(--wrong);background:var(--wrong-bg)}
 .option-marker{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;font-weight:600;color:var(--text-secondary);transition:all .2s;margin-top:1px}
 .option.selected .option-marker{border-color:var(--primary);background:var(--primary);color:#fff}
 .option.correct-answer .option-marker{border-color:var(--correct);background:var(--correct);color:#fff}
@@ -58,7 +58,7 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
 .welcome-hero h2{font-size:1.75rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .welcome-hero p{color:var(--text-secondary);margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto}
 .welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0;text-align:left}
-.feature{background:transparent;border-radius:0;padding:12px 8px;border-left:3px solid var(--border);cursor:default;pointer-events:none}
+.feature{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
 .feature-icon{font-size:1.5rem;margin-bottom:6px}
 .feature-title{font-weight:600;font-size:.9rem}
 .feature-desc{color:var(--text-secondary);font-size:.8rem}
@@ -122,13 +122,9 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
       <h3>Continue Practice</h3>
       <p id="continue-desc">Resume where you left off</p>
     </div>
-    <div class="mode-btn" onclick="startMockTest()">
-      <h3>Mock Test (50 questions)</h3>
-      <p>Simulates the real test format with 50 questions</p>
-    </div>
     <div class="mode-btn" onclick="startQuickQuiz()">
       <h3>Quick Quiz (20 questions)</h3>
-      <p>Random selection for a quick practice run</p>
+      <p>Random selection for a quick test run</p>
     </div>
   </div>
   <div class="actions">
@@ -231,38 +227,16 @@ function continuePractice() {
   }
 }
 
-function pickQuizQuestions(count) {
-  const unmastered = QUESTIONS.filter(q => !state.mastered.includes(q.number));
-  let picked;
-  if (unmastered.length >= count) {
-    picked = shuffle([...unmastered]).slice(0, count);
-  } else {
-    const masteredPool = QUESTIONS.filter(q => state.mastered.includes(q.number));
-    const fill = shuffle([...masteredPool]).slice(0, count - unmastered.length);
-    picked = shuffle([...unmastered, ...fill]);
-  }
-  return picked.map(q => q.number);
-}
-
 function startQuickQuiz() {
-  state.currentQueue = pickQuizQuestions(20);
+  const available = QUESTIONS.filter(q => !state.mastered.includes(q.number));
+  const pool = available.length >= 20 ? available : QUESTIONS;
+  const selected = shuffle([...pool]).slice(0, 20);
+  state.currentQueue = selected.map(q => q.number);
   state.currentIdx = 0;
   state.roundCorrect = 0;
   state.roundWrong = 0;
   state.roundWrongNums = [];
   state.mode = 'quick';
-  state.roundNum = 0;
-  saveState();
-  showQuiz();
-}
-
-function startMockTest() {
-  state.currentQueue = pickQuizQuestions(50);
-  state.currentIdx = 0;
-  state.roundCorrect = 0;
-  state.roundWrong = 0;
-  state.roundWrongNums = [];
-  state.mode = 'mock';
   state.roundNum = 0;
   saveState();
   showQuiz();
@@ -331,8 +305,6 @@ function showCurrentQuestion() {
   const badge = document.getElementById('round-badge-container');
   if (state.mode === 'full' && state.roundNum > 0) {
     badge.innerHTML = `<span class="round-badge">Round ${state.roundNum}${state.roundNum > 1 ? ' - Review' : ''}</span>`;
-  } else if (state.mode === 'mock') {
-    badge.innerHTML = `<span class="round-badge">Mock Test (50 Questions)</span>`;
   } else if (state.mode === 'quick') {
     badge.innerHTML = `<span class="round-badge">Quick Quiz</span>`;
   } else {
@@ -386,7 +358,6 @@ function checkAnswer() {
   document.querySelectorAll('.option').forEach(el => {
     const i = parseInt(el.dataset.idx);
     el.classList.add('disabled');
-    el.classList.remove('selected');
     if (q.correct.includes(i)) el.classList.add('correct-answer');
     if (selectedOptions.has(i) && !q.correct.includes(i)) el.classList.add('wrong-answer');
   });
@@ -434,12 +405,12 @@ function showComplete(allMastered) {
     document.getElementById('next-round-btn').classList.add('hidden');
   } else {
     document.getElementById('complete-icon').textContent = pct >= 80 ? '\uD83C\uDF1F' : '\uD83D\uDCAA';
-    document.getElementById('complete-title').textContent = state.mode === 'mock' ? 'Mock Test Complete!' : state.mode === 'quick' ? 'Quiz Complete!' : `Round ${state.roundNum} Complete!`;
+    document.getElementById('complete-title').textContent = state.mode === 'quick' ? 'Quiz Complete!' : `Round ${state.roundNum} Complete!`;
     const wrongCount = state.mode === 'full' ? state.wrongQueue.length : state.roundWrong;
     document.getElementById('complete-subtitle').textContent = wrongCount > 0
       ? `${wrongCount} question${wrongCount !== 1 ? 's' : ''} to review in the next round`
       : 'Perfect round! All questions answered correctly.';
-    document.getElementById('next-round-btn').classList.toggle('hidden', state.mode !== 'full' || wrongCount === 0);
+    document.getElementById('next-round-btn').classList.toggle('hidden', state.mode === 'quick' || wrongCount === 0);
   }
 
   document.getElementById('results-grid').innerHTML = `
