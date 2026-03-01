@@ -513,10 +513,10 @@ function checkAnswer() {
     fb.innerHTML = `&#10007; Wrong &mdash; Correct: ${correctTexts}`;
     state.roundWrong++;
     state.roundWrongNums.push(q.number);
+    const mi = state.mastered.indexOf(q.number);
+    if (mi > -1) state.mastered.splice(mi, 1);
     if (state.mode === 'full') {
       if (!state.wrongQueue.includes(q.number)) state.wrongQueue.push(q.number);
-      const mi = state.mastered.indexOf(q.number);
-      if (mi > -1) state.mastered.splice(mi, 1);
     }
   }
 
