@@ -138,8 +138,8 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
       <p id="continue-desc">Resume where you left off</p>
     </div>
     <div class="mode-btn" onclick="startMockTest()">
-      <h3>Mock Test (40 questions)</h3>
-      <p>Simulates the real test with 40 questions and a 45-minute timer</p>
+      <h3>Mock Test (50 questions)</h3>
+      <p>Simulates the real test with 50 questions and a 45-minute timer</p>
     </div>
     <div class="mode-btn" onclick="startQuickQuiz()">
       <h3>Quick Quiz (20 questions)</h3>
@@ -288,7 +288,7 @@ function startQuickQuiz() {
 }
 
 function startMockTest() {
-  state.currentQueue = pickQuizQuestions(40);
+  state.currentQueue = pickQuizQuestions(50);
   state.currentIdx = 0;
   state.roundCorrect = 0;
   state.roundWrong = 0;
@@ -441,7 +441,7 @@ function showCurrentQuestion() {
   if (state.mode === 'full' && state.roundNum > 0) {
     badge.innerHTML = `<span class="round-badge">Round ${state.roundNum}${state.roundNum > 1 ? ' - Review' : ''}</span>`;
   } else if (state.mode === 'mock') {
-    badge.innerHTML = `<span class="round-badge">Mock Test (40 Questions)</span>`;
+    badge.innerHTML = `<span class="round-badge">Mock Test (50 Questions)</span>`;
   } else if (state.mode === 'quick') {
     badge.innerHTML = `<span class="round-badge">Quick Quiz</span>`;
   } else {
