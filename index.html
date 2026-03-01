@@ -128,6 +128,7 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
     <div class="feature"><div class="feature-icon">&#x1F504;</div><div class="feature-body"><div class="feature-title">Spaced Rounds</div><div class="feature-desc">Missed questions repeat in the next round</div></div></div>
     <div class="feature"><div class="feature-icon">&#x1F4BE;</div><div class="feature-body"><div class="feature-title">Auto-Save</div><div class="feature-desc">Progress saved in your browser automatically</div></div></div>
   </div>
+  <div class="card hidden" id="mastery-progress" style="text-align:center;padding:16px 20px"></div>
   <div class="mode-select">
     <div class="mode-btn" onclick="startFullPractice()">
       <h3>Start Practice</h3>
@@ -232,18 +233,33 @@ function showScreen(id) {
 
 function updateWelcome() {
   const m = state.mastered.length;
+  const total = QUESTIONS.length;
   const cont = document.getElementById('continue-btn');
   const reset = document.getElementById('reset-btn');
+  const progressSummary = document.getElementById('mastery-progress');
+  if (m > 0) {
+    const pct = Math.round((m / total) * 100);
+    progressSummary.classList.remove('hidden');
+    progressSummary.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <span style="font-weight:700;font-size:1.1rem;color:var(--primary)">${m} / ${total}</span>
+        <span style="color:var(--text-secondary);font-size:.85rem">questions mastered (${pct}%)</span>
+      </div>
+      <div class="progress-container" style="margin:0"><div class="progress-bar" style="width:${pct}%"></div></div>
+    `;
+  } else {
+    progressSummary.classList.add('hidden');
+  }
   if (m > 0 || state.currentQueue.length > 0) {
     cont.classList.remove('hidden');
     reset.style.display = '';
     const remaining = state.currentQueue.length - state.currentIdx;
-    document.getElementById('continue-desc').textContent = `${m} mastered, ${remaining > 0 ? remaining + ' questions remaining in current round' : 'start next round with ' + state.wrongQueue.length + ' review questions'}`;
+    document.getElementById('continue-desc').textContent = remaining > 0 ? `${remaining} questions remaining in current round` : 'Start next round with ' + state.wrongQueue.length + ' review questions';
   } else {
     cont.classList.add('hidden');
     reset.style.display = 'none';
   }
-  document.getElementById('start-desc').textContent = m > 0 ? `Reset and start fresh with all 205 questions` : `Go through all 205 questions. Missed ones repeat until mastered.`;
+  document.getElementById('start-desc').textContent = m > 0 ? `Reset and start fresh with all ${total} questions` : `Go through all ${total} questions. Missed ones repeat until mastered.`;
 }
 
 function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
