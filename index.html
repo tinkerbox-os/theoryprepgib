@@ -555,7 +555,7 @@ function showComplete(allMastered) {
   }
 
   const timeStr = state.mode === 'mock' ? `${Math.floor(elapsed/60)}:${String(elapsed%60).padStart(2,'0')}` : null;
-  const passMarkHtml = state.mode === 'mock' ? `<div class="result-stat"><div class="value" style="color:${pct >= 85 ? 'var(--correct)' : 'var(--wrong)'}">${pct >= 85 ? 'PASS' : 'FAIL'}</div><div class="label">${pct >= 85 ? '85%+ needed' : 'Need 85%'}</div></div>` : '';
+  const passMarkHtml = state.mode === 'mock' ? `<div class="result-stat"><div class="value" style="color:${pct >= 80 ? 'var(--correct)' : 'var(--wrong)'}">${pct >= 80 ? 'PASS' : 'FAIL'}</div><div class="label">${pct >= 80 ? '80%+ needed' : 'Need 80%'}</div></div>` : '';
   const timeHtml = timeStr ? `<div class="result-stat"><div class="value" style="color:var(--accent)">${timeStr}</div><div class="label">Time Taken</div></div>` : '';
   document.getElementById('results-grid').innerHTML = `
     <div class="result-stat"><div class="value" style="color:var(--primary)">${total}</div><div class="label">Questions</div></div>
