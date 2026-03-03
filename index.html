@@ -107,6 +107,11 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
 .bookmark-btn{background:none;border:none;cursor:pointer;font-size:1.3rem;padding:2px 4px;line-height:1;opacity:.4;transition:all .2s;-webkit-tap-highlight-color:transparent;margin-left:auto}
 .bookmark-btn:hover{opacity:.7}
 .bookmark-btn.active{opacity:1;color:#f59e0b}
+.study-label{display:inline-block;background:#fef3c7;color:#92400e;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:100px;margin-bottom:8px}
+.study-option{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;background:var(--card);cursor:default;font-size:.95rem}
+.study-option.study-correct{border-color:var(--correct);background:var(--correct-bg)}
+.study-option .opt-letter{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;font-weight:600;color:var(--text-secondary)}
+.study-option.study-correct .opt-letter{border-color:var(--correct);background:var(--correct);color:#fff}
 .hidden{display:none!important}
 .round-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:100px;margin-bottom:8px}
 @media(max-width:500px){
@@ -161,7 +166,11 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
     </div>
     <div class="mode-btn hidden" id="bookmarked-btn" onclick="startBookmarkedReview()">
       <h3 id="bookmarked-title">Review Bookmarked (0)</h3>
-      <p>Revise questions you've flagged for review</p>
+      <p>Quiz yourself on flagged questions</p>
+    </div>
+    <div class="mode-btn hidden" id="study-btn" onclick="startStudyMode()">
+      <h3 id="study-title">Study Bookmarked (0)</h3>
+      <p>Flashcard mode &mdash; see questions with answers revealed</p>
     </div>
   </div>
   <div class="actions">
@@ -209,6 +218,19 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
       <button class="btn btn-primary" onclick="resumeQuiz()">Resume</button>
       <button class="btn btn-secondary" onclick="exitFromPause()">Exit to Home</button>
     </div>
+  </div>
+</div>
+
+<div id="study-screen" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <span class="study-label" id="study-counter">1 / 5</span>
+    <span class="study-label">Study Mode</span>
+  </div>
+  <div class="progress-container" style="margin:0 0 16px"><div class="progress-bar" id="study-progress"></div></div>
+  <div class="card" id="study-card"></div>
+  <div class="actions">
+    <button class="btn btn-primary" id="study-next-btn" onclick="nextStudyCard()">Next &rarr;</button>
+    <button class="btn btn-secondary" onclick="exitQuiz()" style="font-size:.85rem">Exit</button>
   </div>
 </div>
 
@@ -285,11 +307,15 @@ function updateWelcome() {
   document.getElementById('start-desc').textContent = m > 0 ? `Reset and start fresh with all ${total} questions` : `Go through all ${total} questions. Missed ones repeat until mastered.`;
   const bk = state.bookmarked.length;
   const bkBtn = document.getElementById('bookmarked-btn');
+  const stBtn = document.getElementById('study-btn');
   if (bk > 0) {
     bkBtn.classList.remove('hidden');
+    stBtn.classList.remove('hidden');
     document.getElementById('bookmarked-title').textContent = `Review Bookmarked (${bk})`;
+    document.getElementById('study-title').textContent = `Study Bookmarked (${bk})`;
   } else {
     bkBtn.classList.add('hidden');
+    stBtn.classList.add('hidden');
   }
 }
 
@@ -680,6 +706,59 @@ function goHome() {
   document.getElementById('timer-bar').classList.add('hidden');
   showScreen('welcome-screen');
   updateWelcome();
+}
+
+let studyQueue = [];
+let studyIdx = 0;
+
+function startStudyMode() {
+  if (state.bookmarked.length === 0) return;
+  studyQueue = shuffle([...state.bookmarked]);
+  studyIdx = 0;
+  showScreen('study-screen');
+  showStudyCard();
+}
+
+function showStudyCard() {
+  if (studyIdx >= studyQueue.length) {
+    goHome();
+    return;
+  }
+  const q = getQuestion(studyQueue[studyIdx]);
+  const letters = 'ABCDEFGH';
+  const total = studyQueue.length;
+  document.getElementById('study-counter').textContent = `${studyIdx + 1} / ${total}`;
+  document.getElementById('study-progress').style.width = ((studyIdx / total) * 100) + '%';
+  document.getElementById('study-next-btn').textContent = studyIdx === total - 1 ? 'Finish' : 'Next \u2192';
+
+  const isBookmarked = state.bookmarked.includes(q.number);
+  const optsHtml = q.options.map((opt, i) => {
+    const isCorrect = q.correct.includes(i);
+    return `<div class="study-option ${isCorrect ? 'study-correct' : ''}"><div class="opt-letter">${letters[i]}</div><div style="flex:1">${opt}</div></div>`;
+  }).join('');
+
+  document.getElementById('study-card').innerHTML = `
+    <div class="q-header">
+      <span class="q-number">Q${q.number}</span>
+      ${q.correct.length > 1 ? `<span class="q-multi-badge">Select ${q.correct.length}</span>` : ''}
+      <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleStudyBookmark(${q.number})" title="${isBookmarked ? 'Remove bookmark' : 'Bookmark'}">${isBookmarked ? '&#9733;' : '&#9734;'}</button>
+    </div>
+    <p class="q-text">${q.question}</p>
+    <div class="options" style="gap:8px">${optsHtml}</div>
+  `;
+}
+
+function nextStudyCard() {
+  studyIdx++;
+  showStudyCard();
+}
+
+function toggleStudyBookmark(num) {
+  const idx = state.bookmarked.indexOf(num);
+  if (idx > -1) state.bookmarked.splice(idx, 1);
+  else state.bookmarked.push(num);
+  saveState();
+  showStudyCard();
 }
 
 function toggleReviewDetail(el, num) {
