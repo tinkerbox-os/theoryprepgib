@@ -311,6 +311,7 @@ function startMockTest() {
   state.roundWrongNums = [];
   state.mode = 'mock';
   state.roundNum = 0;
+  state.timerSeconds = MOCK_TIME;
   saveState();
   showQuiz();
 }
@@ -335,7 +336,8 @@ function showQuiz() {
   showScreen('quiz-screen');
   document.getElementById('pause-btn').classList.toggle('hidden', state.mode === 'quick');
   if (state.mode === 'mock') {
-    startTimer();
+    const saved = state.timerSeconds != null ? state.timerSeconds : MOCK_TIME;
+    startTimer(saved);
   } else {
     document.getElementById('timer-bar').classList.add('hidden');
     stopTimer();
@@ -351,15 +353,24 @@ let timerInterval = null;
 let timerSeconds = 0;
 const MOCK_TIME = 45 * 60;
 
-function startTimer() {
+function startTimer(seconds) {
   stopTimer();
-  timerSeconds = MOCK_TIME;
+  timerSeconds = seconds != null ? seconds : MOCK_TIME;
+  state.timerSeconds = timerSeconds;
+  saveState();
   document.getElementById('timer-bar').classList.remove('hidden');
   updateTimerDisplay();
+  runTimerInterval();
+}
+
+function runTimerInterval() {
   timerInterval = setInterval(() => {
     timerSeconds--;
+    state.timerSeconds = timerSeconds;
+    if (timerSeconds % 10 === 0) saveState();
     updateTimerDisplay();
     if (timerSeconds <= 0) {
+      saveState();
       stopTimer();
       showComplete(false);
     }
@@ -385,7 +396,11 @@ function updateTimerDisplay() {
 }
 
 function pauseQuiz() {
-  if (state.mode === 'mock') stopTimer();
+  if (state.mode === 'mock') {
+    stopTimer();
+    state.timerSeconds = timerSeconds;
+    saveState();
+  }
   document.getElementById('pause-overlay').classList.remove('hidden');
   const msg = document.getElementById('pause-message');
   if (state.mode === 'mock') {
@@ -400,11 +415,7 @@ function pauseQuiz() {
 function resumeQuiz() {
   document.getElementById('pause-overlay').classList.add('hidden');
   if (state.mode === 'mock' && timerSeconds > 0) {
-    timerInterval = setInterval(() => {
-      timerSeconds--;
-      updateTimerDisplay();
-      if (timerSeconds <= 0) { stopTimer(); showComplete(false); }
-    }, 1000);
+    runTimerInterval();
   }
 }
 
