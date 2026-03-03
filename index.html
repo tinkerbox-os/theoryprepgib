@@ -94,6 +94,12 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
 .pause-card h2{font-size:1.5rem;margin-bottom:8px;color:var(--primary)}
 .pause-card p{color:var(--text-secondary);margin-bottom:24px;font-size:.9rem}
 .pause-card .actions{margin-top:0}
+.q-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.q-header .q-number{margin-bottom:0}
+.q-header .q-multi-badge{margin-left:0}
+.bookmark-btn{background:none;border:none;cursor:pointer;font-size:1.3rem;padding:2px 4px;line-height:1;opacity:.4;transition:all .2s;-webkit-tap-highlight-color:transparent;margin-left:auto}
+.bookmark-btn:hover{opacity:.7}
+.bookmark-btn.active{opacity:1;color:#f59e0b}
 .hidden{display:none!important}
 .round-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:100px;margin-bottom:8px}
 @media(max-width:500px){
@@ -146,6 +152,10 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
       <h3>Quick Quiz (20 questions)</h3>
       <p>Random selection for a quick practice run</p>
     </div>
+    <div class="mode-btn hidden" id="bookmarked-btn" onclick="startBookmarkedReview()">
+      <h3 id="bookmarked-title">Review Bookmarked (0)</h3>
+      <p>Revise questions you've flagged for review</p>
+    </div>
   </div>
   <div class="actions">
     <button class="btn btn-danger" onclick="resetProgress()" id="reset-btn" style="display:none">Reset All Progress</button>
@@ -167,8 +177,11 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
   </div>
   <div id="round-badge-container"></div>
   <div class="card" id="question-card">
-    <span class="q-number" id="q-number">Q101</span>
-    <span class="q-multi-badge hidden" id="q-multi-badge">Select 2</span>
+    <div class="q-header">
+      <span class="q-number" id="q-number">Q101</span>
+      <span class="q-multi-badge hidden" id="q-multi-badge">Select 2</span>
+      <button class="bookmark-btn" id="bookmark-btn" onclick="toggleBookmark()" title="Bookmark this question">&#9734;</button>
+    </div>
     <p class="q-text" id="q-text"></p>
     <div class="options" id="options-container"></div>
     <div class="feedback hidden" id="feedback"></div>
@@ -219,9 +232,12 @@ let state = loadState();
 function loadState() {
   try {
     const s = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (s && s.mastered) return s;
+    if (s && s.mastered) {
+      if (!s.bookmarked) s.bookmarked = [];
+      return s;
+    }
   } catch(e) {}
-  return { mastered: [], wrongQueue: [], currentQueue: [], currentIdx: 0, roundNum: 1, roundCorrect: 0, roundWrong: 0, roundWrongNums: [], mode: 'full' };
+  return { mastered: [], wrongQueue: [], currentQueue: [], currentIdx: 0, roundNum: 1, roundCorrect: 0, roundWrong: 0, roundWrongNums: [], mode: 'full', bookmarked: [] };
 }
 
 function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
@@ -260,6 +276,14 @@ function updateWelcome() {
     reset.style.display = 'none';
   }
   document.getElementById('start-desc').textContent = m > 0 ? `Reset and start fresh with all ${total} questions` : `Go through all ${total} questions. Missed ones repeat until mastered.`;
+  const bk = state.bookmarked.length;
+  const bkBtn = document.getElementById('bookmarked-btn');
+  if (bk > 0) {
+    bkBtn.classList.remove('hidden');
+    document.getElementById('bookmarked-title').textContent = `Review Bookmarked (${bk})`;
+  } else {
+    bkBtn.classList.add('hidden');
+  }
 }
 
 function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
@@ -334,7 +358,7 @@ function startNextRound() {
 
 function showQuiz() {
   showScreen('quiz-screen');
-  document.getElementById('pause-btn').classList.toggle('hidden', state.mode === 'quick');
+  document.getElementById('pause-btn').classList.toggle('hidden', state.mode === 'quick' || state.mode === 'bookmarked');
   if (state.mode === 'mock') {
     const saved = state.timerSeconds != null ? state.timerSeconds : MOCK_TIME;
     startTimer(saved);
@@ -430,6 +454,39 @@ function exitFromPause() {
   exitQuiz();
 }
 
+function toggleBookmark() {
+  const qNum = state.currentQueue[state.currentIdx];
+  const idx = state.bookmarked.indexOf(qNum);
+  if (idx > -1) {
+    state.bookmarked.splice(idx, 1);
+  } else {
+    state.bookmarked.push(qNum);
+  }
+  saveState();
+  updateBookmarkBtn(qNum);
+}
+
+function updateBookmarkBtn(qNum) {
+  const btn = document.getElementById('bookmark-btn');
+  const isBookmarked = state.bookmarked.includes(qNum);
+  btn.classList.toggle('active', isBookmarked);
+  btn.innerHTML = isBookmarked ? '&#9733;' : '&#9734;';
+  btn.title = isBookmarked ? 'Remove bookmark' : 'Bookmark this question';
+}
+
+function startBookmarkedReview() {
+  if (state.bookmarked.length === 0) return;
+  state.currentQueue = shuffle([...state.bookmarked]);
+  state.currentIdx = 0;
+  state.roundCorrect = 0;
+  state.roundWrong = 0;
+  state.roundWrongNums = [];
+  state.mode = 'bookmarked';
+  state.roundNum = 0;
+  saveState();
+  showQuiz();
+}
+
 function showCurrentQuestion() {
   if (state.currentIdx >= state.currentQueue.length) {
     showComplete(false);
@@ -446,6 +503,7 @@ function showCurrentQuestion() {
 
   document.getElementById('q-number').textContent = `Q${q.number}`;
   document.getElementById('q-text').textContent = q.question;
+  updateBookmarkBtn(q.number);
 
   const multiBadge = document.getElementById('q-multi-badge');
   if (isMulti) {
@@ -469,6 +527,8 @@ function showCurrentQuestion() {
     badge.innerHTML = `<span class="round-badge">Round ${state.roundNum}${state.roundNum > 1 ? ' - Review' : ''}</span>`;
   } else if (state.mode === 'mock') {
     badge.innerHTML = `<span class="round-badge">Mock Test (50 Questions)</span>`;
+  } else if (state.mode === 'bookmarked') {
+    badge.innerHTML = `<span class="round-badge">Bookmarked Review</span>`;
   } else if (state.mode === 'quick') {
     badge.innerHTML = `<span class="round-badge">Quick Quiz</span>`;
   } else {
@@ -573,7 +633,7 @@ function showComplete(allMastered) {
     document.getElementById('next-round-btn').classList.add('hidden');
   } else {
     document.getElementById('complete-icon').textContent = pct >= 80 ? '\uD83C\uDF1F' : '\uD83D\uDCAA';
-    document.getElementById('complete-title').textContent = state.mode === 'mock' ? 'Mock Test Complete!' : state.mode === 'quick' ? 'Quiz Complete!' : `Round ${state.roundNum} Complete!`;
+    document.getElementById('complete-title').textContent = state.mode === 'mock' ? 'Mock Test Complete!' : state.mode === 'bookmarked' ? 'Bookmarked Review Complete!' : state.mode === 'quick' ? 'Quiz Complete!' : `Round ${state.roundNum} Complete!`;
     const wrongCount = state.mode === 'full' ? state.wrongQueue.length : state.roundWrong;
     document.getElementById('complete-subtitle').textContent = wrongCount > 0
       ? `${wrongCount} question${wrongCount !== 1 ? 's' : ''} to review in the next round`
