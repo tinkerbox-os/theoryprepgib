@@ -295,15 +295,19 @@ function updateWelcome() {
   } else {
     progressSummary.classList.add('hidden');
   }
-  if (m > 0 || state.currentQueue.length > 0) {
+  const canContinue = state.currentQueue.length > 0 && state.currentIdx < state.currentQueue.length && state.mode !== 'bookmarked' && state.mode !== 'study';
+  const hasProgress = m > 0 || state.wrongQueue.length > 0;
+  if (canContinue) {
     cont.classList.remove('hidden');
-    reset.style.display = '';
     const remaining = state.currentQueue.length - state.currentIdx;
-    document.getElementById('continue-desc').textContent = remaining > 0 ? `${remaining} questions remaining in current round` : 'Start next round with ' + state.wrongQueue.length + ' review questions';
+    document.getElementById('continue-desc').textContent = `${remaining} questions remaining in current round`;
+  } else if (hasProgress && state.mode === 'full' && state.wrongQueue.length > 0) {
+    cont.classList.remove('hidden');
+    document.getElementById('continue-desc').textContent = 'Start next round with ' + state.wrongQueue.length + ' review questions';
   } else {
     cont.classList.add('hidden');
-    reset.style.display = 'none';
   }
+  reset.style.display = m > 0 ? '' : 'none';
   document.getElementById('start-desc').textContent = m > 0 ? `Reset and start fresh with all ${total} questions` : `Go through all ${total} questions. Missed ones repeat until mastered.`;
   const bk = state.bookmarked.length;
   const bkBtn = document.getElementById('bookmarked-btn');
