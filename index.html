@@ -317,7 +317,7 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
     </button>
   </div>
   <div class="actions">
-    <button class="btn btn-ghost" onclick="resetProgress()" id="reset-btn" style="display:none">Reset All Progress</button>
+    <button class="btn btn-ghost" onclick="resetProgress()" id="reset-btn">Reset All Progress</button>
   </div>
 </div>
 
@@ -632,7 +632,7 @@ function updateWelcome() {
   } else {
     cont.classList.add('hidden');
   }
-  reset.style.display = (m > 0 || state.bookmarked.length > 0 || state.mockHistory.length > 0) ? '' : 'none';
+  if (reset) reset.style.display = '';
   document.getElementById('start-desc').textContent = m > 0
     ? `Start a fresh round through all ${total} questions (progress is preserved)`
     : `Go through all ${total} questions. Missed ones repeat until mastered.`;
