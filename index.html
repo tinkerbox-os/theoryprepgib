@@ -12,10 +12,10 @@ html{color-scheme:light}
 [data-theme="dark"] html,html[data-theme="dark"]{color-scheme:dark}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;transition:background .25s ease,color .25s ease}
 .container{max-width:720px;margin:0 auto;padding:16px}
-header{display:flex;align-items:center;justify-content:space-between;padding:20px 0 12px;gap:12px}
-header .head-title{text-align:left}
-header h1{font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1.2}
-header p{color:var(--text-secondary);font-size:.8rem;margin-top:2px}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px;gap:12px}
+header .head-title{display:flex;align-items:center;gap:10px;text-align:left;min-width:0}
+header h1{font-size:1.15rem;font-weight:700;color:var(--primary);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app-logo{width:36px;height:36px;flex-shrink:0;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.08))}
 .theme-toggle{background:var(--card);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .2s;-webkit-tap-highlight-color:transparent;flex-shrink:0}
 .theme-toggle:hover{border-color:var(--primary);color:var(--primary)}
 .stats-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0;font-size:.8rem}
@@ -85,10 +85,17 @@ header p{color:var(--text-secondary);font-size:.8rem;margin-top:2px}
 .actions{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
 .screen{display:none}
 .screen.active{display:block;animation:fadeSlide .3s ease-out}
-.welcome-hero{text-align:center;padding:20px 0 0}
-.welcome-hero h2{font-size:1.75rem;font-weight:800;margin-bottom:6px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.welcome-hero p{color:var(--text-secondary);max-width:400px;margin:0 auto;font-size:.9rem}
-.welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;text-align:left}
+.welcome-hero{text-align:center;padding:12px 0 0}
+.welcome-hero h2{font-size:1.6rem;font-weight:800;margin-bottom:6px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.welcome-hero p{color:var(--text-secondary);max-width:400px;margin:0 auto;font-size:.88rem}
+.welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;text-align:left}
+details.welcome-features-wrap{margin:10px 0;border-radius:10px}
+details.welcome-features-wrap>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;color:var(--text-secondary);font-size:.8rem;font-weight:500;border-radius:8px;transition:background .15s ease;-webkit-tap-highlight-color:transparent;user-select:none}
+details.welcome-features-wrap>summary::-webkit-details-marker{display:none}
+details.welcome-features-wrap>summary:hover{color:var(--primary);background:var(--primary-soft)}
+details.welcome-features-wrap>summary::after{content:"\25BE";display:inline-block;transition:transform .2s ease;font-size:.7rem}
+details.welcome-features-wrap[open]>summary::after{transform:rotate(180deg)}
+details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeSlide .25s ease-out}
 .feature{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border-radius:10px;padding:12px 14px;cursor:default;border:1px solid var(--border-soft)}
 .feature-icon{font-size:1.25rem;flex-shrink:0;line-height:1}
 .feature-body{display:flex;flex-direction:column}
@@ -200,8 +207,17 @@ header p{color:var(--text-secondary);font-size:.8rem;margin-top:2px}
 <div class="container">
 <header>
   <div class="head-title">
-    <h1>Gibraltar Theory Test Prep</h1>
-    <p>Car Driving Theory &middot; Question Bank</p>
+    <svg class="app-logo" viewBox="0 0 40 40" role="img" aria-label="Theory Test Prep logo">
+      <defs>
+        <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" style="stop-color:var(--primary)"/>
+          <stop offset="100%" style="stop-color:var(--accent)"/>
+        </linearGradient>
+      </defs>
+      <circle cx="20" cy="20" r="18" fill="url(#logoGrad)"/>
+      <path d="M20 9 L29 19.5 L24 19.5 L24 30 L16 30 L16 19.5 L11 19.5 Z" fill="#fff"/>
+    </svg>
+    <h1>Theory Test Prep</h1>
   </div>
   <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">&#9728;</button>
 </header>
@@ -211,12 +227,15 @@ header p{color:var(--text-secondary);font-size:.8rem;margin-top:2px}
     <h2>Master Your Theory Test</h2>
     <p>268 official questions from the Gibraltar Department of Transport question bank. Practice until you know them all.</p>
   </div>
-  <div class="welcome-features">
-    <div class="feature"><div class="feature-icon">&#x1F3AF;</div><div class="feature-body"><div class="feature-title">Smart Review</div><div class="feature-desc">Wrong answers come back until you get them right</div></div></div>
-    <div class="feature"><div class="feature-icon">&#x1F4CA;</div><div class="feature-body"><div class="feature-title">Track Progress</div><div class="feature-desc">See your mastery grow with each round</div></div></div>
-    <div class="feature"><div class="feature-icon">&#x1F504;</div><div class="feature-body"><div class="feature-title">Spaced Rounds</div><div class="feature-desc">Missed questions repeat in the next round</div></div></div>
-    <div class="feature"><div class="feature-icon">&#x1F4BE;</div><div class="feature-body"><div class="feature-title">Auto-Save</div><div class="feature-desc">Progress saved in your browser automatically</div></div></div>
-  </div>
+  <details class="welcome-features-wrap" id="features-disclosure">
+    <summary><span>How this works</span></summary>
+    <div class="welcome-features">
+      <div class="feature"><div class="feature-icon">&#x1F3AF;</div><div class="feature-body"><div class="feature-title">Smart Review</div><div class="feature-desc">Wrong answers come back until you get them right</div></div></div>
+      <div class="feature"><div class="feature-icon">&#x1F4CA;</div><div class="feature-body"><div class="feature-title">Track Progress</div><div class="feature-desc">See your mastery grow with each round</div></div></div>
+      <div class="feature"><div class="feature-icon">&#x1F504;</div><div class="feature-body"><div class="feature-title">Spaced Rounds</div><div class="feature-desc">Missed questions repeat in the next round</div></div></div>
+      <div class="feature"><div class="feature-icon">&#x1F4BE;</div><div class="feature-body"><div class="feature-title">Auto-Save</div><div class="feature-desc">Progress saved in your browser automatically</div></div></div>
+    </div>
+  </details>
   <div class="card hidden" id="mastery-progress" style="text-align:center;padding:16px 20px"></div>
   <div class="score-history hidden" id="score-history"></div>
   <div class="mode-select">
@@ -544,6 +563,14 @@ function updateWelcome() {
   const cont = document.getElementById('continue-btn');
   const reset = document.getElementById('reset-btn');
   const progressSummary = document.getElementById('mastery-progress');
+
+  // First-time visitors see the "How this works" panel open by default.
+  // Returning users get it collapsed so the CTA is higher on the page.
+  const disclosure = document.getElementById('features-disclosure');
+  if (disclosure) {
+    const isNewUser = m === 0 && (state.mockHistory || []).length === 0 && (state.bookmarked || []).length === 0 && !Object.keys(state.wrongCount || {}).length;
+    disclosure.open = isNewUser;
+  }
 
   if (m > 0) {
     const pct = Math.round((m / total) * 100);
