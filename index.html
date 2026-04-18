@@ -57,6 +57,9 @@ header p{color:var(--text-secondary);font-size:.8rem;margin-top:2px}
 .option-text{flex:1;font-size:.95rem;color:var(--text)}
 .option-img{max-width:140px;max-height:140px;object-fit:contain;display:block;margin:0 auto;background:#fff;border-radius:8px;padding:4px}
 .option-text .option-img{margin:0}
+.q-sign{display:flex;justify-content:center;margin:0 0 18px;padding:14px;background:#fff;border-radius:12px;border:1px solid var(--border-soft)}
+.q-sign img{max-width:180px;max-height:180px;object-fit:contain}
+@media(max-width:500px){.q-sign img{max-width:150px;max-height:150px}.q-sign{padding:12px}}
 .sign-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .sign-grid .option{padding:10px;flex-direction:column;align-items:center;gap:8px;text-align:center}
 .sign-grid .option .option-marker{margin-top:0}
@@ -378,6 +381,18 @@ function renderOptionContent(opt) {
 }
 function hasImageOptions(q) {
   return q.options.some(o => typeof o === 'string' && o.startsWith('IMG:'));
+}
+function getQuestionSign(q) {
+  if (typeof q.question === 'string' && q.question.startsWith('[Traffic Sign]')) {
+    return `signs/q${q.number}.png`;
+  }
+  return null;
+}
+function getQuestionText(q) {
+  if (typeof q.question === 'string' && q.question.startsWith('[Traffic Sign]')) {
+    return q.question.replace(/^\[Traffic Sign\]\s*/, '');
+  }
+  return q.question;
 }
 function escapeHTML(s) {
   if (typeof s !== 'string') return s;
@@ -791,7 +806,17 @@ function showCurrentQuestion() {
   card.classList.remove('fade-in'); void card.offsetWidth; card.classList.add('fade-in');
 
   document.getElementById('q-number').textContent = `Q${q.number}`;
-  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('q-text').textContent = getQuestionText(q);
+  const existingSign = card.querySelector('.q-sign');
+  if (existingSign) existingSign.remove();
+  const signSrc = getQuestionSign(q);
+  if (signSrc) {
+    const signEl = document.createElement('div');
+    signEl.className = 'q-sign';
+    signEl.innerHTML = `<img src="${signSrc}" alt="Traffic sign for question ${q.number}" loading="eager">`;
+    const qText = document.getElementById('q-text');
+    qText.parentNode.insertBefore(signEl, qText.nextSibling);
+  }
   updateBookmarkBtn(q.number);
   updateFlagBtn(q.number);
 
@@ -1212,7 +1237,8 @@ function reviewItemHtml(num, kind) {
   const q = getQuestion(num);
   if (!q) return '';
   const border = kind === 'wrong' ? 'var(--wrong)' : 'var(--primary)';
-  return `<div class="review-item" style="border-left-color:${border}" tabindex="0" onclick="toggleReviewDetail(this, ${num})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewDetail(this, ${num})}"><div class="q-num"><span>Q${num}</span><span class="expand-hint">Tap to review</span></div><div class="q-preview">${escapeHTML(q.question.substring(0, 80))}${q.question.length > 80 ? '\u2026' : ''}</div></div>`;
+  const previewText = getQuestionText(q);
+  return `<div class="review-item" style="border-left-color:${border}" tabindex="0" onclick="toggleReviewDetail(this, ${num})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewDetail(this, ${num})}"><div class="q-num"><span>Q${num}</span><span class="expand-hint">Tap to review</span></div><div class="q-preview">${escapeHTML(previewText.substring(0, 80))}${previewText.length > 80 ? '\u2026' : ''}</div></div>`;
 }
 
 function goHome() {
@@ -1254,13 +1280,16 @@ function showStudyCard() {
     ? `<div class="explanation"><strong>Why</strong>${escapeHTML(EXPLANATIONS[q.number])}</div>`
     : '';
 
+  const signSrc = getQuestionSign(q);
+  const signHtml = signSrc ? `<div class="q-sign"><img src="${signSrc}" alt="Traffic sign for question ${q.number}" loading="lazy"></div>` : '';
   document.getElementById('study-card').innerHTML = `
     <div class="q-header">
       <span class="q-number">Q${q.number}</span>
       ${q.correct.length > 1 ? `<span class="q-multi-badge">Select ${q.correct.length}</span>` : ''}
       <button class="icon-btn bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleStudyBookmark(${q.number})" title="${isBookmarked ? 'Remove bookmark' : 'Bookmark'}" aria-pressed="${isBookmarked}">${isBookmarked ? '&#9733;' : '&#9734;'}</button>
     </div>
-    <p class="q-text">${escapeHTML(q.question)}</p>
+    <p class="q-text">${escapeHTML(getQuestionText(q))}</p>
+    ${signHtml}
     <div class="options" style="gap:8px">${optsHtml}</div>
     ${explanation}
   `;
@@ -1294,9 +1323,11 @@ function toggleReviewDetail(el, num) {
   const explanation = EXPLANATIONS[num]
     ? `<div class="explanation" style="margin-top:10px"><strong>Why</strong>${escapeHTML(EXPLANATIONS[num])}</div>`
     : '';
+  const signSrc = getQuestionSign(q);
+  const signHtml = signSrc ? `<div class="q-sign" style="margin-bottom:10px"><img src="${signSrc}" alt="Sign for Q${num}" loading="lazy" style="max-width:120px;max-height:120px"></div>` : '';
   const detail = document.createElement('div');
   detail.className = 'review-detail';
-  detail.innerHTML = `<div class="review-q-text">${escapeHTML(q.question)}</div>${optsHtml}${explanation}`;
+  detail.innerHTML = `<div class="review-q-text">${escapeHTML(getQuestionText(q))}</div>${signHtml}${optsHtml}${explanation}`;
   el.appendChild(detail);
 }
 
