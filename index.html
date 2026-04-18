@@ -179,6 +179,26 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
 .round-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:100px;margin-bottom:8px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--card);padding:10px 18px;border-radius:100px;font-size:.85rem;font-weight:500;box-shadow:var(--shadow-lg);z-index:200;animation:toastIn .25s ease-out}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translateX(-50%)}}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;opacity:0;transition:opacity .2s ease}
+.modal-backdrop.visible{display:flex;opacity:1}
+.modal-card{background:var(--card);border-radius:18px;max-width:420px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.3),0 0 0 1px var(--border);overflow:hidden;transform:scale(.94) translateY(8px);transition:transform .22s cubic-bezier(.2,.9,.3,1.2);display:flex;flex-direction:column}
+.modal-backdrop.visible .modal-card{transform:scale(1) translateY(0)}
+.modal-header{padding:22px 22px 0;display:flex;align-items:flex-start;gap:14px}
+.modal-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;background:var(--primary-soft);color:var(--primary)}
+.modal-icon.danger{background:#fee2e2;color:#dc2626}
+[data-theme="dark"] .modal-icon.danger{background:rgba(220,38,38,.18);color:#f87171}
+.modal-title{font-size:1.08rem;font-weight:700;color:var(--text);line-height:1.35;padding-top:8px}
+.modal-body{padding:12px 22px 4px;color:var(--text-secondary);font-size:.92rem;line-height:1.55}
+.modal-footer{display:flex;gap:10px;padding:18px 22px 20px}
+.modal-btn{flex:1;padding:12px 16px;border-radius:10px;border:1px solid transparent;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .15s ease;-webkit-tap-highlight-color:transparent;font-family:inherit}
+.modal-btn:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.modal-btn.secondary{background:var(--card);border-color:var(--border);color:var(--text)}
+.modal-btn.secondary:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary)}
+.modal-btn.primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+.modal-btn.primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(37,99,235,.35)}
+.modal-btn.danger{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;box-shadow:0 2px 8px rgba(220,38,38,.25)}
+.modal-btn.danger:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(220,38,38,.4)}
+@media(max-width:420px){.modal-footer{flex-direction:column-reverse}.modal-btn{width:100%}}
 @media(max-width:500px){
   .container{padding:12px}
   header{padding:16px 0 8px}
@@ -382,6 +402,20 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
     <div id="topic-list" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto"></div>
     <div class="actions" style="margin-top:18px">
       <button class="btn btn-ghost" onclick="closeTopicPicker()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-body">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-icon" id="confirm-icon" aria-hidden="true">&#x26A0;&#xFE0F;</div>
+      <div class="modal-title" id="confirm-title"></div>
+    </div>
+    <div class="modal-body" id="confirm-body"></div>
+    <div class="modal-footer">
+      <button class="modal-btn secondary" id="confirm-cancel" type="button"></button>
+      <button class="modal-btn primary" id="confirm-ok" type="button"></button>
     </div>
   </div>
 </div>
@@ -685,9 +719,16 @@ function pickQuizQuestions(count, pool) {
   return picked.map(q => q.number);
 }
 
-function startFullPractice() {
+async function startFullPractice() {
   if (state.mastered.length > 0) {
-    if (!confirm('Start fresh? Your mastered questions will stay, but the current round will restart with all 268 questions.')) return;
+    const ok = await showConfirm({
+      title: 'Start a fresh round?',
+      message: 'Your mastered questions will stay mastered, but the current round will restart with all 268 questions.',
+      confirmText: 'Start Fresh',
+      cancelText: 'Cancel',
+      icon: '\uD83D\uDD04'
+    });
+    if (!ok) return;
   }
   Object.assign(state, {
     currentQueue: shuffle(QUESTIONS.map(q => q.number)),
@@ -1056,9 +1097,16 @@ function resumeQuiz() {
   document.getElementById('pause-overlay').classList.add('hidden');
   if (state.mode === 'mock' && timerSeconds > 0) runTimerInterval();
 }
-function exitQuiz() {
+async function exitQuiz() {
   if (state.mode === 'mock' && state.currentIdx < state.currentQueue.length) {
-    if (!confirm('Exit the mock test? Your progress will be lost.')) return;
+    const ok = await showConfirm({
+      title: 'Exit the mock test?',
+      message: 'Your current attempt will be discarded. You can start a new mock test anytime from the home screen.',
+      confirmText: 'Exit Test',
+      cancelText: 'Keep Going',
+      danger: true
+    });
+    if (!ok) return;
     state.timerSeconds = null;
     state.currentQueue = [];
     state.currentIdx = 0;
@@ -1121,6 +1169,44 @@ function toast(msg) {
   document.body.appendChild(el);
   if (toastTimer) clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.remove(), 1800);
+}
+
+// ========== Confirm modal ==========
+function showConfirm(opts) {
+  return new Promise(resolve => {
+    const modal = document.getElementById('confirm-modal');
+    const iconEl = document.getElementById('confirm-icon');
+    const titleEl = document.getElementById('confirm-title');
+    const bodyEl = document.getElementById('confirm-body');
+    const okBtn = document.getElementById('confirm-ok');
+    const cancelBtn = document.getElementById('confirm-cancel');
+
+    titleEl.textContent = opts.title || 'Are you sure?';
+    bodyEl.textContent = opts.message || '';
+    iconEl.innerHTML = opts.icon || (opts.danger ? '\u26A0\uFE0F' : '\u2753');
+    iconEl.classList.toggle('danger', !!opts.danger);
+    okBtn.textContent = opts.confirmText || 'Confirm';
+    cancelBtn.textContent = opts.cancelText || 'Cancel';
+    okBtn.className = 'modal-btn ' + (opts.danger ? 'danger' : 'primary');
+
+    modal.classList.add('visible');
+    setTimeout(() => (opts.danger ? cancelBtn : okBtn).focus(), 80);
+
+    function cleanup(result) {
+      modal.classList.remove('visible');
+      okBtn.onclick = cancelBtn.onclick = modal.onclick = null;
+      document.removeEventListener('keydown', onKey);
+      resolve(result);
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); cleanup(false); }
+      else if (e.key === 'Enter' && document.activeElement !== cancelBtn) { e.preventDefault(); cleanup(true); }
+    }
+    okBtn.onclick = () => cleanup(true);
+    cancelBtn.onclick = () => cleanup(false);
+    modal.onclick = (e) => { if (e.target === modal) cleanup(false); };
+    document.addEventListener('keydown', onKey);
+  });
 }
 
 // ========== Complete screen ==========
@@ -1359,14 +1445,20 @@ function toggleReviewDetail(el, num) {
 }
 
 // ========== Reset ==========
-function resetProgress() {
-  if (confirm('Reset ALL progress? This will clear your mastered questions, bookmarks, wrong-count history, and mock test history. This cannot be undone.')) {
-    localStorage.removeItem(STORAGE_KEY);
-    state = defaultState();
-    saveState();
-    updateWelcome();
-    toast('Progress reset');
-  }
+async function resetProgress() {
+  const ok = await showConfirm({
+    title: 'Reset all progress?',
+    message: 'This will clear your mastered questions, bookmarks, wrong-count history, and mock test history. This action cannot be undone.',
+    confirmText: 'Reset Everything',
+    cancelText: 'Cancel',
+    danger: true
+  });
+  if (!ok) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = defaultState();
+  saveState();
+  updateWelcome();
+  toast('Progress reset');
 }
 
 // ========== Keyboard shortcuts ==========
