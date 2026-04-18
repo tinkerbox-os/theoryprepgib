@@ -6,32 +6,44 @@
 <title>Gibraltar Car Theory Test Prep</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f0f4f8;--card:#fff;--primary:#2563eb;--primary-hover:#1d4ed8;--correct:#16a34a;--correct-bg:#dcfce7;--wrong:#dc2626;--wrong-bg:#fee2e2;--text:#1e293b;--text-secondary:#64748b;--border:#e2e8f0;--accent:#8b5cf6;--shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.06)}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+:root{--bg:#f0f4f8;--card:#fff;--card-elevated:#fff;--primary:#2563eb;--primary-soft:#eff6ff;--primary-hover:#1d4ed8;--correct:#16a34a;--correct-bg:#dcfce7;--wrong:#dc2626;--wrong-bg:#fee2e2;--warn:#f59e0b;--warn-bg:#fef3c7;--warn-text:#92400e;--text:#1e293b;--text-secondary:#64748b;--border:#e2e8f0;--border-soft:#edf2f7;--accent:#8b5cf6;--accent-soft:#f5f3ff;--shadow:0 4px 6px -1px rgba(0,0,0,.08),0 2px 4px -2px rgba(0,0,0,.05);--shadow-lg:0 10px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.06);--ring:0 0 0 3px rgba(37,99,235,.35)}
+[data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--card-elevated:#273449;--primary:#60a5fa;--primary-soft:rgba(96,165,250,.14);--primary-hover:#93c5fd;--correct:#34d399;--correct-bg:rgba(52,211,153,.14);--wrong:#f87171;--wrong-bg:rgba(248,113,113,.14);--warn:#fbbf24;--warn-bg:rgba(251,191,36,.16);--warn-text:#fde68a;--text:#e2e8f0;--text-secondary:#94a3b8;--border:#334155;--border-soft:#273449;--accent:#a78bfa;--accent-soft:rgba(167,139,250,.14);--shadow:0 4px 6px -1px rgba(0,0,0,.35),0 2px 4px -2px rgba(0,0,0,.3);--shadow-lg:0 10px 25px -5px rgba(0,0,0,.45),0 8px 10px -6px rgba(0,0,0,.3);--ring:0 0 0 3px rgba(96,165,250,.5)}
+html{color-scheme:light}
+[data-theme="dark"] html,html[data-theme="dark"]{color-scheme:dark}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;transition:background .25s ease,color .25s ease}
 .container{max-width:720px;margin:0 auto;padding:16px}
-header{text-align:center;padding:24px 0 16px}
-header h1{font-size:1.5rem;font-weight:700;color:var(--primary)}
-header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
-.stats-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:16px 0;font-size:.8rem}
-.stat{background:var(--card);border-radius:10px;padding:8px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;min-width:70px}
+header{display:flex;align-items:center;justify-content:space-between;padding:20px 0 12px;gap:12px}
+header .head-title{text-align:left}
+header h1{font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1.2}
+header p{color:var(--text-secondary);font-size:.8rem;margin-top:2px}
+.theme-toggle{background:var(--card);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .2s;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.theme-toggle:hover{border-color:var(--primary);color:var(--primary)}
+.stats-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0;font-size:.8rem}
+.stat{background:var(--card);border-radius:10px;padding:8px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;min-width:72px;flex:1 1 72px;max-width:140px}
 .stat-value{font-size:1.25rem;font-weight:700;color:var(--primary)}
 .stat-label{color:var(--text-secondary);font-size:.7rem;text-transform:uppercase;letter-spacing:.5px}
 .stat-value.correct-color{color:var(--correct)}
 .stat-value.wrong-color{color:var(--wrong)}
 .stat-value.accent-color{color:var(--accent)}
-.progress-container{margin:16px 0;background:#e2e8f0;border-radius:100px;height:8px;overflow:hidden}
+.progress-container{margin:14px 0;background:var(--border-soft);border-radius:100px;height:8px;overflow:hidden}
 .progress-bar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:100px;transition:width .5s ease}
 .card{background:var(--card);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
-.q-number{display:inline-block;background:var(--primary);color:#fff;font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:100px;margin-bottom:12px}
-.q-multi-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:100px;margin-left:6px}
-.q-text{font-size:1.1rem;font-weight:600;line-height:1.5;margin-bottom:20px}
+.card.fade-in{animation:fadeSlide .35s ease-out}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.q-number{display:inline-block;background:var(--primary);color:#fff;font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:100px}
+.q-multi-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:100px}
+.topic-badge{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:.65rem;font-weight:600;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.3px}
+.q-text{font-size:1.1rem;font-weight:600;line-height:1.5;margin-bottom:20px;color:var(--text)}
 .options{display:flex;flex-direction:column;gap:10px}
-.option{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;background:var(--card);-webkit-tap-highlight-color:transparent;user-select:none}
-@media(hover:hover){.option:hover:not(.disabled){border-color:var(--primary);background:#eff6ff}}
-.option.selected{border-color:var(--primary);background:#eff6ff}
-.option.correct-answer{border-color:var(--correct);background:var(--correct-bg)}
-.option.wrong-answer{border-color:var(--wrong);background:var(--wrong-bg)}
-.option.disabled{cursor:default;opacity:.85}
+.option{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:transform .12s ease,border-color .15s ease,background .15s ease,box-shadow .15s ease;background:var(--card);-webkit-tap-highlight-color:transparent;user-select:none;font-family:inherit;font-size:inherit;color:inherit;width:100%;text-align:left}
+@media(hover:hover){.option:hover:not(.disabled){border-color:var(--primary);background:var(--primary-soft)}}
+.option:focus-visible{outline:none;box-shadow:var(--ring)}
+.option.selected{border-color:var(--primary);background:var(--primary-soft)}
+.option.correct-answer{border-color:var(--correct);background:var(--correct-bg);animation:popIn .35s ease-out}
+.option.wrong-answer{border-color:var(--wrong);background:var(--wrong-bg);animation:shake .4s}
+@keyframes popIn{0%{transform:scale(1)}40%{transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.option.disabled{cursor:default;opacity:.9}
 @media(hover:hover){.option.disabled:hover{border-color:var(--border);background:var(--card)}
 .option.disabled.correct-answer:hover{border-color:var(--correct);background:var(--correct-bg)}
 .option.disabled.wrong-answer:hover{border-color:var(--wrong);background:var(--wrong-bg)}}
@@ -40,103 +52,155 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
 .option.correct-answer .option-marker{border-color:var(--correct);background:var(--correct);color:#fff}
 .option.wrong-answer .option-marker{border-color:var(--wrong);background:var(--wrong);color:#fff}
 .multi-marker{border-radius:6px}
-.option-text{flex:1;font-size:.95rem}
-.option-img{max-width:120px;max-height:120px;object-fit:contain;display:block;margin:0 auto;background:#fff;border-radius:8px}
+.option-kbd{margin-left:auto;display:none;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:6px;background:var(--border-soft);color:var(--text-secondary);font-size:.7rem;font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.5px;flex-shrink:0;margin-top:3px}
+.has-keyboard .option-kbd{display:inline-flex}
+.option-text{flex:1;font-size:.95rem;color:var(--text)}
+.option-img{max-width:140px;max-height:140px;object-fit:contain;display:block;margin:0 auto;background:#fff;border-radius:8px;padding:4px}
 .option-text .option-img{margin:0}
-.sign-grid .option{padding:10px}
+.sign-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sign-grid .option{padding:10px;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.sign-grid .option .option-marker{margin-top:0}
+.sign-grid .option-kbd{margin-left:0;margin-top:0}
 .review-opt .option-img,.study-option .option-img{max-width:90px;max-height:90px}
-.feedback{margin-top:16px;padding:14px 16px;border-radius:12px;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:8px}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:12px;font-weight:600;font-size:.9rem;display:flex;align-items:flex-start;gap:10px;animation:fadeSlide .25s ease-out}
 .feedback.correct{background:var(--correct-bg);color:var(--correct)}
 .feedback.wrong{background:var(--wrong-bg);color:var(--wrong)}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;gap:8px}
+.feedback .fb-icon{font-size:1.1rem;line-height:1.2;flex-shrink:0}
+.feedback .fb-body{flex:1}
+.explanation{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--primary-soft);color:var(--text);font-size:.85rem;font-weight:400;line-height:1.5;border-left:3px solid var(--primary)}
+.explanation strong{color:var(--primary);display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;gap:8px;font-family:inherit}
+.btn:focus-visible{outline:none;box-shadow:var(--ring)}
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:var(--primary-hover);transform:translateY(-1px)}
 .btn-secondary{background:var(--card);color:var(--primary);border:2px solid var(--primary)}
-.btn-secondary:hover{background:#eff6ff}
+.btn-secondary:hover{background:var(--primary-soft)}
 .btn-danger{background:var(--wrong);color:#fff}
-.btn-danger:hover{background:#b91c1c}
+.btn-danger:hover{filter:brightness(.92)}
+.btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border);font-weight:500}
+.btn-ghost:hover{color:var(--primary);border-color:var(--primary)}
 .actions{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
 .screen{display:none}
-.screen.active{display:block}
-.welcome-hero{text-align:center;padding:28px 0 0}
-.welcome-hero h2{font-size:1.75rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.welcome-hero p{color:var(--text-secondary);margin-bottom:0;max-width:400px;margin-left:auto;margin-right:auto}
+.screen.active{display:block;animation:fadeSlide .3s ease-out}
+.welcome-hero{text-align:center;padding:20px 0 0}
+.welcome-hero h2{font-size:1.75rem;font-weight:800;margin-bottom:6px;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.welcome-hero p{color:var(--text-secondary);max-width:400px;margin:0 auto;font-size:.9rem}
 .welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;text-align:left}
-.feature{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,#f0f4ff,#f5f3ff);border-radius:10px;padding:12px 14px;cursor:default;pointer-events:none;border:1px solid rgba(139,92,246,.1)}
+.feature{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border-radius:10px;padding:12px 14px;cursor:default;border:1px solid var(--border-soft)}
 .feature-icon{font-size:1.25rem;flex-shrink:0;line-height:1}
 .feature-body{display:flex;flex-direction:column}
 .feature-title{font-weight:600;font-size:.8rem;color:var(--text);line-height:1.3}
 .feature-desc{color:var(--text-secondary);font-size:.72rem;line-height:1.4;margin-top:2px}
-.mode-select{display:flex;flex-direction:column;gap:12px;margin:20px 0}
-.mode-btn{padding:16px;border-radius:12px;border:2px solid var(--border);background:var(--card);cursor:pointer;text-align:left;transition:all .2s}
-.mode-btn:hover{border-color:var(--primary);background:#eff6ff}
-.mode-btn h3{font-size:1rem;font-weight:600;color:var(--primary)}
-.mode-btn p{font-size:.85rem;color:var(--text-secondary)}
-.complete-screen{text-align:center;padding:40px 0}
-.complete-screen h2{font-size:1.75rem;font-weight:800;margin-bottom:16px;color:var(--correct)}
+.mode-select{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.mode-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:12px;width:100%;font-family:inherit;color:inherit}
+.mode-btn:hover{border-color:var(--primary);background:var(--primary-soft);transform:translateY(-1px)}
+.mode-btn:focus-visible{outline:none;box-shadow:var(--ring)}
+.mode-btn .mode-icon{font-size:1.5rem;flex-shrink:0;line-height:1}
+.mode-btn .mode-body{flex:1;min-width:0}
+.mode-btn h3{font-size:.98rem;font-weight:700;color:var(--primary);margin-bottom:2px}
+.mode-btn p{font-size:.82rem;color:var(--text-secondary);line-height:1.35}
+.mode-btn.primary{background:linear-gradient(135deg,var(--primary),var(--accent));border-color:transparent;color:#fff}
+.mode-btn.primary h3,.mode-btn.primary p{color:#fff}
+.mode-btn.primary p{color:rgba(255,255,255,.85)}
+.mode-btn.primary:hover{filter:brightness(1.05)}
+.score-history{background:var(--card);border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:var(--shadow)}
+.score-history-head{display:flex;align-items:center;justify-content:space-between;font-size:.82rem;color:var(--text-secondary);margin-bottom:8px}
+.score-history-head strong{color:var(--text);font-size:.9rem}
+.sparkline{display:block;width:100%;height:60px}
+.complete-screen{text-align:center;padding:24px 0}
+.complete-screen h2{font-size:1.6rem;font-weight:800;margin:14px 0 6px;color:var(--text)}
 .complete-screen p{color:var(--text-secondary);margin-bottom:8px}
-.trophy{font-size:4rem;margin-bottom:16px}
-.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
-.result-stat{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
-.result-stat .value{font-size:1.5rem;font-weight:700}
-.result-stat .label{font-size:.75rem;color:var(--text-secondary);text-transform:uppercase}
+.score-ring-wrap{display:flex;justify-content:center;margin:10px 0 18px}
+.score-ring{position:relative;width:160px;height:160px}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring .ring-track{fill:none;stroke:var(--border-soft);stroke-width:12}
+.score-ring .ring-prog{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s ease-out}
+.score-ring .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-ring .ring-pct{font-size:2.2rem;font-weight:800;line-height:1}
+.score-ring .ring-label{font-size:.7rem;text-transform:uppercase;color:var(--text-secondary);letter-spacing:.5px;margin-top:2px}
+.verdict-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.verdict-pill.pass{background:var(--correct-bg);color:var(--correct)}
+.verdict-pill.fail{background:var(--wrong-bg);color:var(--wrong)}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.result-stat{background:var(--card);border-radius:12px;padding:12px;box-shadow:var(--shadow)}
+.result-stat .value{font-size:1.35rem;font-weight:700}
+.result-stat .label{font-size:.7rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.3px}
 .review-list{text-align:left;margin:16px 0}
-.review-item{background:var(--card);border-radius:10px;padding:12px 16px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);border-left:4px solid var(--wrong);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .2s}
-.review-item .q-num{font-weight:700;color:var(--primary);font-size:.85rem;display:flex;align-items:center;justify-content:space-between}
+.review-list h3{font-size:1rem;margin-bottom:10px;color:var(--text)}
+.review-item{background:var(--card);border-radius:10px;padding:12px 16px;margin-bottom:8px;box-shadow:var(--shadow);border-left:4px solid var(--wrong);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .2s}
+.review-item:focus-visible{outline:none;box-shadow:var(--ring)}
+.review-item .q-num{font-weight:700;color:var(--primary);font-size:.85rem;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .review-item .q-num .expand-hint{font-size:.7rem;color:var(--text-secondary);font-weight:400}
 .review-item .q-preview{font-size:.85rem;color:var(--text-secondary);margin-top:2px}
 .review-detail{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
-.review-detail .review-q-text{font-size:.9rem;font-weight:600;margin-bottom:10px;line-height:1.5}
-.review-detail .review-opt{padding:8px 12px;border-radius:8px;font-size:.85rem;margin-bottom:6px;border:1px solid var(--border);display:flex;align-items:flex-start;gap:8px}
+.review-detail .review-q-text{font-size:.9rem;font-weight:600;margin-bottom:10px;line-height:1.5;color:var(--text)}
+.review-detail .review-opt{padding:8px 12px;border-radius:8px;font-size:.85rem;margin-bottom:6px;border:1px solid var(--border);display:flex;align-items:flex-start;gap:8px;color:var(--text)}
 .review-detail .review-opt .opt-letter{font-weight:700;color:var(--text-secondary);flex-shrink:0;min-width:18px}
 .review-detail .review-opt.correct-opt{background:var(--correct-bg);border-color:var(--correct);color:var(--correct);font-weight:600}
 .review-item.expanded{border-left-color:var(--primary)}
 .timer-bar{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 4px;font-size:.85rem;font-weight:600}
 .timer-clock{font-variant-numeric:tabular-nums;color:var(--primary);font-size:1.1rem}
-.timer-clock.warning{color:#f59e0b}
+.timer-clock.warning{color:var(--warn)}
 .timer-clock.danger{color:var(--wrong);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.timer-progress{flex:1;max-width:200px;height:6px;background:#e2e8f0;border-radius:100px;overflow:hidden}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.timer-progress{flex:1;max-width:220px;height:6px;background:var(--border-soft);border-radius:100px;overflow:hidden}
 .timer-fill{height:100%;background:var(--primary);border-radius:100px;transition:width 1s linear}
-.timer-fill.warning{background:#f59e0b}
+.timer-fill.warning{background:var(--warn)}
 .timer-fill.danger{background:var(--wrong)}
-.pause-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(4px)}
-.pause-card{background:var(--card);border-radius:20px;padding:40px;text-align:center;max-width:360px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.2)}
+.pause-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(4px);animation:fadeSlide .2s ease-out}
+.pause-card{background:var(--card);border-radius:20px;padding:36px;text-align:center;max-width:360px;width:90%;box-shadow:var(--shadow-lg)}
 .pause-card h2{font-size:1.5rem;margin-bottom:8px;color:var(--primary)}
-.pause-card p{color:var(--text-secondary);margin-bottom:24px;font-size:.9rem}
+.pause-card p{color:var(--text-secondary);margin-bottom:22px;font-size:.9rem}
 .pause-card .actions{margin-top:0}
 .q-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.q-header .q-number{margin-bottom:0}
-.q-header .q-multi-badge{margin-left:0}
-.bookmark-btn{background:none;border:none;cursor:pointer;font-size:1.3rem;padding:2px 4px;line-height:1;opacity:.4;transition:all .2s;-webkit-tap-highlight-color:transparent;margin-left:auto}
-.bookmark-btn:hover{opacity:.7}
-.bookmark-btn.active{opacity:1;color:#f59e0b}
-.study-label{display:inline-block;background:#fef3c7;color:#92400e;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:100px;margin-bottom:8px}
-.study-option{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;background:var(--card);cursor:default;font-size:.95rem}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:1.3rem;padding:8px;line-height:1;opacity:.55;transition:all .2s;-webkit-tap-highlight-color:transparent;border-radius:8px;min-width:40px;min-height:40px;display:inline-flex;align-items:center;justify-content:center;color:var(--text)}
+.icon-btn:hover{opacity:1;background:var(--border-soft)}
+.icon-btn:focus-visible{outline:none;box-shadow:var(--ring);opacity:1}
+.icon-btn.active{opacity:1}
+.bookmark-btn{margin-left:auto}
+.bookmark-btn.active{color:var(--warn)}
+.flag-btn.active{color:var(--primary)}
+.study-label{display:inline-block;background:var(--warn-bg);color:var(--warn-text);font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:100px}
+.study-option{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;background:var(--card);cursor:default;font-size:.95rem;color:var(--text)}
 .study-option.study-correct{border-color:var(--correct);background:var(--correct-bg)}
 .study-option .opt-letter{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;font-weight:600;color:var(--text-secondary)}
 .study-option.study-correct .opt-letter{border-color:var(--correct);background:var(--correct);color:#fff}
 .hidden{display:none!important}
-.round-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:100px;margin-bottom:8px}
+.round-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:100px;margin-bottom:8px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--card);padding:10px 18px;border-radius:100px;font-size:.85rem;font-weight:500;box-shadow:var(--shadow-lg);z-index:200;animation:toastIn .25s ease-out}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translateX(-50%)}}
 @media(max-width:500px){
   .container{padding:12px}
-  header h1{font-size:1.25rem}
+  header{padding:16px 0 8px}
+  header h1{font-size:1.2rem}
+  header p{font-size:.72rem}
   .card{padding:18px}
   .q-text{font-size:1rem}
   .option{padding:12px}
+  .sign-grid{gap:8px}
   .welcome-features{grid-template-columns:1fr}
   .results-grid{grid-template-columns:1fr 1fr}
   .stats-bar{gap:6px}
   .stat{padding:6px 10px;min-width:60px}
   .stat-value{font-size:1rem}
+  .btn{padding:11px 18px;font-size:.95rem}
+  .mode-btn{padding:12px 14px}
+  .score-ring{width:140px;height:140px}
+  .score-ring .ring-pct{font-size:1.9rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 </style>
 </head>
 <body>
 <div class="container">
 <header>
-  <h1>Gibraltar Theory Test Prep</h1>
-  <p>Car Driving Theory - Question Bank</p>
+  <div class="head-title">
+    <h1>Gibraltar Theory Test Prep</h1>
+    <p>Car Driving Theory &middot; Question Bank</p>
+  </div>
+  <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">&#9728;</button>
 </header>
 
 <div id="welcome-screen" class="screen active">
@@ -151,34 +215,67 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
     <div class="feature"><div class="feature-icon">&#x1F4BE;</div><div class="feature-body"><div class="feature-title">Auto-Save</div><div class="feature-desc">Progress saved in your browser automatically</div></div></div>
   </div>
   <div class="card hidden" id="mastery-progress" style="text-align:center;padding:16px 20px"></div>
+  <div class="score-history hidden" id="score-history"></div>
   <div class="mode-select">
-    <div class="mode-btn" onclick="startFullPractice()">
-      <h3>Start Practice</h3>
-      <p id="start-desc">Go through all 268 questions. Missed ones repeat until mastered.</p>
-    </div>
-    <div class="mode-btn" id="continue-btn" class="hidden" onclick="continuePractice()">
-      <h3>Continue Practice</h3>
-      <p id="continue-desc">Resume where you left off</p>
-    </div>
-    <div class="mode-btn" onclick="startMockTest()">
-      <h3>Mock Test (50 questions)</h3>
-      <p>Simulates the real test with 50 questions and a 45-minute timer</p>
-    </div>
-    <div class="mode-btn" onclick="startQuickQuiz()">
-      <h3>Quick Quiz (20 questions)</h3>
-      <p>Random selection for a quick practice run</p>
-    </div>
-    <div class="mode-btn hidden" id="bookmarked-btn" onclick="startBookmarkedReview()">
-      <h3 id="bookmarked-title">Review Bookmarked (0)</h3>
-      <p>Quiz yourself on flagged questions</p>
-    </div>
-    <div class="mode-btn hidden" id="study-btn" onclick="startStudyMode()">
-      <h3 id="study-title">Study Bookmarked (0)</h3>
-      <p>Flashcard mode &mdash; see questions with answers revealed</p>
-    </div>
+    <button class="mode-btn hidden" id="continue-btn" onclick="continuePractice()">
+      <span class="mode-icon">&#x25B6;&#xFE0F;</span>
+      <span class="mode-body">
+        <h3>Continue Practice</h3>
+        <p id="continue-desc">Resume where you left off</p>
+      </span>
+    </button>
+    <button class="mode-btn primary" onclick="startFullPractice()">
+      <span class="mode-icon">&#x1F680;</span>
+      <span class="mode-body">
+        <h3>Start Practice</h3>
+        <p id="start-desc">Go through all 268 questions. Missed ones repeat until mastered.</p>
+      </span>
+    </button>
+    <button class="mode-btn" onclick="startMockTest()">
+      <span class="mode-icon">&#x1F4DD;</span>
+      <span class="mode-body">
+        <h3>Mock Test &middot; 50 questions</h3>
+        <p>Simulates the real exam with a 45-minute timer &middot; 80% to pass</p>
+      </span>
+    </button>
+    <button class="mode-btn" onclick="startQuickQuiz()">
+      <span class="mode-icon">&#x26A1;</span>
+      <span class="mode-body">
+        <h3>Quick Quiz &middot; 20 questions</h3>
+        <p>Random selection focused on questions you haven&rsquo;t mastered yet</p>
+      </span>
+    </button>
+    <button class="mode-btn" onclick="openTopicPicker()">
+      <span class="mode-icon">&#x1F4DA;</span>
+      <span class="mode-body">
+        <h3>Practice by Topic</h3>
+        <p>Drill specific areas: signs, motorways, weather, stopping distances&hellip;</p>
+      </span>
+    </button>
+    <button class="mode-btn hidden" id="hardest-btn" onclick="startHardestQuestions()">
+      <span class="mode-icon">&#x1F525;</span>
+      <span class="mode-body">
+        <h3 id="hardest-title">Hardest Questions</h3>
+        <p>Drill the questions you&rsquo;ve gotten wrong most often</p>
+      </span>
+    </button>
+    <button class="mode-btn hidden" id="bookmarked-btn" onclick="startBookmarkedReview()">
+      <span class="mode-icon">&#x2B50;</span>
+      <span class="mode-body">
+        <h3 id="bookmarked-title">Review Bookmarked (0)</h3>
+        <p>Quiz yourself on questions you&rsquo;ve starred</p>
+      </span>
+    </button>
+    <button class="mode-btn hidden" id="study-btn" onclick="startStudyMode()">
+      <span class="mode-icon">&#x1F4D6;</span>
+      <span class="mode-body">
+        <h3 id="study-title">Study Bookmarked (0)</h3>
+        <p>Flashcard mode &mdash; see questions with answers revealed</p>
+      </span>
+    </button>
   </div>
   <div class="actions">
-    <button class="btn btn-danger" onclick="resetProgress()" id="reset-btn" style="display:none">Reset All Progress</button>
+    <button class="btn btn-ghost" onclick="resetProgress()" id="reset-btn" style="display:none">Reset All Progress</button>
   </div>
 </div>
 
@@ -188,7 +285,6 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
     <div class="stat"><span class="stat-value" id="s-total">205</span><span class="stat-label">Remaining</span></div>
     <div class="stat"><span class="stat-value correct-color" id="s-correct">0</span><span class="stat-label">Correct</span></div>
     <div class="stat"><span class="stat-value wrong-color" id="s-wrong">0</span><span class="stat-label">Wrong</span></div>
-    <div class="stat"><span class="stat-value accent-color" id="s-mastered">0</span><span class="stat-label">Mastered</span></div>
   </div>
   <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
   <div class="timer-bar hidden" id="timer-bar">
@@ -200,17 +296,19 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
     <div class="q-header">
       <span class="q-number" id="q-number">Q101</span>
       <span class="q-multi-badge hidden" id="q-multi-badge">Select 2</span>
-      <button class="bookmark-btn" id="bookmark-btn" onclick="toggleBookmark()" title="Bookmark this question">&#9734;</button>
+      <span class="topic-badge hidden" id="topic-badge"></span>
+      <button class="icon-btn flag-btn hidden" id="flag-btn" onclick="toggleFlag()" title="Flag for review (F)" aria-label="Flag question for review">&#x2691;</button>
+      <button class="icon-btn bookmark-btn" id="bookmark-btn" onclick="toggleBookmark()" title="Bookmark (B)" aria-label="Bookmark question">&#9734;</button>
     </div>
     <p class="q-text" id="q-text"></p>
-    <div class="options" id="options-container"></div>
-    <div class="feedback hidden" id="feedback"></div>
+    <div class="options" id="options-container" role="radiogroup" aria-label="Answer options"></div>
+    <div class="feedback hidden" id="feedback" aria-live="polite"></div>
   </div>
   <div class="actions">
     <button class="btn btn-primary hidden" id="next-btn" onclick="nextQuestion()">Next Question &rarr;</button>
     <button class="btn btn-secondary hidden" id="submit-multi-btn" onclick="submitMultiAnswer()">Check Answer</button>
-    <button class="btn btn-secondary hidden" id="pause-btn" onclick="pauseQuiz()" style="font-size:.85rem">Pause</button>
-    <button class="btn btn-secondary" onclick="exitQuiz()" style="font-size:.85rem">Exit</button>
+    <button class="btn btn-ghost hidden" id="pause-btn" onclick="pauseQuiz()">Pause</button>
+    <button class="btn btn-ghost" onclick="exitQuiz()">Exit</button>
   </div>
 </div>
 
@@ -240,17 +338,28 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
 
 <div id="complete-screen" class="screen">
   <div class="complete-screen">
-    <div class="trophy" id="complete-icon">&#x1F3C6;</div>
+    <div id="verdict-pill-wrap"></div>
+    <div class="score-ring-wrap">
+      <div class="score-ring" id="score-ring"></div>
+    </div>
     <h2 id="complete-title">Round Complete!</h2>
     <p id="complete-subtitle"></p>
     <div class="results-grid" id="results-grid"></div>
     <div class="review-list hidden" id="review-section">
-      <h3 style="margin-bottom:12px;font-size:1rem">Questions to Review:</h3>
+      <h3 id="review-heading">Questions to Review</h3>
       <div id="review-list"></div>
     </div>
-    <div class="actions" style="margin-top:24px">
-      <button class="btn btn-primary" id="next-round-btn" onclick="startNextRound()">Next Round &rarr;</button>
-      <button class="btn btn-secondary" onclick="goHome()">Home</button>
+    <div class="actions" style="margin-top:24px" id="complete-actions"></div>
+  </div>
+</div>
+
+<div class="pause-overlay hidden" id="topic-overlay">
+  <div class="pause-card" style="max-width:440px;text-align:left;padding:28px 24px">
+    <h2 style="font-size:1.25rem;margin-bottom:4px;text-align:center">Practice by Topic</h2>
+    <p style="text-align:center;margin-bottom:18px">Pick an area to focus your practice.</p>
+    <div id="topic-list" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto"></div>
+    <div class="actions" style="margin-top:18px">
+      <button class="btn btn-ghost" onclick="closeTopicPicker()">Cancel</button>
     </div>
   </div>
 </div>
@@ -259,49 +368,174 @@ header p{color:var(--text-secondary);font-size:.875rem;margin-top:4px}
 <script>
 const QUESTIONS = [{"number": 101, "question": "A cycle lane is marked by a solid white line. You must not drive or park in it:", "options": ["At any time", "During the rush hour", "If a cyclist is using it", "During its period of operation"], "correct": [0], "mark_count": 1}, {"number": 102, "question": "While driving, you intend to turn left into a minor road. On the approach you should:", "options": ["Keep just left of the middle of the road", "Keep in the middle of the road", "Swing out wide just before turning", "Keep well to the left of the road"], "correct": [0], "mark_count": 1}, {"number": 103, "question": "You may remove your seat belt when carrying out a manoeuvre that involves:", "options": ["Reversing", "A hill start", "An emergency stop", "Driving slowly"], "correct": [0], "mark_count": 1}, {"number": 104, "question": "You must not reverse:", "options": ["Into a side road", "For more than a car’s length", "For longer than necessary", "In a built-up area"], "correct": [2], "mark_count": 1}, {"number": 105, "question": "When you are NOT sure that it is safe to reverse your vehicle you should:", "options": ["Use your horn", "Rev your engine", "Get out and check", "Reverse slowly"], "correct": [2], "mark_count": 1}, {"number": 106, "question": "When may you reverse from a side road into a main road?", "options": ["Only if both roads are clear of traffic", "Not at any time", "At any time", "Only if the main road is clear of traffic"], "correct": [1], "mark_count": 1}, {"number": 107, "question": "When may you use hazard warning lights when driving?", "options": ["Instead of sounding the horn in a built-up area between 11.30 pm and 7 am", "On a motorway or unrestricted dual carriageway, to warn of a hazard ahead", "On rural routes, after a warning sign of animals", "On the approach to toucan crossings where cyclists are waiting to cross"], "correct": [1], "mark_count": 1}, {"number": 108, "question": "Before driving anyone else’s motor vehicle you should make sure that:", "options": ["The vehicle owner has third party insurance cover", "Your own vehicle has insurance cover", "The vehicle is insured for your use", "The owner has left the insurance documents in the vehicle"], "correct": [2], "mark_count": 1}, {"number": 109, "question": "You have broken down on a two-way road. You have a warning triangle. You should place the warning triangle at least how far from your vehicle?", "options": ["5 metres (16 feet)", "25 metres (82 feet)", "45 metres (147 feet)", "100 metres (328 feet)"], "correct": [2], "mark_count": 1}, {"number": 110, "question": "Your tyre bursts while you are driving. Which TWO things should you do?", "options": ["Pull on the handbrake", "Pull up slowly at the side of the road", "Brake as quickly as possible", "Hold the steering wheel firmly to keep control", "Continue on at a normal speed"], "correct": [1, 3], "mark_count": 2}, {"number": 111, "question": "Any load that is carried on a roof rack must be:", "options": ["Securely fastened when driving", "Carried only when strictly necessary", "As light as possible", "Covered with plastic sheeting"], "correct": [0], "mark_count": 1}, {"number": 112, "question": "If a trailer swerves or snakes when you are towing it you should:", "options": ["Let go of the steering wheel and let it correct itself", "Ease off the accelerator and reduce your speed", "Brake hard and hold the pedal down", "Increase your speed as quickly as possible"], "correct": [1], "mark_count": 1}, {"number": 113, "question": "How can you stop a caravan snaking from side to side?", "options": ["Turn the steering wheel slowly to each side", "Accelerate to increase your speed", "Stop as quickly as you can", "Slow down very gradually"], "correct": [3], "mark_count": 1}, {"number": 114, "question": "The legal minimum depth of tread for car tyres over three quarters of the breadth is:", "options": ["1 mm", "1.6 mm", "2.5 mm", "4 mm"], "correct": [1], "mark_count": 1}, {"number": 115, "question": "You are carrying two 13 year old children and their parents in your car. Who is responsible for seeing that the children wear seat belts?", "options": ["The children’s parents", "You, the driver", "The front-seat passenger", "The children"], "correct": [1], "mark_count": 1}, {"number": 116, "question": "When a roof rack is not in use it should be removed. Why is this?", "options": ["It will affect the suspension", "It is illegal", "It will affect your braking", "It will waste fuel"], "correct": [3], "mark_count": 1}, {"number": 117, "question": "Which FOUR are most likely to cause you to lose concentration while you are driving?", "options": ["Using a mobile phone", "Checking the mirrors", "Talking into a microphone", "Using the demisters", "Tuning your car radio", "Looking at a map"], "correct": [0, 2, 4, 5], "mark_count": 1}, {"number": 118, "question": "You should ONLY use a mobile phone when:", "options": ["Receiving a call", "Suitably parked", "Driving at less than 30 kph", "Driving an automatic vehicle"], "correct": [1], "mark_count": 1}, {"number": 119, "question": "Using a mobile phone while you are driving:", "options": ["Is acceptable in a vehicle with power steering", "Will reduce your field of vision", "Could distract your attention from the road", "Will affect your vehicle's electronic systems"], "correct": [2], "mark_count": 1}, {"number": 120, "question": "To reduce the volume of traffic on the roads you could:", "options": ["Travel by car at all times", "Use public transport more often", "Use a car with a smaller engine", "Drive in a bus lane", "Share a car when possible", "Walk or cycle on short journeys"], "correct": [1, 4, 5], "mark_count": 3}, {"number": 121, "question": "Which THREE of the following are most likely to waste fuel?", "options": ["Reducing your speed", "Carrying unnecessary weight", "Using the wrong grade of fuel", "Under-inflated tyres", "Using different brands of fuel", "A fitted, empty roof rack"], "correct": [1, 3, 5], "mark_count": 3}, {"number": 122, "question": "You are entering an area of road works. There is a temporary speed limit displayed. You should:", "options": ["Not exceed the speed limit", "Ignore the displayed limit", "Obey the limit only during rush hour", "Obey the limit except at night"], "correct": [0], "mark_count": 1}, {"number": 123, "question": "Anti-lock brakes prevent wheels from locking. This means the tyres are less likely to:", "options": ["Aquaplane", "Puncture", "Skid", "Wear"], "correct": [2], "mark_count": 1}, {"number": 124, "question": "Anti-lock brakes reduce the chances of a skid occurring particularly when:", "options": ["Braking in an emergency", "Driving down steep hills", "Braking during normal driving", "Driving on good road surfaces"], "correct": [0], "mark_count": 1}, {"number": 125, "question": "Vehicles fitted with anti-lock brakes:", "options": ["Are impossible to skid", "Can be steered while you are braking", "Accelerate much faster", "Are not fitted with a handbrake"], "correct": [1], "mark_count": 1}, {"number": 126, "question": "Anti-lock brakes can greatly assist with:", "options": ["A higher cruising speed", "Control when accelerating", "Steering control when braking", "Motorway driving"], "correct": [2], "mark_count": 1}, {"number": 127, "question": "You are driving a vehicle fitted with anti-lock brakes. You need to stop in an emergency. You should apply the footbrake:", "options": ["Slowly and gently", "Slowly but firmly", "Rapidly and gently", "Rapidly and firmly"], "correct": [3], "mark_count": 1}, {"number": 128, "question": "Your vehicle has anti-lock brakes, but they may not always prevent skidding. This is most likely to happen when driving:", "options": ["In foggy conditions", "On surface water", "On loose road surfaces", "On dry tarmac", "At night on unlit roads"], "correct": [1, 2], "mark_count": 2}, {"number": 129, "question": "Front fog lights may be used ONLY if:", "options": ["Visibility is seriously reduced", "They are fitted above the bumper", "They are not as bright as the headlights", "An audible warning device is used"], "correct": [0], "mark_count": 1}, {"number": 130, "question": "You are driving with your front fog lights switched on. Earlier fog has now cleared. What should you do?", "options": ["Leave them on if other drivers have their lights on", "Switch them off as long as visibility remains good", "Flash them to warn oncoming traffic that it is foggy", "Drive with them on instead of your headlights"], "correct": [1], "mark_count": 1}, {"number": 131, "question": "You are driving on a clear dry night with your rear fog lights switched on. This may:", "options": ["Reduce glare from the road surface", "Make other drivers think you are braking", "Give a better view of the road ahead", "Dazzle following drivers", "Help your indicators to be seen more clearly"], "correct": [1, 3], "mark_count": 2}, {"number": 132, "question": "You forget to switch off your rear fog lights when the fog has cleared. This may:", "options": ["Dazzle other road users", "Reduce battery life", "Cause brake lights to be less clear", "Be breaking the law", "Seriously affect engine power"], "correct": [0, 2, 3], "mark_count": 3}, {"number": 133, "question": "Before you make a U-turn in the road, you should:", "options": ["Give an arm signal as well as using your indicators", "Signal so that other drivers can slow down for you", "Look over your shoulder for a final check", "Select a higher gear than normal"], "correct": [2], "mark_count": 1}, {"number": 134, "question": "‘Tailgating’ means?", "options": ["Using the rear door of a hatchback car", "Reversing into a parking space", "Following another vehicle too closely", "Driving with rear fog lights on"], "correct": [2], "mark_count": 1}, {"number": 135, "question": "You will feel the effects of engine braking when you:", "options": ["only use the handbrake", "change to a lower gear", "only use neutral", "change to a higher gear"], "correct": [1], "mark_count": 1}, {"number": 136, "question": "You claim on your insurance to have your car repaired. Your policy has an excess of £100. What does this mean?", "options": ["The insurance company will pay the first £100 of any claim", "You will be paid £100 if you do not claim within one year", "Your vehicle is insured for a value of £100 if it is stolen", "You will have to pay the first £100 of the cost of repair to your car"], "correct": [3], "mark_count": 1}, {"number": 137, "question": "Your vehicle is insured third party only. This covers:", "options": ["Damage to your vehicle", "Damage to other vehicles", "Injury to yourself", "Injury to others", "All damage and injury"], "correct": [1, 3], "mark_count": 2}, {"number": 138, "question": "Braking distances on ice can be:", "options": ["Twice the normal distance", "Five times the normal distance", "Seven times the normal distance", "Ten times the normal distance"], "correct": [3], "mark_count": 1}, {"number": 139, "question": "Freezing conditions will affect the distance it takes you to come to a stop. You should expect stopping distances to increase by up to:", "options": ["Two times", "Three times", "Five times", "Ten times"], "correct": [2], "mark_count": 1}, {"number": 140, "question": "In windy conditions you need to take extra care when:", "options": ["Using the brakes", "Making a hill start", "Turning into a narrow road", "Passing pedal cyclists"], "correct": [3], "mark_count": 1}, {"number": 141, "question": "A trailer must stay securely hitched up to the towing vehicle. What additional safety device can be fitted to the trailer braking system?", "options": ["Stabiliser", "Jockey wheel", "Corner steadies", "Breakaway cable"], "correct": [3], "mark_count": 1}, {"number": 142, "question": "Your vehicle is fitted with anti-lock brakes. To stop quickly in an emergency you should:", "options": ["Brake firmly and pump the brake pedal on and off", "Brake rapidly and firmly without releasing the brake pedal", "Brake gently and pump the brake pedal on and off", "Brake rapidly once, and immediately release the brake pedal"], "correct": [1], "mark_count": 1}, {"number": 143, "question": "You have an accident while driving through a tunnel. You are not injured but your vehicle cannot be driven. What should you do first?", "options": ["Rely on other drivers phoning for the police", "Switch off the engine and switch on hazard lights", "Take the names of witnesses and other drivers", "Sweep up any debris that is in the road"], "correct": [1], "mark_count": 1}, {"number": 144, "question": "You are planning to tow a caravan. Which of these will mostly help to aid the vehicle handling?", "options": ["A jockey wheel fitted to the tow bar", "Power steering fitted to the towing vehicle", "Anti-lock brakes fitted to the towing vehicle", "A stabiliser fitted to the tow bar"], "correct": [3], "mark_count": 1}, {"number": 145, "question": "Are passengers allowed to ride in a caravan that is being towed?", "options": ["Yes, if they are over fourteen", "No, not at any time", "Only if all the seats in the towing vehicle are full", "Only if a stabiliser is fitted"], "correct": [1], "mark_count": 1}, {"number": 146, "question": "Your engine catches fire. What should you do first?", "options": ["Lift the bonnet and disconnect the battery", "Lift the bonnet and warn other traffic", "Call a breakdown service", "Call the fire brigade"], "correct": [3], "mark_count": 1}, {"number": 147, "question": "You are on a road that is only wide enough for one vehicle. There is a car coming towards you. What should you do?", "options": ["Pull into a passing place on your right", "Pull into a passing place if your vehicle is wider", "Force the other driver to reverse", "Pull into a passing place on your left"], "correct": [0], "mark_count": 1}, {"number": 148, "question": "While driving, a warning light on your vehicle’s instrument panel comes on. You should:", "options": ["Continue if the engine sounds all right", "Hope that it is just a temporary electrical fault", "Deal with the problem when there is more time", "Check out the problem quickly and safely"], "correct": [3], "mark_count": 1}, {"number": 149, "question": "To supervise a learner driver, in the “B” category, you must:", "options": ["Have held a full licence for at least 3 years", "Be an approved driving instructor", "Be at least 21 years old", "Hold an advanced driving certificate"], "correct": [0, 2], "mark_count": 2}, {"number": 150, "question": "When is it legal to drive a Private Motor Vehicle that is four years old without a Roadworthiness certificate?", "options": ["Up to seven days after the old certificate has run out", "When driving to the Motor Vehicle Test Centre to arrange an appointment", "Just after buying a second-hand car with no Roadworthiness  certificate", "When driving to an appointment at the Motor Vehicle Test Centre"], "correct": [3], "mark_count": 1}, {"number": 151, "question": "Private Motor Vehicles must first have a  Roadworthiness Certificate when they are:", "options": ["One year old", "Four years old", "Five years old", "Seven years old"], "correct": [1], "mark_count": 1}, {"number": 152, "question": "As a car driver, which THREE lanes are you NOT normally allowed to use?", "options": ["Crawler lane", "Bus lane", "Overtaking lane", "Acceleration lane", "Cycle lane", "Tram lane"], "correct": [1, 4, 5], "mark_count": 3}, {"number": 153, "question": "You are parked in a busy high street. What is the safest way to turn your vehicle around so you can go the opposite way?", "options": ["Find a quiet side road to turn round in", "Drive into a side road and reverse into the main road", "Get someone to stop the traffic", "Do a U-turn"], "correct": [0], "mark_count": 1}, {"number": 154, "question": "To help keep your vehicle secure at night, where should you park?", "options": ["Near a police station", "In a quiet road", "On a red route", "In a well-lit area"], "correct": [3], "mark_count": 1}, {"number": 155, "question": "On which THREE occasions MUST you stop your vehicle?", "options": ["When in an accident were damage or injury is caused", "When signalled to do so by a police officer", "At a junction with double broken white lines", "At a pelican crossing when the amber light is flashing and no pedestrians are crossing", "At a red traffic light"], "correct": [0, 1, 4], "mark_count": 3}, {"number": 156, "question": "You intend to turn left into a side road. Just before turning you should check for motorcyclists who might be:", "options": ["Overtaking on your right", "Following you closely", "Emerging from the side road", "Overtaking on your left"], "correct": [3], "mark_count": 1}, {"number": 157, "question": "Your vehicle breaks down on the hard shoulder of a motorway. You decide to use your mobile phone to call for help. You should:", "options": ["Stand at the rear of the vehicle while making the call", "Try to repair the vehicle yourself", "Get out of the vehicle by the right-hand door", "Check your location from the marker posts on the left"], "correct": [2], "mark_count": 1}, {"number": 158, "question": "You are on a three-lane motorway towing a trailer. You may use the left-hand lane when:", "options": ["There are lane closures", "There is slow moving traffic", "You can maintain a high speed", "Large vehicles are in the right and centre lanes"], "correct": [1], "mark_count": 1}, {"number": 159, "question": "You are driving down a steep hill. Why could keeping the clutch down or rolling in neutral for too long be dangerous?", "options": ["Fuel consumption will be higher", "Your vehicle will pick up speed", "It will damage the engine", "It will wear tyres out more quickly"], "correct": [1], "mark_count": 1}, {"number": 160, "question": "Holding the clutch pedal down or rolling in neutral for too long while driving will:", "options": ["Use more fuel", "Cause the engine to overheat", "Reduce your control", "Improve tyre wear"], "correct": [2], "mark_count": 1}, {"number": 161, "question": "When you are overtaking a cyclist you should leave as much room as you would give to a car. What is the main reason for this?", "options": ["The cyclist might change lanes", "The cyclist might get off the bike", "The cyclist might swerve", "The cyclist might have to make a left turn"], "correct": [2], "mark_count": 1}, {"number": 162, "question": "Which TWO should you allow extra room when overtaking?", "options": ["Motorcycles", "Tractors", "Bicycles", "Road-sweeping vehicles"], "correct": [0, 2], "mark_count": 2}, {"number": 163, "question": "Why should you look particularly for motorcyclists and cyclists at junctions?", "options": ["They may want to turn into the side road", "They may slow down to let you turn", "They might not see you turn", "They are harder to see"], "correct": [3], "mark_count": 1}, {"number": 164, "question": "You are waiting to come out of a side road. Why should you watch carefully for motorcycles?", "options": ["Motorcycles are usually faster than cars", "Motorcycles are small and hard to see", "Police patrols often use motorcycles", "Motorcycles have right of way"], "correct": [1], "mark_count": 1}, {"number": 165, "question": "In daylight, an approaching motorcyclist is using a dipped headlight. Why?", "options": ["So that the rider can be seen more easily", "To stop the battery overcharging", "To improve the rider’s vision", "The rider is inviting you to proceed"], "correct": [0], "mark_count": 1}, {"number": 166, "question": "Motorcyclists should wear bright clothing mainly because:", "options": ["They must do so by law", "It helps keep them cool in summer", "The colours are popular", "Drivers often do not see them"], "correct": [3], "mark_count": 1}, {"number": 167, "question": "There is a slow-moving motorcyclist ahead of you. You are unsure what the rider is going to do. You should:", "options": ["Pass on the left", "Stay behind", "Pass on the right", "Move closer"], "correct": [1], "mark_count": 1}, {"number": 168, "question": "Motorcyclists will often look round over their left shoulder just before turning left. This is because:", "options": ["They need to listen for following traffic", "Motorcycles do not have mirrors", "Looking around helps them balance as they turn", "They need to check for traffic in their blind area"], "correct": [3], "mark_count": 1}, {"number": 169, "question": "At road junctions which of the following are most vulnerable?", "options": ["Cyclists", "Pedestrians", "Car drivers", "Lorry drivers", "Motorcyclists"], "correct": [0, 4], "mark_count": 2}, {"number": 170, "question": "Motorcyclists are particularly vulnerable:", "options": ["When moving off", "On dual carriageways", "When approaching junctions", "On motorways"], "correct": [2], "mark_count": 1}, {"number": 171, "question": "An injured motorcyclist is lying unconscious in the road. You should:", "options": ["Remove the safety helmet", "Seek medical assistance", "Move the person off the road", "Remove the leather jacket"], "correct": [1], "mark_count": 1}, {"number": 172, "question": "You are approaching a roundabout. There are horses just ahead of you. You should:", "options": ["Be prepared to stop", "Treat them like any other vehicle", "Give them plenty of room", "Accelerate past as quickly as possible", "Sound your horn as a warning"], "correct": [0, 2], "mark_count": 2}, {"number": 173, "question": "Why is it dangerous to leave rear fog lights on when they are not needed?", "options": ["Brake lights are less clear", "Electrical systems could be overloaded", "Direction indicators may not work properly", "Following drivers can be dazzled", "The battery could fail"], "correct": [0, 3], "mark_count": 2}, {"number": 174, "question": "You have to make a journey in fog. What are the TWO most important things you should do before you set out?", "options": ["Top up the radiator with anti-freeze", "Make sure that you have a warning triangle in the vehicle", "Check the battery", "Check that your lights are working", "Make sure that the windows are clean"], "correct": [1, 3], "mark_count": 2}, {"number": 175, "question": "You have just driven out of fog. Visibility is now good. You MUST:", "options": ["Keep your rear fog lights on", "Keep your front fog lights on", "Leave fog lights on in case fog returns", "Switch off all your fog lights"], "correct": [3], "mark_count": 1}, {"number": 176, "question": "You are on a wet motorway with surface spray. You should use:", "options": ["Dipped headlights", "Hazard flashers", "Rear fog lights", "Sidelights"], "correct": [0], "mark_count": 1}, {"number": 177, "question": "Why is passing a lorry more risky than passing a car?", "options": ["Lorries are longer than cars", "Lorries may suddenly pull up", "The brakes of lorries are not as good", "Lorries climb hills more slowly"], "correct": [0], "mark_count": 1}, {"number": 178, "question": "You are travelling behind a bus that pulls up at a bus stop. What should you do?", "options": ["Accelerate past the bus sounding your horn", "Watch carefully for pedestrians", "Pull in closely behind the bus", "Be ready to give way to the bus"], "correct": [1, 3], "mark_count": 2}, {"number": 179, "question": "You are driving in heavy traffic on a wet road. Spray makes it difficult to be seen. You should use your:", "options": ["Full beam headlights", "Rear fog lights if visibility is less than 100 metres (328 feet)", "Rear fog lights if visibility is more than 100 metres (328 feet)", "Dipped headlights", "Sidelights only"], "correct": [1, 3], "mark_count": 2}, {"number": 180, "question": "You are towing a caravan. Which is the safest type of rear-view mirror to use?", "options": ["Interior wide-angle mirror", "Extended-arm side mirrors", "Ordinary door mirrors", "Ordinary interior mirror"], "correct": [1], "mark_count": 1}, {"number": 181, "question": "When joining a motorway you must always:", "options": ["Use the hard shoulder", "Stop at the end of the acceleration lane", "Come to a stop before joining the motorway", "Give way to traffic already on the motorway"], "correct": [3], "mark_count": 1}, {"number": 182, "question": "You are travelling on a motorway. You decide you need a rest. You should:", "options": ["Go to a service area", "Stop on the hard shoulder", "Park on the slip road", "Park on the central reservation", "Leave at the next exit"], "correct": [0, 4], "mark_count": 2}, {"number": 183, "question": "You break down on a motorway. You need to call for help. Why may it be better to use an emergency roadside telephone rather than a mobile phone?", "options": ["It connects you to a local garage", "Using a mobile phone will distract other drivers", "It allows easy location by the emergency services", "Mobile phones do not work on motorways"], "correct": [2], "mark_count": 1}, {"number": 184, "question": "After a breakdown you need to rejoin the main carriageway of a motorway from the hard shoulder. You should:", "options": ["Move out onto the carriageway using your hazard lights", "Gain speed on the hard shoulder before moving out", "Move out onto the carriageway then build up your speed onto the carriageway", "Wait on the hard shoulder until someone flashes their headlights at you"], "correct": [2], "mark_count": 1}, {"number": 185, "question": "You are dazzled at night by a vehicle behind you. You should:", "options": ["Set your mirror to anti-dazzle", "Set your mirror to dazzle the other driver", "Brake sharply to a stop", "Switch your rear lights on and off"], "correct": [0], "mark_count": 1}, {"number": 186, "question": "You are driving on a motorway. There are red flashing lights above every lane. You must:", "options": ["Pull onto the hard shoulder", "Slow down and watch for further signals", "Leave at the next exit", "Stop and wait"], "correct": [1], "mark_count": 1}, {"number": 187, "question": "A friend wants to help you learn to drive. They must be:", "options": ["Over 21 and have held a full licence for at least two years", "Over 18 and hold an advanced driver’s certificate", "Over 18 and have fully comprehensive insurance", "Over 21 and have held a full licence for at least three years"], "correct": [3], "mark_count": 1}, {"number": 188, "question": "You are driving past parked cars. You notice a bicycle wheel sticking out between them. What should you do?", "options": ["Accelerate past quickly and sound your horn", "Slow down and wave the cyclist across", "Brake sharply and flash your headlights", "Slow down and be prepared to stop for a cyclist"], "correct": [3], "mark_count": 1}, {"number": 189, "question": "You are driving on a motorway. The traffic ahead is braking sharply because of an accident. How could you warn traffic behind you?", "options": ["Briefly use the hazard warning lights", "Switch on the hazard warning lights continuously", "Briefly use the rear fog lights", "Switch on the headlights continuously"], "correct": [0], "mark_count": 1}, {"number": 190, "question": "For which of these may you use hazard warning lights?", "options": ["When driving on a motorway to warn traffic behind of a hazard ahead", "When you are double-parked on a two-way road", "When your direction indicators are not working", "When warning oncoming traffic that you intend to stop"], "correct": [0], "mark_count": 1}, {"number": 191, "question": "There is a tractor ahead of you. You wish to overtake but you are NOT sure if it is safe to do so. You should:", "options": ["Follow another overtaking vehicle through", "Sound your horn to the slow vehicle to pull over", "Speed through but flash your lights to oncoming traffic", "Not overtake if you are in doubt"], "correct": [3], "mark_count": 1}, {"number": 192, "question": "Hills can affect the performance of your vehicle. Which TWO apply when driving up steep hills?", "options": ["Higher gears will pull better", "The engine will work harder", "Overtaking will be easier", "The steering will feel heavier", "You will slow down sooner"], "correct": [1, 4], "mark_count": 2}, {"number": 193, "question": "You are not sure if your cough medicine will affect you. What TWO things should you do?", "options": ["Ask your doctor", "Drive if you feel alright", "Check the medicine label", "Ask a friend or relative for advice"], "correct": [0, 2], "mark_count": 2}, {"number": 194, "question": "If your motorway journey seems boring and you feel drowsy while driving, you should:", "options": ["Open a window and drive to the next service area", "Stop on the hard shoulder for a sleep", "Speed up to arrive at your destination sooner", "Slow down and let other drivers overtake"], "correct": [0], "mark_count": 1}, {"number": 195, "question": "You are approaching a busy junction. There are several lanes with road markings. At the last moment you realise that you are in the wrong lane. You should:", "options": ["Force your way across", "Stop until the area has cleared", "Continue in that lane", "Use clear arm signals to cut across"], "correct": [2], "mark_count": 1}, {"number": 196, "question": "Which vehicle might have to use a different course to normal at roundabouts?", "options": ["Sports car", "Van", "Estate car", "Long vehicle"], "correct": [3], "mark_count": 1}, {"number": 197, "question": "Anti-lock brakes will take effect when:", "options": ["You do not brake quickly enough", "Maximum brake pressure has been applied", "You have not seen a hazard ahead", "Speeding on slippery road surfaces"], "correct": [1], "mark_count": 1}, {"number": 198, "question": "You MUST stop when signalled to do so by which TWO of these?", "options": ["A police officer", "A pedestrian", "A bus driver", "A red traffic light"], "correct": [0, 3], "mark_count": 2}, {"number": 199, "question": "You are leaving your vehicle parked on a road. When may you leave the engine running?", "options": ["If you will be parking for less than five minutes", "If the battery is flat", "Never on any occasion", "When in a 20 kph zone"], "correct": [2], "mark_count": 1}, {"number": 200, "question": "Someone is waiting to cross at a zebra crossing. They are standing on the pavement. You should normally:", "options": ["Go on quickly before they step onto the crossing", "Stop before you reach the zigzag lines and let them cross", "Stop, let them cross, wait patiently", "Ignore them as they are still on the pavement"], "correct": [1], "mark_count": 1}, {"number": 201, "question": "At a pelican crossing, what does a flashing amber light mean?", "options": ["You must give way to pedestrians still on the crossing", "You must not move off until the lights stop flashing", "You can move off, even if pedestrians are still on the crossing", "You must stop because the lights are about to change to red"], "correct": [0], "mark_count": 1}, {"number": 202, "question": "You are waiting at a pelican crossing. The red light changes to flashing amber. This means you must:", "options": ["Wait for pedestrians on the crossing to clear", "Move off immediately without any hesitation", "Wait for the green light before moving off", "Get ready and go when the continuous amber light shows"], "correct": [0], "mark_count": 1}, {"number": 203, "question": "You are braking on a wet road. Your vehicle begins to skid. It does not have anti- lock brakes. What is the FIRST thing you should do?", "options": ["Quickly pull up the handbrake", "Release the footbrake fully", "Push harder on the brake pedal", "Gently use the accelerator"], "correct": [1], "mark_count": 1}, {"number": 204, "question": "How can you use your vehicle’s engine as a brake?", "options": ["By selecting reverse gear", "By changing to a higher gear", "By selecting neutral gear", "By changing to a lower gear"], "correct": [3], "mark_count": 1}, {"number": 205, "question": "You are having difficulty finding a parking space in a busy town. You can see there is space on the zigzag lines of a zebra crossing. Can you park there?", "options": ["No, unless you stay with your car", "Yes, in order to drop off a passenger", "Yes, if you do not block people from crossing", "No, not in any circumstances"], "correct": [3], "mark_count": 1}, {"number": 206, "question": "Rear-facing baby seats should NEVER be used on a seat protected with:", "options": ["An airbag", "Seat belts", "Head restraints", "Seat covers"], "correct": [0], "mark_count": 1}, {"number": 207, "question": "How can you lessen the risk of your vehicle being broken into at night?", "options": ["Leave it in a well-lit area", "Park in a quiet side road", "Don’t engage the steering lock", "Park in a poorly-lit area"], "correct": [0], "mark_count": 1}, {"number": 208, "question": "On a vehicle, where would you find a catalytic converter?", "options": ["In the fuel tank", "In the air filter", "On the cooling system", "On the exhaust system"], "correct": [3], "mark_count": 1}, {"number": 209, "question": "When leaving your car to help keep it secure you should:", "options": ["Leave the hazard warning lights on", "Lock it and remove the key", "Park on a one-way street", "Park in a residential area"], "correct": [1], "mark_count": 1}, {"number": 210, "question": "When emerging from junctions, which is most likely to obstruct your view?", "options": ["Windscreen pillars", "Steering wheel", "Interior mirror", "Windscreen wipers"], "correct": [0], "mark_count": 1}, {"number": 211, "question": "You are driving at night on an unlit road behind another vehicle. You should:", "options": ["Flash your headlights", "Use dipped beam headlights", "Switch off your headlights", "Use full beam headlights"], "correct": [1], "mark_count": 1}, {"number": 212, "question": "You are driving a slow-moving vehicle on a narrow winding road. You should:", "options": ["Keep well out to stop vehicles overtaking dangerously", "Wave following vehicles past you if you think they can overtake quickly", "Pull in safely when you can, to let following vehicles overtake", "Give a left signal when it is safe for vehicles to overtake you"], "correct": [2], "mark_count": 1}, {"number": 213, "question": "Which TWO of these must be in good working order for your car to be roadworthy?", "options": ["The temperature gauge", "The speedometer", "The windscreen washers", "The windscreen wipers", "The oil warning light", "The horn"], "correct": [1, 3], "mark_count": 2}, {"number": 214, "question": "The most important reason for having a properly adjusted head restraint is to", "options": ["Help you to avoid neck injury", "Make you more comfortable", "Help you to relax", "Help you to maintain your driving position"], "correct": [0], "mark_count": 1}, {"number": 215, "question": "You are driving the children of a friend home from school. They are both under 14 years old. Who is responsible for making sure they wear a seat belt?", "options": ["An adult passenger", "The children", "You, the driver", "Your friend"], "correct": [2], "mark_count": 1}, {"number": 216, "question": "You have a loose filler cap on your diesel fuel tank. This will:", "options": ["Waste fuel and money", "Make roads slippery for other road users", "Improve your vehicles’ fuel consumption", "Increase the level of exhaust emissions"], "correct": [1], "mark_count": 1}, {"number": 217, "question": "As a driver you can cause more damage to the environment by:", "options": ["Choosing a fuel-efficient vehicle", "Making a lot of short journeys", "Driving in as high a gear as possible", "Accelerating as quickly as possible", "Having your vehicle regularly serviced"], "correct": [3], "mark_count": 1}, {"number": 218, "question": "If your vehicle uses diesel fuel, take extra care when refuelling. Diesel fuel when spilt is:", "options": ["Sticky", "Odourless", "Slippery", "Clear"], "correct": [2], "mark_count": 1}, {"number": 219, "question": "How can you reduce the chances of your car being broken into when leaving it unattended?", "options": ["Take all valuables with you", "Park near a taxi rank", "Place any valuables on the floor", "Park near a fire station"], "correct": [0], "mark_count": 1}, {"number": 220, "question": "How can you help to prevent your car radio being stolen?", "options": ["Park in an unlit area", "Hide the radio with a blanket", "Park near a busy junction", "Install a security-coded radio"], "correct": [3], "mark_count": 1}, {"number": 221, "question": "You are on the motorway. Luggage falls from your vehicle. What should you do?", "options": ["Stop at the next emergency telephone and contact the police", "Stop on the motorway and put on hazard lights while you pick it up", "Walk back up the motorway to pick it up", "Pull up on the hard shoulder and wave traffic down"], "correct": [0], "mark_count": 1}, {"number": 222, "question": "You are parking your car. You have some valuables which you are unable to take with you. What should you do?", "options": ["Park near a police station", "Put them under the driver’s seat", "Lock them out of sight", "Park in an unlit side road"], "correct": [2], "mark_count": 1}, {"number": 223, "question": "Wherever possible, which one of the following should you do when parking at night?", "options": ["Park in a quiet car park", "Park facing against the flow of traffic", "Park next to a busy junction", "Park in a well-lit area"], "correct": [3], "mark_count": 1}, {"number": 224, "question": "What is the safest way to use a mobile phone in your vehicle?", "options": ["Use hands-free equipment", "Find a suitable place to stop", "Drive slowly on a quiet road", "Direct your call through the operator"], "correct": [1], "mark_count": 1}, {"number": 225, "question": "Your mobile phone rings while you are on the motorway. Before answering you should:", "options": ["Reduce your speed to 30 kph", "Pull up on the hard shoulder", "Move into the left-hand lane", "Stop in a safe place"], "correct": [3], "mark_count": 1}, {"number": 226, "question": "Your vehicle is fitted with a hands-free phone system. Using this equipment whilst driving:", "options": ["Is quite safe as long as you slow down", "Is recommended by the highway code", "Could distract your attention from the road", "Could be very good for road safety"], "correct": [2], "mark_count": 1}, {"number": 227, "question": "Using a hands-free phone is likely to:", "options": ["Divert your attention", "Improve your safety", "Increase your concentration", "Reduce your view"], "correct": [0], "mark_count": 1}, {"number": 228, "question": "You should not use a mobile phone while driving:", "options": ["Until you are satisfied that no other traffic is near", "Because it might distract your attention from the road ahead", "Unless you are able to drive one-handed", "Because reception is poor when the engine is running"], "correct": [1], "mark_count": 1}, {"number": 229, "question": "You are driving down a long steep hill. You suddenly notice your brakes are not working as well as normal. What is the usual cause of this?", "options": ["The brakes overheating", "Air in the brake fluid", "Oil on the brakes", "Badly adjusted brakes"], "correct": [0], "mark_count": 1}, {"number": 230, "question": "You are away from home and have to park your vehicle overnight. Where should you leave it?", "options": ["Opposite another parked vehicle", "In a quiet road", "Opposite a traffic island", "In a secure car park"], "correct": [3], "mark_count": 1}, {"number": 231, "question": "When snow is falling heavily you should", "options": ["Only drive with your hazard lights on", "Not drive unless you have a mobile phone", "Not drive unless it is essential", "Only drive when your journey is short"], "correct": [2], "mark_count": 1}, {"number": 232, "question": "Signals are normally given by direction indicators and", "options": ["Brake lights", "Side lights", "Fog lights", "Interior lights"], "correct": [0], "mark_count": 1}, {"number": 233, "question": "What TWO safeguards could you take against fire risk to your vehicle?", "options": ["Keep water levels above maximum", "Carry a fire extinguisher", "Avoid driving with a full tank of petrol", "Use unleaded petrol", "Check out any strong smell of petrol", "Use low octane fuel"], "correct": [1, 4], "mark_count": 2}, {"number": 234, "question": "While you are driving in fog, it becomes necessary to use front fog lights. You should:", "options": ["Only turn them on in heavy traffic conditions", "Remember not to use them on motorways", "Only use them on dual carriageways", "Remember to switch them off as visibility improves"], "correct": [3], "mark_count": 1}, {"number": 235, "question": "You are driving through a tunnel. Your vehicle breaks down. What should you do?", "options": ["Switch on hazard warning lights", "Remain in your vehicle", "Wait for the police to find you", "Rely on CCTV cameras seeing you"], "correct": [0], "mark_count": 1}, {"number": 236, "question": "In which TWO places would parking your vehicle cause danger or obstruction to other road users", "options": ["In front of a property entrance", "At or near a bus stop", "On your driveway", "In a marked parking space", "On the approach to a level crossing"], "correct": [1, 4], "mark_count": 2}, {"number": 237, "question": "In which TWO places would parking cause an obstruction to others?", "options": ["Near the brow of a hill", "In a lay-by", "Where the kerb is raised", "Where the kerb has been lowered for wheelchairs", "At or near a bus stop"], "correct": [0, 3], "mark_count": 2}, {"number": 238, "question": "Before driving through a tunnel what should you do?", "options": ["Switch your radio off", "Close your sunroof", "Remove any sunglasses", "Switch on windscreen wipers"], "correct": [2], "mark_count": 1}, {"number": 239, "question": "You are driving through a tunnel and the traffic is flowing normally. What should you do?", "options": ["Use parking lights", "Use front spot lights", "Use dipped headlights", "Use rear fog lights"], "correct": [2], "mark_count": 1}, {"number": 240, "question": "There is a police car following you. The police officer flashes the headlights and points to the right. What should you do?", "options": ["Stop immediately", "Pull up on the right", "Move over to the right", "Turn left at the next junction"], "correct": [1], "mark_count": 1}, {"number": 241, "question": "You may only enter a yellow box junction when:", "options": ["There are less than two vehicles in front of you", "You need to turn right", "Your exit road is clear", "The traffic lights show green"], "correct": [2], "mark_count": 1}, {"number": 242, "question": "You want to turn left from a junction but your view is restricted by parked vehicles. What should you do?", "options": ["Move out quickly, but be prepared to stop", "Stop, then move slowly forward until you have a clear view", "Sound your horn and pull out if there is no reply", "Stop, get out and look along the main road to check"], "correct": [1], "mark_count": 1}, {"number": 243, "question": "During a long journey you discover the coolant in the vehicle radiator needs topping up. You should:", "options": ["Let it cool before removing the filler cap", "Hose down the engine to cool it before refilling", "Keep the engine running and fill it with coolant immediately", "Keep driving and the fan will cool the engine"], "correct": [0], "mark_count": 1}, {"number": 244, "question": "A large white triangle on the road surface before a road junction warns drivers that:", "options": ["They must stop at the junction", "They must give way at the junction", "The road widens ahead", "They are entering a two way road"], "correct": [1], "mark_count": 1}, {"number": 245, "question": "An outside convex mirror fitted to a car makes a following vehicle appear to be :", "options": ["Closer than it really is", "Further away than it really is", "Larger than it really is", "Travelling faster than it really is"], "correct": [1], "mark_count": 1}, {"number": 246, "question": "The most important consideration when adjusting your seat is that you can:", "options": ["Fasten the seat belt", "Reach the controls", "Start the car", "Operate the controls easily"], "correct": [3], "mark_count": 1}, {"number": 247, "question": "At a Pelican crossing the flashing amber signal follows the:", "options": ["Green signal", "Steady amber signal", "Red and amber together", "Red signal"], "correct": [3], "mark_count": 1}, {"number": 248, "question": "A toucan crossing is different from other crossings because:", "options": ["It is controlled by a traffic warden", "Moped riders can use it", "Cyclists can use it", "It is controlled by two flashing lights"], "correct": [2], "mark_count": 1}, {"number": 249, "question": "You are parked at the side of the road, before moving off you should:", "options": ["Check all mirrors and look around", "Check the left side mirror", "Check the interior and left side mirrors", "Check the interior mirror"], "correct": [0], "mark_count": 1}, {"number": 250, "question": "You are driving in a built up area and approaching a speed hump. You should:", "options": ["Move across to the right side of the road", "Wait for any pedestrians to cross", "Stop and check both pavements", "Slow your vehicle right down"], "correct": [3], "mark_count": 1}, {"number": 251, "question": "In very hot weather the road surface can become soft. Which TWO of the following will be most affected?", "options": ["The suspension", "The grip of the tyres", "The exhaust", "The braking"], "correct": [1, 3], "mark_count": 2}, {"number": 252, "question": "You are waiting at a level crossing. The red warning lights continue to flash after a train has passed by. What should you do?", "options": ["Get out and investigate", "Telephone the signal operator", "Continue to wait", "Drive across carefully"], "correct": [2], "mark_count": 1}, {"number": 253, "question": "You are driving over a level crossing. The warning lights come on and a bell rings. What should you do?", "options": ["Get everyone out of the vehicle immediately", "Stop and reverse back to clear the crossing", "Keep going and clear the crossing", "Stop immediately and use your hazard warning lights"], "correct": [2], "mark_count": 1}, {"number": 254, "question": "You are on a busy main road and find that you are travelling in the opposite direction. What should you do?", "options": ["Turn into a side road on the right and reverse into the main road", "Make a U-turn in the main road", "Make a ‘three-point’ turn in the main road", "Turn round in a side road"], "correct": [3], "mark_count": 1}, {"number": 255, "question": "The white line along the side of the road:", "options": ["Shows the edge of the carriageway", "Shows the approach to a hazard", "Means no parking", "Means no overtaking"], "correct": [0], "mark_count": 1}, {"number": 256, "question": "You are waiting at a T-junction. A vehicle is coming from the right with the left signal flashing. What should you do?", "options": ["Move out and accelerate hard", "Wait until the vehicle starts to turn in", "Pull out before the vehicle reaches the junction", "Move out slowly"], "correct": [1], "mark_count": 1}, {"number": 257, "question": "To drive on the road learners MUST:", "options": ["Have NO penalty points on their licence", "Have taken professional instruction", "Have a valid learners licence", "Apply for a driving test within 12 months"], "correct": [2], "mark_count": 1}, {"number": 258, "question": "You break down on a level crossing. The lights have not yet begun to flash. Which THREE things should you do?", "options": ["Telephone the signal operator", "Leave your vehicle and get everyone clear", "Walk down the track and signal the next train", "Move the vehicle if a signal operator tells you to", "Tell drivers behind what has happened"], "correct": [0, 1, 3], "mark_count": 3}, {"number": 259, "question": "It is illegal to drive with tyres that:", "options": ["Have been bought second-hand", "Have a large deep cut in the side wall", "Are of different makes", "Are of different tread patterns"], "correct": [1, 3], "mark_count": 2}, {"number": 260, "question": "You are on a long, downhill slope. What should you do to help control the speed of your vehicle?", "options": ["Select neutral", "Select a lower gear", "Grip the handbrake firmly", "Apply the parking brake gently"], "correct": [1], "mark_count": 1}, {"number": 261, "question": "You go to a social event and need to drive a short time after. What precaution should you take?", "options": ["Avoid drinking alcohol on an empty stomach", "Drink plenty of coffee after drinking alcohol", "Avoid drinking alcohol completely", "Drink plenty of milk before drinking alcohol"], "correct": [2], "mark_count": 1}, {"number": 262, "question": "You take some cough medicine given to you by a friend. What should you do before driving?", "options": ["Ask your friend if taking the medicine affected their driving", "Drink some strong coffee one hour before driving", "Check the label to see if the medicine will affect your driving", "Drive a short distance to see if the medicine is affecting your driving"], "correct": [2], "mark_count": 1}, {"number": 263, "question": "You are most likely to lose concentration when driving if you:", "options": ["Use a mobile phone", "Listen to very loud music", "Switch on the heated rear window", "Look at the door mirrors"], "correct": [0, 1], "mark_count": 2}, {"number": 264, "question": "How can you, as a driver, help the environment?", "options": ["By reducing your speed", "By gentle acceleration", "By using leaded fuel", "By driving faster", "By harsh acceleration", "By servicing your vehicle properly"], "correct": [0, 1, 5], "mark_count": 3}, {"number": 265, "question": "In which of these situations should you avoid overtaking?", "options": ["Just after a bend", "In a one-way street", "On a 30 kph road", "Approaching a dip in the road"], "correct": [3], "mark_count": 1}, {"number": 266, "question": "Your mobile phone rings while you are travelling. You should:", "options": ["Stop immediately", "Answer it immediately", "Pull up in a suitable place", "Pull up at the nearest kerb"], "correct": [2], "mark_count": 1}, {"number": 267, "question": "At a pelican crossing the flashing amber light means you MUST:", "options": ["Stop and wait for the green light", "Stop and wait for the red light", "Give way to pedestrians waiting to cross", "Give way to pedestrians already on the crossing"], "correct": [3], "mark_count": 1}, {"number": 268, "question": "You should never wave people across at pedestrian crossings because:", "options": ["There may be another vehicle coming", "They may not be looking", "It is safer for you to carry on", "They may not be ready to cross"], "correct": [0], "mark_count": 1}, {"number": 269, "question": "You are following a vehicle on a wet road. You should leave a time gap of at least:", "options": ["One second", "Two seconds", "Three seconds", "Four seconds"], "correct": [2], "mark_count": 1}, {"number": 270, "question": "Which of the following vehicles will use blue flashing beacons?", "options": ["Bomb disposal", "Motorway maintenance", "Blood transfusion", "Breakdown recovery", "Police patrol"], "correct": [0, 2, 4], "mark_count": 3}, {"number": 271, "question": "When being followed by an ambulance showing a flashing blue beacon you should:", "options": ["Pull over as soon as safely possible to let it pass", "Accelerate hard to get away from it", "Maintain your speed and course", "Brake harshly and immediately stop in the road"], "correct": [0], "mark_count": 1}, {"number": 272, "question": "On a road where trams operate, which of these vehicles will be most at risk from the tram rails?", "options": ["Cars", "Cycles", "Buses", "Lorries"], "correct": [1], "mark_count": 1}, {"number": 273, "question": "What should you use your horn for?", "options": ["To alert others to your presence", "To allow you right of way", "To greet other road users", "To signal your annoyance"], "correct": [0], "mark_count": 1}, {"number": 274, "question": "You wish to turn left ahead. Why should you take up the correct position in good time?", "options": ["To allow other drivers to pull out in front of you", "To help other road users know what you intend to do", "To give a better view into the road that you’re joining", "To allow drivers to pass you on the right"], "correct": [1], "mark_count": 1}, {"number": 275, "question": "Which TWO are badly affected if the tyres are under-inflated?", "options": ["Braking", "Changing gear", "Steering", "Parking"], "correct": [0, 2], "mark_count": 2}, {"number": 276, "question": "You must NOT sound your horn:", "options": ["Within the inner City at any time", "Between 10 pm and 6 am in a built-up area", "At any time in a built-up area", "Between 11.30 pm and 6 am on any road", "Between 9pm and 7am elsewhere than in the inner City"], "correct": [0, 4], "mark_count": 2}, {"number": 277, "question": "What is the legal minimum insurance cover you must have to drive on public roads?", "options": ["Third party, fire and theft", "Comprehensive", "Third party only", "Personal injury cover"], "correct": [2], "mark_count": 1}, {"number": 278, "question": "You can save fuel when conditions allow by:", "options": ["Using lower gears as often as possible", "Accelerating sharply in each gear", "Using each gear in turn", "Missing out some gears"], "correct": [2], "mark_count": 1}, {"number": 279, "question": "You will find that driving smoothly can:", "options": ["Reduce fuel consumption by about 15%", "Reduce journey times by about 15%", "Increase fuel consumption by about 15%", "Increase journey times by about 15%"], "correct": [0], "mark_count": 1}, {"number": 280, "question": "Road humps, chicanes, and narrowings are:", "options": ["Always at major road works", "Used to increase traffic speed", "At toll-bridge approaches only", "Traffic calming measures"], "correct": [3], "mark_count": 1}, {"number": 281, "question": "A driver pulls out of a side road in front of you. You have to brake hard. You should:", "options": ["Flash your lights to show your annoyance", "Ignore the error and stay calm", "Sound your horn to show your annoyance", "Overtake as soon as possible"], "correct": [1], "mark_count": 1}, {"number": 282, "question": "An elderly person’s driving ability could be affected because they may be unable to:", "options": ["Obtain car insurance", "Understand road signs", "React very quickly", "Give signals correctly"], "correct": [2], "mark_count": 1}, {"number": 283, "question": "You are turning right into a side road. What hazards should you be especially aware of?", "options": ["One way street", "Pedestrians", "Traffic congestion", "Parked vehicles"], "correct": [1], "mark_count": 1}, {"number": 284, "question": "You are on a motorway. There is a contraflow system ahead. What would you expect to find?", "options": ["Temporary traffic lights", "Speed humps", "Wider lanes than normal", "Lower speed limits"], "correct": [3], "mark_count": 1}, {"number": 285, "question": "You see a pedestrian with a white stick and red band. This means that the person is:", "options": ["Physically disabled", "Deaf only", "Blind only", "Deaf and blind"], "correct": [3], "mark_count": 1}, {"number": 286, "question": "You see two elderly pedestrians about to cross the road ahead. You should:", "options": ["Expect them to wait for you to pass", "Be careful, they may misjudge your speed", "Speed up to get past them quickly", "Stop and wave them across the road"], "correct": [1], "mark_count": 1}, {"number": 287, "question": "You are coming up to a roundabout. A cyclist is signalling to turn left. What should you do?", "options": ["Overtake on the left", "Give a horn warning", "Signal the cyclist to move across", "Give the cyclist plenty of room"], "correct": [3], "mark_count": 1}, {"number": 288, "question": "You are waiting to emerge right from a minor road. A large vehicle is approaching from the left. You have time to turn, but you should wait. Why?", "options": ["The large vehicle can easily hide an overtaking vehicle", "The large vehicle can turn suddenly", "The large vehicle is difficult to steer in a straight line", "The large vehicle can easily hide vehicles from the left"], "correct": [0], "mark_count": 1}, {"number": 289, "question": "Before overtaking a large vehicle you should keep well back. Why is this?", "options": ["To give acceleration space to overtake quickly on blind bends", "To get the best view of the road ahead", "To leave a gap in case the vehicle stops and rolls back", "To offer other drivers a safe gap if they want to overtake you"], "correct": [1], "mark_count": 1}, {"number": 290, "question": "In which TWO of these situations may you overtake another vehicle on the right?", "options": ["When you are in a one-way street", "When approaching a motorway slip road where you will be turning off", "When the vehicle in front is signalling to turn left?", "When a slower vehicle is travelling in the left-hand lane of a dual carriageway", "In slow-moving traffic queues when traffic in the left-hand lane is moving more slowly"], "correct": [2, 4], "mark_count": 2}, {"number": 291, "question": "You are travelling in very heavy rain. Your overall stopping distance is likely to be:", "options": ["Doubled", "Up to ten times greater", "No different", "Halved"], "correct": [0], "mark_count": 1}, {"number": 292, "question": "Which TWO of the following are correct? When overtaking at night you should:", "options": ["Wait until a bend so that you can see the oncoming headlights", "Be careful because you can see less", "Sound your horn twice before moving out", "Beware of bends in the road ahead", "Put headlights on full beam"], "correct": [1, 3], "mark_count": 2}, {"number": 293, "question": "You are driving towards a zebra crossing. A person in a wheelchair is waiting to cross. What should you do?", "options": ["Continue on your way", "Wave to the person to cross", "Wave to the person to wait", "Be prepared to stop"], "correct": [3], "mark_count": 1}, {"number": 294, "question": "What colour are the reflective studs between a motorway and its slip road?", "options": ["Amber", "White", "Green", "Red"], "correct": [0], "mark_count": 1}, {"number": 295, "question": "On a clearway you must not stop:", "options": ["At any time", "When it is busy", "In the rush hour", "During daylight hours"], "correct": [0], "mark_count": 1}, {"number": 296, "question": "What does the term ‘blind spot’ mean for a driver?", "options": ["An area covered by your right-hand mirror", "An area not covered by your headlights", "An area covered by your left-hand mirror", "An area not covered by your mirrors"], "correct": [3], "mark_count": 1}, {"number": 297, "question": "To avoid spillage after refuelling, you should make sure that:", "options": ["Your tank is only three quarters full", "You have used a locking filler cap", "You check your fuel gauge is working", "Your filler cap is securely fastened"], "correct": [3], "mark_count": 1}, {"number": 298, "question": "Before entering a tunnel it is good advice to:", "options": ["Put on your sunglasses", "Check tyre pressures", "Change to a lower gear", "Tune your radio to a local channel"], "correct": [2], "mark_count": 1}, {"number": 299, "question": "When should you especially check the engine oil level?", "options": ["Before a long journey", "When the engine is hot", "Early in the morning", "Every 6000 kilometres"], "correct": [0], "mark_count": 1}, {"number": 300, "question": "What is the overall stopping distance when travelling at 32kph in good dry conditions?", "options": ["5 metres", "8 metres", "12 metres", "15 metres"], "correct": [2], "mark_count": 1}, {"number": 301, "question": "What is the overall stopping distance when travelling at 48 kph in good dry conditions?", "options": ["14 metres", "17 metres", "23 metres", "26 metres"], "correct": [2], "mark_count": 1}, {"number": 302, "question": "What is the overall stopping distance when travelling at 64 kph in good dry conditions?", "options": ["36 metres", "39 metres", "44 metres", "50 metres"], "correct": [0], "mark_count": 1}, {"number": 303, "question": "What is the overall stopping distance when travelling at 80 kph in good dry conditions?", "options": ["49 metres", "53 metres", "59 metres", "60 metres"], "correct": [1], "mark_count": 1}, {"number": 304, "question": "What is the overall stopping distance when travelling at 96 kph in good dry conditions?", "options": ["63 metres", "67 metres", "70 metres", "73 metres"], "correct": [3], "mark_count": 1}, {"number": 305, "question": "What is the overall stopping distance when travelling at 112 kph in good dry conditions?", "options": ["90 metres", "96 metres", "103 metres", "110 metres"], "correct": [1], "mark_count": 1}, {"number": 306, "question": "Which sign means that pedestrians may be walking along the road?", "options": ["IMG:signs/q306_opt0.png", "IMG:signs/q306_opt1.png", "IMG:signs/q306_opt2.png", "IMG:signs/q306_opt3.png"], "correct": [1], "mark_count": 1}, {"number": 307, "question": "Which shape is used for a 'give way' sign?", "options": ["IMG:signs/q307_opt0.png", "IMG:signs/q307_opt1.png", "IMG:signs/q307_opt2.png", "IMG:signs/q307_opt3.png"], "correct": [3], "mark_count": 1}, {"number": 308, "question": "Traffic signs giving orders are generally which shape?", "options": ["IMG:signs/q308_opt0.png", "IMG:signs/q308_opt1.png", "IMG:signs/q308_opt2.png", "IMG:signs/q308_opt3.png"], "correct": [0], "mark_count": 1}, {"number": 309, "question": "Which of these signs means road narrows on left?", "options": ["IMG:signs/q309_opt0.png", "IMG:signs/q309_opt1.png", "IMG:signs/q309_opt2.png", "IMG:signs/q309_opt3.png"], "correct": [2], "mark_count": 1}, {"number": 310, "question": "Which sign means no overtaking?", "options": ["IMG:signs/q310_opt0.png", "IMG:signs/q310_opt1.png", "IMG:signs/q310_opt2.png", "IMG:signs/q310_opt3.png"], "correct": [0], "mark_count": 1}, {"number": 311, "question": "Which sign means no waiting?", "options": ["IMG:signs/q311_opt0.png", "IMG:signs/q311_opt1.png", "IMG:signs/q311_opt2.png", "IMG:signs/q311_opt3.png"], "correct": [3], "mark_count": 1}, {"number": 312, "question": "You MUST obey signs giving orders. These signs are usually:", "options": ["Circular", "Triangular", "Rectangular", "Blue"], "correct": [0], "mark_count": 1}, {"number": 313, "question": "What shape is a STOP sign?", "options": ["Circular", "Triangular", "Inverted triangle", "Octagonal"], "correct": [3], "mark_count": 1}, {"number": 314, "question": "Signs with blue circles are mostly?", "options": ["Orders", "Warnings", "Compulsory", "Directions"], "correct": [2], "mark_count": 1}, {"number": 315, "question": "Information signs are usually?", "options": ["Circular", "Rectangular", "Triangular", "Octagonal"], "correct": [1], "mark_count": 1}, {"number": 316, "question": "Triangular signs are mostly?", "options": ["Signs giving orders", "Signs giving warnings", "Signs giving positive instruction", "Signs giving directions"], "correct": [1], "mark_count": 1}, {"number": 317, "question": "[Traffic Sign] What does this sign mean?", "options": ["Ahead only", "Level crossing with gate", "Level crossing without gate", "Crossroads"], "correct": [3], "mark_count": 1}, {"number": 318, "question": "[Traffic Sign] What does this sign mean?", "options": ["Bend to the right", "No traffic from the right", "No right turn", "Road on the right close"], "correct": [2], "mark_count": 1}, {"number": 319, "question": "[Traffic Sign] What does this sign mean?", "options": ["No right turn", "No left turn", "Give way to traffic on your right", "No entry"], "correct": [1], "mark_count": 1}, {"number": 320, "question": "Which FOUR of these would be indicated by a triangular road sign?", "options": ["Road narrows on both sides", "Hump bridge", "School crossing ahead", "Ahead only", "Minimum speed", "T-junction"], "correct": [0, 1, 2, 5], "mark_count": 4}, {"number": 321, "question": "[Traffic Sign] What does this sign mean?", "options": ["No left Lane", "No left turn", "No U-turns", "Left lane ends"], "correct": [2], "mark_count": 1}, {"number": 322, "question": "[Traffic Sign] What does this sign mean?", "options": ["No motor vehicles", "No overtaking", "No cars", "Dual carriage way"], "correct": [1], "mark_count": 1}, {"number": 323, "question": "[Traffic Sign] What does this sign mean?", "options": ["No stopping", "Parking or waiting restricted", "No motor vehicles", "No parking"], "correct": [1], "mark_count": 1}, {"number": 324, "question": "[Traffic Sign] What does this sign mean?", "options": ["No stopping (Clearway)", "Waiting restrictions apply", "No entry", "No parking"], "correct": [0], "mark_count": 1}, {"number": 325, "question": "[Traffic Sign] What does this sign mean?", "options": ["No entry", "No vehicles", "Stop", "Give way"], "correct": [1], "mark_count": 1}, {"number": 326, "question": "[Traffic Sign] What does this sign mean?", "options": ["No through road", "No entry for vehicular traffic", "Road closed ahead", "Motorway exit"], "correct": [1], "mark_count": 1}, {"number": 327, "question": "[Traffic Sign] What MUST you do when you see this sign?", "options": ["Stop, only if a red light is showing", "Stop, only if children are waiting to cross", "Stop, even if the road is clear", "Stop, only if traffic is approaching"], "correct": [2], "mark_count": 1}, {"number": 328, "question": "[Traffic Sign] What MUST you do when you see this sign?", "options": ["Stop", "Give way to traffic on major road", "No parking", "No vehicles"], "correct": [1], "mark_count": 1}, {"number": 329, "question": "[Traffic Sign] What does this sign mean?", "options": ["Warning zigzag road ahead", "Sharp bend ahead", "Bend to right", "Reduce speed before turning right"], "correct": [2], "mark_count": 1}, {"number": 330, "question": "[Traffic Sign] What does this sign mean?", "options": ["Slippery road when wet", "Double bend first to left", "Double bend first to right", "Zigzag road ends ahead"], "correct": [1], "mark_count": 1}, {"number": 331, "question": "[Traffic Sign] What does this sign mean?", "options": ["Double bend first to right", "Bend to left", "Junction on bend", "Slippery road"], "correct": [0], "mark_count": 1}, {"number": 332, "question": "[Traffic Sign] What does this sign mean?", "options": ["Zigzag road ahead", "Uneven road surface", "Slippery road", "Ice conditions ahead"], "correct": [2], "mark_count": 1}, {"number": 333, "question": "[Traffic Sign] What does this sign mean?", "options": ["Falling or fallen rocks", "Side winds", "Quayside or riverbank", "Uneven surface"], "correct": [0], "mark_count": 1}, {"number": 334, "question": "[Traffic Sign] What does this sign mean?", "options": ["Bridge ahead", "Ford ahead", "Tunnel ahead", "Uneven road"], "correct": [3], "mark_count": 1}, {"number": 335, "question": "[Traffic Sign] What does this sign mean?", "options": ["Traffic signals end", "Pedestrian crossing", "No through road", "Traffic light"], "correct": [3], "mark_count": 1}, {"number": 336, "question": "[Traffic Sign] What does this sign mean?", "options": ["Road narrows on right", "Single lane traffic ahead", "Dual carriageway ends", "Road narrows on both sides"], "correct": [3], "mark_count": 1}, {"number": 337, "question": "[Traffic Sign] What does this sign mean?", "options": ["Move into right lane", "Road narrows on left", "Right Lane ends ahead", "Warning two lane motorway"], "correct": [1], "mark_count": 1}, {"number": 338, "question": "[Traffic Sign] What does this sign mean?", "options": ["Move into left lane", "End of left lane", "Two way traffic", "Road narrows on right"], "correct": [3], "mark_count": 1}, {"number": 339, "question": "[Traffic Sign] What does this sign mean?", "options": ["T-junction", "No through road", "Turn right", "Side road"], "correct": [3], "mark_count": 1}, {"number": 340, "question": "[Traffic Sign] What does this sign mean?", "options": ["Crossroads", "Staggered junction", "Junction on bend", "T-junction"], "correct": [1], "mark_count": 1}, {"number": 341, "question": "[Traffic Sign] What does this sign mean?", "options": ["Low bridge ahead", "Railway tunnel ahead", "Hump bridge", "Tunnel ahead"], "correct": [2], "mark_count": 1}, {"number": 342, "question": "[Traffic Sign] What does this sign mean?", "options": ["Steep hill downwards", "Loose chippings", "Accident spot", "Uphill gradient"], "correct": [0], "mark_count": 1}, {"number": 343, "question": "[Traffic Sign] What does this sign mean?", "options": ["Loose chippings", "Accident spot", "Steep hill upwards", "Downhill gradient"], "correct": [2], "mark_count": 1}, {"number": 344, "question": "[Traffic Sign] What does this sign mean?", "options": ["School Patrol", "Pedestrian crossing", "Traffic island", "Elderly people crossing"], "correct": [1], "mark_count": 1}, {"number": 345, "question": "[Traffic Sign] What does this sign mean?", "options": ["No vehicles", "Mini-roundabout", "Roundabout", "Ring road"], "correct": [2], "mark_count": 1}, {"number": 346, "question": "[Traffic Sign] What does this sign mean?", "options": ["Aircraft only", "Oncoming airport", "Low flying aircraft or sudden aircraft noise", "Trams crossing ahead"], "correct": [2], "mark_count": 1}, {"number": 347, "question": "[Traffic Sign] What does this sign mean?", "options": ["Dual carriageway ends", "T-junction", "Two-way traffic straight ahead", "Danger ahead"], "correct": [1], "mark_count": 1}, {"number": 348, "question": "[Traffic Sign] What does this sign mean?", "options": ["You have right of way", "No overtaking", "Two-way traffic straight ahead", "Oncoming traffic has priority"], "correct": [2], "mark_count": 1}, {"number": 349, "question": "[Traffic Sign] What does this sign mean?", "options": ["Two-way traffic straight ahead", "Two-way traffic over a bridge", "Two-way traffic crosses a two-way road", "Two-way traffic crosses one-way road"], "correct": [3], "mark_count": 1}, {"number": 350, "question": "[Traffic Sign] What does this sign mean?", "options": ["Goods vehicles access", "No goods vehicles over unladen weight shown (unladen weight limit)", "Goods vehicles with unladen weight shown (unladen weight limit)", "No access to goods vehicles"], "correct": [1], "mark_count": 1}, {"number": 351, "question": "[Traffic Sign] Which type of vehicle does this sign apply to?", "options": ["No vehicles over width shown", "High Vehicles", "Long Vehicles", "Heavy Vehicles"], "correct": [0], "mark_count": 1}, {"number": 352, "question": "[Traffic Sign] What does this sign mean?", "options": ["No vehicles over the width shown", "No vehicle or combination of vehicles over length shown", "No vehicles", "No vehicles over the height shown"], "correct": [1], "mark_count": 1}, {"number": 353, "question": "[Traffic Sign] What does this sign mean?", "options": ["No cars", "No motorbikes", "No entry", "No motor vehicles"], "correct": [3], "mark_count": 1}, {"number": 354, "question": "[Traffic Sign] What does this sign mean?", "options": ["No motor vehicles", "No motor vehicles except solo motor cycles, scooters or mopeds", "Single lane", "No overtaking"], "correct": [1], "mark_count": 1}, {"number": 355, "question": "[Traffic Sign] What does this sign mean?", "options": ["Pedestrian crossing ahead", "Pedestrians in the road ahead", "No pedestrians", "Pedestrian zone - no vehicles allowed"], "correct": [2], "mark_count": 1}, {"number": 356, "question": "[Traffic Sign] What does this sign mean?", "options": ["Unladen weight limit", "Maximum speed", "Minimum speed", "National speed limit"], "correct": [1], "mark_count": 1}, {"number": 357, "question": "[Traffic Sign] What does this sign mean?", "options": ["School crossing ahead", "No pedestrians allowed", "Pedestrian zone - no vehicles allowed", "Footpath ahead"], "correct": [0], "mark_count": 1}, {"number": 358, "question": "[Traffic Sign] What does this sign mean?", "options": ["Diversion ahead", "One way traffic", "Ahead only", "Single Lane"], "correct": [2], "mark_count": 1}, {"number": 359, "question": "[Traffic Sign] What does this sign mean?", "options": ["Give way to traffic on your left", "No left turn", "Right turn ahead", "Left turn ahead"], "correct": [3], "mark_count": 1}, {"number": 360, "question": "[Traffic Sign] What does this sign mean?", "options": ["Give way to traffic on your right", "Right turn ahead", "Left turn ahead", "No right turn"], "correct": [1], "mark_count": 1}, {"number": 361, "question": "[Traffic Sign] What does this sign mean?", "options": ["Diversion to the right", "Turn right", "Keep right", "Single lane"], "correct": [1], "mark_count": 1}, {"number": 362, "question": "[Traffic Sign] What does this sign mean?", "options": ["Turn left", "Keep left", "Single lane", "Diversion to the left"], "correct": [0], "mark_count": 1}, {"number": 363, "question": "[Traffic Sign] What does this sign mean?", "options": ["Turn left", "Keep left", "Single lane", "Traffic passes on the left"], "correct": [1], "mark_count": 1}, {"number": 364, "question": "[Traffic Sign] What does this sign mean?", "options": ["Traffic passes on the left", "Turn right", "Keep right", "Single lane"], "correct": [2], "mark_count": 1}, {"number": 365, "question": "[Traffic Sign] What does this sign mean?", "options": ["Give way to vehicles on left and right", "Traffic passes on both sides", "Vehicles may pass either side to reach same destination", "Turn off at next the junction on the motorway"], "correct": [2], "mark_count": 1}, {"number": 366, "question": "[Traffic Sign] What does this sign mean?", "options": ["Ahead only", "One way traffic", "No waiting", "Diversion ahead"], "correct": [1], "mark_count": 1}, {"number": 367, "question": "[Traffic Sign] What does this sign mean?", "options": ["No Cycles", "Route to be used by pedal cyclist only", "Cycle route ahead", "Secure cycle parking ahead"], "correct": [1], "mark_count": 1}, {"number": 368, "question": "You are driving along the motorway in the inside lane. You intend to turn right at the next available exit. When should you signal right?", "options": ["At the third count-down marker (100 meters to go)", "At the second count-down marker (200 meters to go)", "At the first count-down marker (300 meters to go)", "When you have reached the slip road"], "correct": [1], "mark_count": 1}];
 
+
+// ========== Option rendering helpers ==========
 function renderOptionContent(opt) {
   if (typeof opt === 'string' && opt.startsWith('IMG:')) {
     return `<img class="option-img" src="${opt.substring(4)}" alt="Sign option" loading="lazy">`;
   }
-  return opt;
+  return escapeHTML(opt);
 }
 function hasImageOptions(q) {
   return q.options.some(o => typeof o === 'string' && o.startsWith('IMG:'));
 }
+function escapeHTML(s) {
+  if (typeof s !== 'string') return s;
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 
+// ========== Topic classifier ==========
+const TOPIC_DEFS = [
+  { id: 'signs', label: 'Signs & Markings', icon: '\uD83D\uDEA6' },
+  { id: 'motorway', label: 'Motorways', icon: '\uD83D\uDEE3\uFE0F' },
+  { id: 'weather', label: 'Weather & Visibility', icon: '\uD83C\uDF27\uFE0F' },
+  { id: 'stopping', label: 'Speed & Stopping Distances', icon: '\u23F1\uFE0F' },
+  { id: 'vulnerable', label: 'Vulnerable Road Users', icon: '\uD83D\uDEB4' },
+  { id: 'vehicle', label: 'Vehicle Control & Brakes', icon: '\uD83D\uDEE0\uFE0F' },
+  { id: 'security', label: 'Security, Fuel & Admin', icon: '\uD83D\uDD12' },
+  { id: 'rules', label: 'Rules & Procedures', icon: '\uD83D\uDCD6' }
+];
+
+function classifyTopic(q) {
+  const n = q.number;
+  const t = (q.question || '').toLowerCase();
+  const opts = (q.options || []).map(o => typeof o === 'string' ? o.toLowerCase() : '').join(' ');
+  const text = t + ' ' + opts;
+  if (n >= 306 && n <= 368) return 'signs';
+  if (/\bsign\b|traffic light|pelican|zebra|toucan|amber|crossing|yellow box|reflective stud|white line|zigzag/.test(text)) return 'signs';
+  if (/motorway|hard shoulder|contraflow|slip road|acceleration lane|central reservation|reflective stud/.test(text)) return 'motorway';
+  if (/\bfog\b|mist|rain|wet|snow|ice|icy|freezing|dazzle|headlight|fog light|visibility|tunnel|night|windy|wind/.test(text)) return 'weather';
+  if (/stopping distance|metres|mph|kph|speed limit|\bspeed\b|tailgat|time gap|overall stopping|thinking distance|braking distance/.test(text)) return 'stopping';
+  if (/cyclist|motorcyc|pedestrian|wheelchair|horse|elderly|disabled|blind|child(ren)?|school|learner|rider|moped/.test(text)) return 'vulnerable';
+  if (/brake|braking|anti-lock|abs|gear|clutch|steering|skid|tyre|handbrake|engine|oil|coolant|roof rack|trailer|caravan|stabiliser|warning triangle/.test(text)) return 'vehicle';
+  if (/insurance|licence|license|roadworthiness|park|parking|security|stolen|valuables|lock|fuel|diesel|petrol|catalytic|filler|emission/.test(text)) return 'security';
+  return 'rules';
+}
+function getTopic(q) {
+  if (q._topic) return q._topic;
+  q._topic = classifyTopic(q);
+  return q._topic;
+}
+QUESTIONS.forEach(q => getTopic(q));
+
+// ========== Explanations (curated) ==========
+const EXPLANATIONS = {
+  103: "Your seat belt is only legally exempt while you're actively reversing, because the belt can restrict the twist/look needed to see behind.",
+  106: "Reversing from a side road into a main road is never allowed in any circumstance \u2014 always reverse from main into side.",
+  109: "Place the warning triangle at least 45 m (147 ft) behind your vehicle on a two-way road so following traffic has enough warning distance.",
+  110: "In a tyre burst, brake abruptly can cause a full skid. Slow gradually and hold the wheel firmly so the car tracks straight.",
+  113: "Counter-intuitive but correct: slow down very gradually. Braking, steering or accelerating all tend to make caravan snaking worse.",
+  114: "Legal minimum tread depth is 1.6 mm across the central three-quarters of the tyre \u2014 remember 1.6, not 1.0.",
+  123: "ABS prevents the wheels locking, which stops the tyres from skidding \u2014 it doesn't stop aquaplaning, punctures or wear.",
+  127: "With ABS, press the brake rapidly and firmly, and hold it. Don't pump; the system does that for you many times per second.",
+  128: "ABS needs grip to work with. On loose surfaces (gravel) or standing water (aquaplaning) the tyre can't grip, so ABS can't prevent skidding.",
+  131: "Rear fog lights on a clear night can dazzle drivers behind you and be mistaken for brake lights. Only use them when visibility is seriously reduced (under 100 m).",
+  138: "On ice, braking distances can be up to 10\u00d7 normal. This is the single biggest multiplier to remember.",
+  139: "In freezing conditions (not ice) stopping distances are up to 5\u00d7 greater than on a dry road.",
+  142: "ABS works by rapidly modulating brake pressure. Your job is just to press firmly and hold \u2014 don't release until stopped.",
+  149: "To supervise a learner you must be at least 21 and have held a full licence for the appropriate category for at least 3 years.",
+  161: "Cyclists may swerve suddenly to avoid pot-holes, drains or doors opening \u2014 leave a car's width when overtaking.",
+  166: "Bright/reflective clothing is important because drivers genuinely often don't see motorcyclists (the \"SMIDSY\" problem: Sorry, Mate, I Didn't See You).",
+  171: "Never remove a helmet from an injured motorcyclist \u2014 you can do serious spinal damage. Call for medical assistance and only remove it if airway is compromised.",
+  200: "When someone is waiting at a zebra crossing, stop before the zigzag lines and let them cross. The zigzags are the legal no-stop/no-overtake zone.",
+  201: "Flashing amber at a pelican crossing means give way to pedestrians still on the crossing, but you may proceed if none are.",
+  203: "If you skid without ABS, the first thing is to release the footbrake to let the wheels turn again so you can steer out of the skid.",
+  267: "Flashing amber = give way to pedestrians ALREADY on the crossing. You do not need to wait for those still on the pavement.",
+  268: "Never wave pedestrians across \u2014 another vehicle (especially a bike filtering) might not have seen you stop or the pedestrian.",
+  269: "On a wet road, double the normal two-second gap to at least four seconds \u2014 but note the question asks about a \"wet road\"; the safer rule of thumb used here is four seconds (some sources say three, the test requires four).",
+  277: "The legal minimum is Third Party only \u2014 it doesn't cover your own car, but it's the baseline to drive on public roads.",
+  291: "In very heavy rain, overall stopping distance roughly doubles because spray, reduced visibility and aquaplaning all compound.",
+  296: "A blind spot is any area NOT covered by your mirrors. Always shoulder-check before changing lane.",
+  300: "32 kph \u2248 20 mph: overall stopping distance is about 12 m in good conditions.",
+  301: "48 kph \u2248 30 mph: overall stopping distance is about 23 m.",
+  305: "112 kph \u2248 70 mph: overall stopping distance is about 96 m \u2014 roughly 24 car lengths.",
+  307: "A 'give way' sign is an inverted (downward-pointing) triangle \u2014 it's the only common road sign with that shape.",
+  308: "Signs giving orders are circular \u2014 triangles are warnings, rectangles are informational, octagons are STOP.",
+  313: "STOP is the one sign with an octagonal shape so it's recognisable even when dirty or from behind.",
+  316: "Triangular signs are almost always warnings \u2014 circles order, triangles warn, rectangles inform."
+};
+
+// ========== State ==========
 const STORAGE_KEY = 'gib_theory_test_v1';
+const THEME_KEY = 'gib_theory_theme';
+const MOCK_TIME = 45 * 60;
+
 let state = loadState();
 
 function loadState() {
   try {
     const s = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (s && s.mastered) {
-      if (!s.bookmarked) s.bookmarked = [];
+      s.bookmarked = s.bookmarked || [];
+      s.wrongCount = s.wrongCount || {};
+      s.mockFlags = s.mockFlags || [];
+      s.mockHistory = s.mockHistory || [];
+      s.topic = s.topic || null;
       return s;
     }
   } catch(e) {}
-  return { mastered: [], wrongQueue: [], currentQueue: [], currentIdx: 0, roundNum: 1, roundCorrect: 0, roundWrong: 0, roundWrongNums: [], mode: 'full', bookmarked: [] };
+  return defaultState();
+}
+function defaultState() {
+  return {
+    mastered: [], wrongQueue: [], currentQueue: [], currentIdx: 0, roundNum: 1,
+    roundCorrect: 0, roundWrong: 0, roundWrongNums: [], mode: 'full',
+    bookmarked: [], wrongCount: {}, mockFlags: [], mockHistory: [], topic: null
+  };
+}
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function getQuestion(num) { return QUESTIONS.find(q => q.number === num); }
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
-function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+// ========== Theme ==========
+function initTheme() {
+  let theme = localStorage.getItem(THEME_KEY);
+  if (!theme) {
+    theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  applyTheme(theme);
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.innerHTML = theme === 'dark' ? '&#9728;' : '&#127769;';
+    btn.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+  }
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
 
+// ========== Screens ==========
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
+// ========== Welcome / home ==========
 function updateWelcome() {
   const m = state.mastered.length;
   const total = QUESTIONS.length;
   const cont = document.getElementById('continue-btn');
   const reset = document.getElementById('reset-btn');
   const progressSummary = document.getElementById('mastery-progress');
+
   if (m > 0) {
     const pct = Math.round((m / total) * 100);
     progressSummary.classList.remove('hidden');
     progressSummary.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-        <span style="font-weight:700;font-size:1.1rem;color:var(--primary)">${m} / ${total}</span>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;justify-content:center">
+        <span style="font-weight:700;font-size:1.15rem;color:var(--primary)">${m} / ${total}</span>
         <span style="color:var(--text-secondary);font-size:.85rem">questions mastered (${pct}%)</span>
       </div>
       <div class="progress-container" style="margin:0"><div class="progress-bar" style="width:${pct}%"></div></div>
@@ -309,42 +543,118 @@ function updateWelcome() {
   } else {
     progressSummary.classList.add('hidden');
   }
+
   const canContinue = state.currentQueue.length > 0 && state.currentIdx < state.currentQueue.length && state.mode !== 'bookmarked' && state.mode !== 'study';
-  const hasProgress = m > 0 || state.wrongQueue.length > 0;
   if (canContinue) {
     cont.classList.remove('hidden');
     const remaining = state.currentQueue.length - state.currentIdx;
-    document.getElementById('continue-desc').textContent = `${remaining} questions remaining in current round`;
-  } else if (hasProgress && state.mode === 'full' && state.wrongQueue.length > 0) {
+    const modeLabel = {full:'Practice',mock:'Mock Test',quick:'Quick Quiz',topic:'Topic Practice',hardest:'Hardest Questions'}[state.mode] || 'Session';
+    document.getElementById('continue-desc').textContent = `${modeLabel} \u00b7 ${remaining} question${remaining!==1?'s':''} left`;
+  } else if (state.mode === 'full' && state.wrongQueue.length > 0) {
     cont.classList.remove('hidden');
-    document.getElementById('continue-desc').textContent = 'Start next round with ' + state.wrongQueue.length + ' review questions';
+    document.getElementById('continue-desc').textContent = `Start next round with ${state.wrongQueue.length} review question${state.wrongQueue.length!==1?'s':''}`;
   } else {
     cont.classList.add('hidden');
   }
-  reset.style.display = m > 0 ? '' : 'none';
-  document.getElementById('start-desc').textContent = m > 0 ? `Reset and start fresh with all ${total} questions` : `Go through all ${total} questions. Missed ones repeat until mastered.`;
+  reset.style.display = (m > 0 || state.bookmarked.length > 0 || state.mockHistory.length > 0) ? '' : 'none';
+  document.getElementById('start-desc').textContent = m > 0
+    ? `Start a fresh round through all ${total} questions (progress is preserved)`
+    : `Go through all ${total} questions. Missed ones repeat until mastered.`;
+
+  // Bookmarked
   const bk = state.bookmarked.length;
   const bkBtn = document.getElementById('bookmarked-btn');
   const stBtn = document.getElementById('study-btn');
   if (bk > 0) {
     bkBtn.classList.remove('hidden');
     stBtn.classList.remove('hidden');
-    document.getElementById('bookmarked-title').textContent = `Review Bookmarked (${bk})`;
-    document.getElementById('study-title').textContent = `Study Bookmarked (${bk})`;
+    bkBtn.querySelector('#bookmarked-title').textContent = `Review Bookmarked (${bk})`;
+    stBtn.querySelector('#study-title').textContent = `Study Bookmarked (${bk})`;
   } else {
     bkBtn.classList.add('hidden');
     stBtn.classList.add('hidden');
   }
+
+  // Hardest
+  const hardestNums = getHardestQuestionNums();
+  const hardBtn = document.getElementById('hardest-btn');
+  if (hardestNums.length >= 5) {
+    hardBtn.classList.remove('hidden');
+    hardBtn.querySelector('#hardest-title').textContent = `Hardest Questions (${Math.min(hardestNums.length, 20)})`;
+  } else {
+    hardBtn.classList.add('hidden');
+  }
+
+  // Mock history sparkline
+  renderScoreHistory();
 }
 
-function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+function getHardestQuestionNums() {
+  const entries = Object.entries(state.wrongCount || {})
+    .filter(([, n]) => n > 0)
+    .sort((a,b) => b[1] - a[1]);
+  return entries.map(e => parseInt(e[0]));
+}
+
+function renderScoreHistory() {
+  const host = document.getElementById('score-history');
+  const hist = state.mockHistory || [];
+  if (hist.length < 2) { host.classList.add('hidden'); return; }
+  host.classList.remove('hidden');
+  const last = hist.slice(-10);
+  const w = 300, h = 50, pad = 4;
+  const max = 100, min = 0;
+  const step = (w - pad * 2) / Math.max(1, last.length - 1);
+  const y = v => h - pad - ((v - min) / (max - min)) * (h - pad * 2);
+  const pts = last.map((p, i) => `${pad + i * step},${y(p.score)}`).join(' ');
+  const circles = last.map((p, i) => {
+    const cx = pad + i * step;
+    const cy = y(p.score);
+    const col = p.score >= 80 ? 'var(--correct)' : 'var(--wrong)';
+    return `<circle cx="${cx}" cy="${cy}" r="3" fill="${col}" />`;
+  }).join('');
+  const latest = last[last.length - 1];
+  const avg = Math.round(last.reduce((a,b)=>a+b.score,0) / last.length);
+  host.innerHTML = `
+    <div class="score-history-head">
+      <strong>Mock test history</strong>
+      <span>Latest: <strong style="color:${latest.score>=80?'var(--correct)':'var(--wrong)'}">${latest.score}%</strong> &middot; Avg ${avg}%</span>
+    </div>
+    <svg class="sparkline" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <line x1="${pad}" y1="${y(80)}" x2="${w-pad}" y2="${y(80)}" stroke="var(--border)" stroke-dasharray="3 3" stroke-width="1" />
+      <polyline points="${pts}" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      ${circles}
+    </svg>
+  `;
+}
+
+// ========== Practice modes ==========
+function pickQuizQuestions(count, pool) {
+  const base = pool || QUESTIONS;
+  const unmastered = base.filter(q => !state.mastered.includes(q.number));
+  let picked;
+  if (unmastered.length >= count) {
+    picked = shuffle([...unmastered]).slice(0, count);
+  } else {
+    const masteredPool = base.filter(q => state.mastered.includes(q.number));
+    const fill = shuffle([...masteredPool]).slice(0, count - unmastered.length);
+    picked = shuffle([...unmastered, ...fill]);
+  }
+  return picked.map(q => q.number);
+}
 
 function startFullPractice() {
-  state = { mastered: [], wrongQueue: [], currentQueue: shuffle(QUESTIONS.map(q => q.number)), currentIdx: 0, roundNum: 1, roundCorrect: 0, roundWrong: 0, roundWrongNums: [], mode: 'full' };
+  if (state.mastered.length > 0) {
+    if (!confirm('Start fresh? Your mastered questions will stay, but the current round will restart with all 268 questions.')) return;
+  }
+  Object.assign(state, {
+    currentQueue: shuffle(QUESTIONS.map(q => q.number)),
+    currentIdx: 0, roundNum: 1, roundCorrect: 0, roundWrong: 0, roundWrongNums: [],
+    wrongQueue: [], mode: 'full', topic: null, mockFlags: []
+  });
   saveState();
   showQuiz();
 }
-
 function continuePractice() {
   if (state.currentIdx >= state.currentQueue.length) {
     startNextRound();
@@ -352,45 +662,58 @@ function continuePractice() {
     showQuiz();
   }
 }
-
-function pickQuizQuestions(count) {
-  const unmastered = QUESTIONS.filter(q => !state.mastered.includes(q.number));
-  let picked;
-  if (unmastered.length >= count) {
-    picked = shuffle([...unmastered]).slice(0, count);
-  } else {
-    const masteredPool = QUESTIONS.filter(q => state.mastered.includes(q.number));
-    const fill = shuffle([...masteredPool]).slice(0, count - unmastered.length);
-    picked = shuffle([...unmastered, ...fill]);
-  }
-  return picked.map(q => q.number);
-}
-
 function startQuickQuiz() {
-  state.currentQueue = pickQuizQuestions(20);
-  state.currentIdx = 0;
-  state.roundCorrect = 0;
-  state.roundWrong = 0;
-  state.roundWrongNums = [];
-  state.mode = 'quick';
-  state.roundNum = 0;
+  Object.assign(state, {
+    currentQueue: pickQuizQuestions(20),
+    currentIdx: 0, roundCorrect: 0, roundWrong: 0, roundWrongNums: [],
+    mode: 'quick', roundNum: 0, topic: null, mockFlags: []
+  });
   saveState();
   showQuiz();
 }
-
 function startMockTest() {
-  state.currentQueue = pickQuizQuestions(50);
-  state.currentIdx = 0;
-  state.roundCorrect = 0;
-  state.roundWrong = 0;
-  state.roundWrongNums = [];
-  state.mode = 'mock';
-  state.roundNum = 0;
-  state.timerSeconds = MOCK_TIME;
+  Object.assign(state, {
+    currentQueue: pickQuizQuestions(50),
+    currentIdx: 0, roundCorrect: 0, roundWrong: 0, roundWrongNums: [],
+    mode: 'mock', roundNum: 0, timerSeconds: MOCK_TIME, topic: null, mockFlags: []
+  });
   saveState();
   showQuiz();
 }
-
+function startHardestQuestions() {
+  const nums = getHardestQuestionNums().slice(0, 20);
+  if (nums.length === 0) return;
+  Object.assign(state, {
+    currentQueue: shuffle([...nums]),
+    currentIdx: 0, roundCorrect: 0, roundWrong: 0, roundWrongNums: [],
+    mode: 'hardest', roundNum: 0, topic: null, mockFlags: []
+  });
+  saveState();
+  showQuiz();
+}
+function startTopicPractice(topicId) {
+  const pool = QUESTIONS.filter(q => getTopic(q) === topicId);
+  if (pool.length === 0) return;
+  const count = Math.min(20, pool.length);
+  Object.assign(state, {
+    currentQueue: pickQuizQuestions(count, pool),
+    currentIdx: 0, roundCorrect: 0, roundWrong: 0, roundWrongNums: [],
+    mode: 'topic', roundNum: 0, topic: topicId, mockFlags: []
+  });
+  saveState();
+  closeTopicPicker();
+  showQuiz();
+}
+function startBookmarkedReview() {
+  if (state.bookmarked.length === 0) return;
+  Object.assign(state, {
+    currentQueue: shuffle([...state.bookmarked]),
+    currentIdx: 0, roundCorrect: 0, roundWrong: 0, roundWrongNums: [],
+    mode: 'bookmarked', roundNum: 0, topic: null, mockFlags: []
+  });
+  saveState();
+  showQuiz();
+}
 function startNextRound() {
   if (state.wrongQueue.length === 0) {
     showComplete(true);
@@ -407,9 +730,34 @@ function startNextRound() {
   showQuiz();
 }
 
+// ========== Topic picker ==========
+function openTopicPicker() {
+  const list = document.getElementById('topic-list');
+  const counts = {};
+  TOPIC_DEFS.forEach(t => counts[t.id] = 0);
+  QUESTIONS.forEach(q => counts[getTopic(q)]++);
+  list.innerHTML = TOPIC_DEFS.map(t => {
+    const n = counts[t.id] || 0;
+    return `<button class="mode-btn" onclick="startTopicPractice('${t.id}')">
+      <span class="mode-icon">${t.icon}</span>
+      <span class="mode-body">
+        <h3>${t.label}</h3>
+        <p>${n} question${n!==1?'s':''} \u00b7 up to 20 per session</p>
+      </span>
+    </button>`;
+  }).join('');
+  document.getElementById('topic-overlay').classList.remove('hidden');
+}
+function closeTopicPicker() {
+  document.getElementById('topic-overlay').classList.add('hidden');
+}
+
+// ========== Quiz screen ==========
 function showQuiz() {
   showScreen('quiz-screen');
-  document.getElementById('pause-btn').classList.toggle('hidden', state.mode === 'quick' || state.mode === 'bookmarked');
+  const showPause = state.mode === 'mock' || state.mode === 'full';
+  document.getElementById('pause-btn').classList.toggle('hidden', !showPause);
+  document.getElementById('flag-btn').classList.toggle('hidden', state.mode !== 'mock');
   if (state.mode === 'mock') {
     const saved = state.timerSeconds != null ? state.timerSeconds : MOCK_TIME;
     startTimer(saved);
@@ -420,125 +768,12 @@ function showQuiz() {
   showCurrentQuestion();
 }
 
-function getQuestion(num) { return QUESTIONS.find(q => q.number === num); }
-
 let selectedOptions = new Set();
 let answered = false;
-let timerInterval = null;
-let timerSeconds = 0;
-const MOCK_TIME = 45 * 60;
-
-function startTimer(seconds) {
-  stopTimer();
-  timerSeconds = seconds != null ? seconds : MOCK_TIME;
-  state.timerSeconds = timerSeconds;
-  saveState();
-  document.getElementById('timer-bar').classList.remove('hidden');
-  updateTimerDisplay();
-  runTimerInterval();
-}
-
-function runTimerInterval() {
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    state.timerSeconds = timerSeconds;
-    if (timerSeconds % 10 === 0) saveState();
-    updateTimerDisplay();
-    if (timerSeconds <= 0) {
-      saveState();
-      stopTimer();
-      showComplete(false);
-    }
-  }, 1000);
-}
-
-function stopTimer() {
-  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-}
-
-function updateTimerDisplay() {
-  const m = Math.floor(Math.max(0, timerSeconds) / 60);
-  const s = Math.max(0, timerSeconds) % 60;
-  const clock = document.getElementById('timer-clock');
-  const fill = document.getElementById('timer-fill');
-  clock.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  const pct = (timerSeconds / MOCK_TIME) * 100;
-  fill.style.width = pct + '%';
-  clock.classList.remove('warning','danger');
-  fill.classList.remove('warning','danger');
-  if (timerSeconds <= 120) { clock.classList.add('danger'); fill.classList.add('danger'); }
-  else if (timerSeconds <= 300) { clock.classList.add('warning'); fill.classList.add('warning'); }
-}
-
-function pauseQuiz() {
-  if (state.mode === 'mock') {
-    stopTimer();
-    state.timerSeconds = timerSeconds;
-    saveState();
-  }
-  document.getElementById('pause-overlay').classList.remove('hidden');
-  const msg = document.getElementById('pause-message');
-  if (state.mode === 'mock') {
-    const m = Math.floor(timerSeconds / 60);
-    const s = timerSeconds % 60;
-    msg.textContent = `Timer paused at ${m}:${String(s).padStart(2,'0')}. Your progress is saved.`;
-  } else {
-    msg.textContent = 'Take a break. Your progress is saved.';
-  }
-}
-
-function resumeQuiz() {
-  document.getElementById('pause-overlay').classList.add('hidden');
-  if (state.mode === 'mock' && timerSeconds > 0) {
-    runTimerInterval();
-  }
-}
-
-function exitQuiz() {
-  stopTimer();
-  document.getElementById('timer-bar').classList.add('hidden');
-  goHome();
-}
-
-function exitFromPause() {
-  document.getElementById('pause-overlay').classList.add('hidden');
-  exitQuiz();
-}
-
-function toggleBookmark() {
-  const qNum = state.currentQueue[state.currentIdx];
-  const idx = state.bookmarked.indexOf(qNum);
-  if (idx > -1) {
-    state.bookmarked.splice(idx, 1);
-  } else {
-    state.bookmarked.push(qNum);
-  }
-  saveState();
-  updateBookmarkBtn(qNum);
-}
-
-function updateBookmarkBtn(qNum) {
-  const btn = document.getElementById('bookmark-btn');
-  const isBookmarked = state.bookmarked.includes(qNum);
-  btn.classList.toggle('active', isBookmarked);
-  btn.innerHTML = isBookmarked ? '&#9733;' : '&#9734;';
-  btn.title = isBookmarked ? 'Remove bookmark' : 'Bookmark this question';
-}
-
-function startBookmarkedReview() {
-  if (state.bookmarked.length === 0) return;
-  state.currentQueue = shuffle([...state.bookmarked]);
-  state.currentIdx = 0;
-  state.roundCorrect = 0;
-  state.roundWrong = 0;
-  state.roundWrongNums = [];
-  state.mode = 'bookmarked';
-  state.roundNum = 0;
-  saveState();
-  showQuiz();
-}
+let autoAdvanceTimer = null;
 
 function showCurrentQuestion() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
   if (state.currentIdx >= state.currentQueue.length) {
     showComplete(false);
     return;
@@ -552,16 +787,26 @@ function showCurrentQuestion() {
   const isMulti = q.correct.length > 1;
   const requiredCount = q.correct.length;
 
+  const card = document.getElementById('question-card');
+  card.classList.remove('fade-in'); void card.offsetWidth; card.classList.add('fade-in');
+
   document.getElementById('q-number').textContent = `Q${q.number}`;
   document.getElementById('q-text').textContent = q.question;
   updateBookmarkBtn(q.number);
+  updateFlagBtn(q.number);
 
   const multiBadge = document.getElementById('q-multi-badge');
-  if (isMulti) {
-    multiBadge.classList.remove('hidden');
-    multiBadge.textContent = `Select ${requiredCount}`;
+  multiBadge.classList.toggle('hidden', !isMulti);
+  if (isMulti) multiBadge.textContent = `Select ${requiredCount}`;
+
+  // Topic badge
+  const topicBadge = document.getElementById('topic-badge');
+  if (state.mode === 'topic' && state.topic) {
+    const t = TOPIC_DEFS.find(td => td.id === state.topic);
+    topicBadge.textContent = t ? t.label : state.topic;
+    topicBadge.classList.remove('hidden');
   } else {
-    multiBadge.classList.add('hidden');
+    topicBadge.classList.add('hidden');
   }
 
   const total = state.currentQueue.length;
@@ -570,34 +815,35 @@ function showCurrentQuestion() {
   document.getElementById('s-total').textContent = remaining;
   document.getElementById('s-correct').textContent = state.roundCorrect;
   document.getElementById('s-wrong').textContent = state.roundWrong;
-  document.getElementById('s-mastered').textContent = state.mastered.length;
   document.getElementById('progress-bar').style.width = ((state.currentIdx / total) * 100) + '%';
 
   const badge = document.getElementById('round-badge-container');
-  if (state.mode === 'full' && state.roundNum > 0) {
-    badge.innerHTML = `<span class="round-badge">Round ${state.roundNum}${state.roundNum > 1 ? ' - Review' : ''}</span>`;
-  } else if (state.mode === 'mock') {
-    badge.innerHTML = `<span class="round-badge">Mock Test (50 Questions)</span>`;
-  } else if (state.mode === 'bookmarked') {
-    badge.innerHTML = `<span class="round-badge">Bookmarked Review</span>`;
-  } else if (state.mode === 'quick') {
-    badge.innerHTML = `<span class="round-badge">Quick Quiz</span>`;
-  } else {
-    badge.innerHTML = '';
-  }
+  const labels = {
+    full: state.roundNum > 0 ? `Round ${state.roundNum}${state.roundNum > 1 ? ' \u00b7 Review' : ''}` : '',
+    mock: `Mock Test \u00b7 50 Questions`,
+    bookmarked: `Bookmarked Review`,
+    quick: `Quick Quiz`,
+    hardest: `Hardest Questions`,
+    topic: (TOPIC_DEFS.find(t => t.id === state.topic) || {}).label || 'Topic Practice'
+  };
+  const label = labels[state.mode] || '';
+  badge.innerHTML = label ? `<span class="round-badge">${label}</span>` : '';
 
   const letters = 'ABCDEFGH';
   const container = document.getElementById('options-container');
   const imgMode = hasImageOptions(q);
   container.className = imgMode ? 'options sign-grid' : 'options';
+  container.setAttribute('role', isMulti ? 'group' : 'radiogroup');
   container.innerHTML = q.options.map((opt, i) => `
-    <div class="option" data-idx="${i}" onclick="selectOption(${i})">
-      <div class="option-marker ${isMulti ? 'multi-marker' : ''}">${letters[i]}</div>
-      <div class="option-text">${renderOptionContent(opt)}</div>
-    </div>
+    <button type="button" class="option" data-idx="${i}" role="${isMulti ? 'checkbox' : 'radio'}" aria-checked="false" onclick="selectOption(${i})">
+      <span class="option-marker ${isMulti ? 'multi-marker' : ''}" aria-hidden="true">${letters[i]}</span>
+      <span class="option-text">${renderOptionContent(opt)}</span>
+      <span class="option-kbd" aria-hidden="true">${letters[i]}</span>
+    </button>
   `).join('');
 
   document.getElementById('feedback').classList.add('hidden');
+  document.getElementById('feedback').innerHTML = '';
   document.getElementById('next-btn').classList.add('hidden');
   document.getElementById('submit-multi-btn').classList.toggle('hidden', !isMulti);
 }
@@ -612,7 +858,9 @@ function selectOption(idx) {
     else selectedOptions.add(idx);
     document.querySelectorAll('.option').forEach(el => {
       const i = parseInt(el.dataset.idx);
-      el.classList.toggle('selected', selectedOptions.has(i));
+      const on = selectedOptions.has(i);
+      el.classList.toggle('selected', on);
+      el.setAttribute('aria-checked', on ? 'true' : 'false');
     });
   } else {
     selectedOptions = new Set([idx]);
@@ -636,26 +884,32 @@ function checkAnswer() {
     const i = parseInt(el.dataset.idx);
     el.classList.add('disabled');
     el.classList.remove('selected');
+    el.setAttribute('aria-disabled', 'true');
     if (q.correct.includes(i)) el.classList.add('correct-answer');
     if (selectedOptions.has(i) && !q.correct.includes(i)) el.classList.add('wrong-answer');
   });
 
   const fb = document.getElementById('feedback');
   fb.classList.remove('hidden', 'correct', 'wrong');
+  const letters = 'ABCDEFGH';
+
   if (isCorrect) {
     fb.classList.add('correct');
-    fb.innerHTML = '&#10003; Correct!';
+    fb.innerHTML = `<span class="fb-icon" aria-hidden="true">&#10003;</span><span class="fb-body"><strong>Correct!</strong></span>`;
     state.roundCorrect++;
     if (!state.mastered.includes(q.number)) state.mastered.push(q.number);
   } else {
     fb.classList.add('wrong');
-    const letters2 = 'ABCDEFGH';
-    const correctTexts = hasImageOptions(q)
-      ? q.correct.map(i => `Option ${letters2[i]}`).join(', ')
-      : q.correct.map(i => q.options[i]).join(', ');
-    fb.innerHTML = `&#10007; Wrong &mdash; Correct: ${correctTexts}`;
+    const correctLabel = hasImageOptions(q)
+      ? q.correct.map(i => `<strong>${letters[i]}</strong>`).join(', ')
+      : q.correct.map(i => `<strong>${letters[i]}</strong> &mdash; ${escapeHTML(q.options[i])}`).join('<br>');
+    const explanation = EXPLANATIONS[q.number]
+      ? `<div class="explanation"><strong>Why</strong>${escapeHTML(EXPLANATIONS[q.number])}</div>`
+      : '';
+    fb.innerHTML = `<span class="fb-icon" aria-hidden="true">&#10007;</span><span class="fb-body"><strong>Not quite.</strong><div style="margin-top:4px;font-weight:500">Correct answer${q.correct.length>1?'s':''}: ${correctLabel}</div>${explanation}</span>`;
     state.roundWrong++;
     state.roundWrongNums.push(q.number);
+    state.wrongCount[q.number] = (state.wrongCount[q.number] || 0) + 1;
     const mi = state.mastered.indexOf(q.number);
     if (mi > -1) state.mastered.splice(mi, 1);
     if (state.mode === 'full') {
@@ -663,74 +917,313 @@ function checkAnswer() {
     }
   }
 
-  document.getElementById('next-btn').classList.remove('hidden');
   document.getElementById('submit-multi-btn').classList.add('hidden');
+  const nextBtn = document.getElementById('next-btn');
+
+  // Auto-advance on correct single-answer (not multi, not last, not mock)
+  const isSingle = q.correct.length === 1;
+  const isLast = state.currentIdx >= state.currentQueue.length - 1;
+  if (isCorrect && isSingle && !isLast && state.mode !== 'mock') {
+    nextBtn.classList.add('hidden');
+    autoAdvanceTimer = setTimeout(() => { autoAdvanceTimer = null; nextQuestion(); }, 850);
+  } else {
+    nextBtn.classList.remove('hidden');
+    nextBtn.focus();
+  }
   saveState();
 }
 
 function nextQuestion() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
   state.currentIdx++;
   saveState();
   showCurrentQuestion();
 }
 
+// ========== Timer ==========
+let timerInterval = null;
+let timerSeconds = 0;
+
+function startTimer(seconds) {
+  stopTimer();
+  timerSeconds = seconds != null ? seconds : MOCK_TIME;
+  state.timerSeconds = timerSeconds;
+  saveState();
+  document.getElementById('timer-bar').classList.remove('hidden');
+  updateTimerDisplay();
+  runTimerInterval();
+}
+function runTimerInterval() {
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    state.timerSeconds = timerSeconds;
+    if (timerSeconds % 10 === 0) saveState();
+    updateTimerDisplay();
+    if (timerSeconds <= 0) {
+      saveState();
+      stopTimer();
+      showComplete(false);
+    }
+  }, 1000);
+}
+function stopTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+function updateTimerDisplay() {
+  const m = Math.floor(Math.max(0, timerSeconds) / 60);
+  const s = Math.max(0, timerSeconds) % 60;
+  const clock = document.getElementById('timer-clock');
+  const fill = document.getElementById('timer-fill');
+  clock.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const pct = (timerSeconds / MOCK_TIME) * 100;
+  fill.style.width = pct + '%';
+  clock.classList.remove('warning','danger');
+  fill.classList.remove('warning','danger');
+  if (timerSeconds <= 120) { clock.classList.add('danger'); fill.classList.add('danger'); }
+  else if (timerSeconds <= 300) { clock.classList.add('warning'); fill.classList.add('warning'); }
+}
+
+// ========== Pause & exit ==========
+function pauseQuiz() {
+  if (state.mode === 'mock') {
+    stopTimer();
+    state.timerSeconds = timerSeconds;
+    saveState();
+  }
+  document.getElementById('pause-overlay').classList.remove('hidden');
+  const msg = document.getElementById('pause-message');
+  if (state.mode === 'mock') {
+    const m = Math.floor(timerSeconds / 60);
+    const s = timerSeconds % 60;
+    msg.textContent = `Timer paused at ${m}:${String(s).padStart(2,'0')}. Your progress is saved.`;
+  } else {
+    msg.textContent = 'Take a break. Your progress is saved.';
+  }
+}
+function resumeQuiz() {
+  document.getElementById('pause-overlay').classList.add('hidden');
+  if (state.mode === 'mock' && timerSeconds > 0) runTimerInterval();
+}
+function exitQuiz() {
+  if (state.mode === 'mock' && state.currentIdx < state.currentQueue.length) {
+    if (!confirm('Exit the mock test? Your progress will be lost.')) return;
+    state.timerSeconds = null;
+    state.currentQueue = [];
+    state.currentIdx = 0;
+    saveState();
+  }
+  stopTimer();
+  document.getElementById('timer-bar').classList.add('hidden');
+  goHome();
+}
+function exitFromPause() {
+  document.getElementById('pause-overlay').classList.add('hidden');
+  exitQuiz();
+}
+
+// ========== Bookmark / flag ==========
+function toggleBookmark() {
+  const qNum = state.currentQueue[state.currentIdx];
+  if (qNum == null) return;
+  const idx = state.bookmarked.indexOf(qNum);
+  if (idx > -1) { state.bookmarked.splice(idx, 1); toast('Bookmark removed'); }
+  else { state.bookmarked.push(qNum); toast('Bookmarked'); }
+  saveState();
+  updateBookmarkBtn(qNum);
+}
+function updateBookmarkBtn(qNum) {
+  const btn = document.getElementById('bookmark-btn');
+  const isBookmarked = state.bookmarked.includes(qNum);
+  btn.classList.toggle('active', isBookmarked);
+  btn.innerHTML = isBookmarked ? '&#9733;' : '&#9734;';
+  btn.setAttribute('aria-pressed', isBookmarked ? 'true' : 'false');
+  btn.title = isBookmarked ? 'Remove bookmark (B)' : 'Bookmark (B)';
+}
+function toggleFlag() {
+  if (state.mode !== 'mock') return;
+  const qNum = state.currentQueue[state.currentIdx];
+  if (qNum == null) return;
+  const idx = state.mockFlags.indexOf(qNum);
+  if (idx > -1) { state.mockFlags.splice(idx, 1); toast('Flag removed'); }
+  else { state.mockFlags.push(qNum); toast('Flagged for review'); }
+  saveState();
+  updateFlagBtn(qNum);
+}
+function updateFlagBtn(qNum) {
+  const btn = document.getElementById('flag-btn');
+  if (!btn) return;
+  const on = state.mockFlags.includes(qNum);
+  btn.classList.toggle('active', on);
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  btn.title = on ? 'Remove flag (F)' : 'Flag for review (F)';
+}
+
+// ========== Toast ==========
+let toastTimer = null;
+function toast(msg) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.remove(), 1800);
+}
+
+// ========== Complete screen ==========
 function showComplete(allMastered) {
   const elapsed = MOCK_TIME - Math.max(0, timerSeconds);
   stopTimer();
   document.getElementById('timer-bar').classList.add('hidden');
   showScreen('complete-screen');
+
   const total = state.roundCorrect + state.roundWrong;
   const pct = total > 0 ? Math.round((state.roundCorrect / total) * 100) : 0;
+  const verdictWrap = document.getElementById('verdict-pill-wrap');
+  verdictWrap.innerHTML = '';
+
+  // Record mock test to history
+  if (state.mode === 'mock' && total > 0) {
+    state.mockHistory = state.mockHistory || [];
+    state.mockHistory.push({ date: Date.now(), score: pct, correct: state.roundCorrect, total });
+    state.mockHistory = state.mockHistory.slice(-20);
+    state.timerSeconds = null;
+  }
+  // Clear current queue so "Continue" doesn't show a finished session
+  state.currentQueue = [];
+  state.currentIdx = 0;
+
+  // Title & subtitle
+  const titleEl = document.getElementById('complete-title');
+  const subEl = document.getElementById('complete-subtitle');
 
   if (allMastered) {
-    document.getElementById('complete-icon').textContent = '\uD83C\uDFC6';
-    document.getElementById('complete-title').textContent = 'All Questions Mastered!';
-    document.getElementById('complete-subtitle').textContent = 'You\'ve correctly answered every question in the bank. You\'re ready for your theory test!';
-    document.getElementById('next-round-btn').classList.add('hidden');
+    titleEl.textContent = 'All Questions Mastered!';
+    subEl.textContent = `You've correctly answered every question in the bank. You're ready for your theory test!`;
+  } else if (state.mode === 'mock') {
+    const passed = pct >= 80;
+    verdictWrap.innerHTML = `<div class="verdict-pill ${passed?'pass':'fail'}">${passed?'\u2714 Pass':'\u2716 Not yet'}</div>`;
+    titleEl.textContent = passed ? 'Mock Test Passed!' : 'Mock Test \u2014 Keep Practising';
+    subEl.textContent = passed
+      ? `Strong result. Aim to stay above 80% consistently.`
+      : `80% needed to pass. Review the questions below and try again.`;
+  } else if (state.mode === 'bookmarked') {
+    titleEl.textContent = 'Bookmarked Review Complete';
+    subEl.textContent = pct === 100 ? `Perfect \u2014 every bookmark correct!` : `Great focused practice.`;
+  } else if (state.mode === 'quick') {
+    titleEl.textContent = 'Quick Quiz Complete';
+    subEl.textContent = `Nice \u2014 ${state.roundCorrect} of ${total} correct.`;
+  } else if (state.mode === 'hardest') {
+    titleEl.textContent = 'Hardest Questions Done';
+    subEl.textContent = `Keep chipping away \u2014 these are your stickiest ones.`;
+  } else if (state.mode === 'topic') {
+    const t = TOPIC_DEFS.find(td => td.id === state.topic);
+    titleEl.textContent = `${t ? t.label : 'Topic'} \u2014 Done`;
+    subEl.textContent = `${state.roundCorrect}/${total} correct.`;
   } else {
-    document.getElementById('complete-icon').textContent = pct >= 80 ? '\uD83C\uDF1F' : '\uD83D\uDCAA';
-    document.getElementById('complete-title').textContent = state.mode === 'mock' ? 'Mock Test Complete!' : state.mode === 'bookmarked' ? 'Bookmarked Review Complete!' : state.mode === 'quick' ? 'Quiz Complete!' : `Round ${state.roundNum} Complete!`;
-    const wrongCount = state.mode === 'full' ? state.wrongQueue.length : state.roundWrong;
-    document.getElementById('complete-subtitle').textContent = wrongCount > 0
-      ? `${wrongCount} question${wrongCount !== 1 ? 's' : ''} to review in the next round`
-      : 'Perfect round! All questions answered correctly.';
-    document.getElementById('next-round-btn').classList.toggle('hidden', state.mode !== 'full' || wrongCount === 0);
+    const wrongCount = state.wrongQueue.length;
+    titleEl.textContent = `Round ${state.roundNum} Complete`;
+    subEl.textContent = wrongCount > 0
+      ? `${wrongCount} question${wrongCount!==1?'s':''} to review in the next round.`
+      : `Perfect round! All questions answered correctly.`;
   }
 
-  const timeStr = state.mode === 'mock' ? `${Math.floor(elapsed/60)}:${String(elapsed%60).padStart(2,'0')}` : null;
-  const passMarkHtml = state.mode === 'mock' ? `<div class="result-stat"><div class="value" style="color:${pct >= 80 ? 'var(--correct)' : 'var(--wrong)'}">${pct >= 80 ? 'PASS' : 'FAIL'}</div><div class="label">${pct >= 80 ? '80%+ needed' : 'Need 80%'}</div></div>` : '';
-  const timeHtml = timeStr ? `<div class="result-stat"><div class="value" style="color:var(--accent)">${timeStr}</div><div class="label">Time Taken</div></div>` : '';
-  document.getElementById('results-grid').innerHTML = `
-    <div class="result-stat"><div class="value" style="color:var(--primary)">${total}</div><div class="label">Questions</div></div>
-    <div class="result-stat"><div class="value" style="color:var(--correct)">${state.roundCorrect}</div><div class="label">Correct</div></div>
-    <div class="result-stat"><div class="value" style="color:var(--wrong)">${state.roundWrong}</div><div class="label">Wrong</div></div>
-    <div class="result-stat"><div class="value" style="color:var(--primary)">${pct}%</div><div class="label">Score</div></div>
-    ${passMarkHtml}
-    ${timeHtml}
-    <div class="result-stat"><div class="value" style="color:var(--accent)">${state.mastered.length}</div><div class="label">Mastered</div></div>
-    <div class="result-stat"><div class="value">${QUESTIONS.length - state.mastered.length}</div><div class="label">Remaining</div></div>
+  // Score ring
+  const ring = document.getElementById('score-ring');
+  const size = 160, stroke = 12, r = (size - stroke) / 2, c = 2 * Math.PI * r;
+  const offset = c - (pct / 100) * c;
+  const ringColor = pct >= 80 ? 'var(--correct)' : pct >= 50 ? 'var(--warn)' : 'var(--wrong)';
+  ring.innerHTML = `
+    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+      <circle class="ring-track" cx="${size/2}" cy="${size/2}" r="${r}" />
+      <circle class="ring-prog" cx="${size/2}" cy="${size/2}" r="${r}" stroke="${ringColor}" stroke-dasharray="${c}" stroke-dashoffset="${c}" />
+    </svg>
+    <div class="ring-center">
+      <div class="ring-pct" style="color:${ringColor}">${pct}%</div>
+      <div class="ring-label">${state.roundCorrect} / ${total} correct</div>
+    </div>
   `;
+  requestAnimationFrame(() => {
+    const prog = ring.querySelector('.ring-prog');
+    if (prog) prog.style.strokeDashoffset = offset;
+  });
 
+  // Results grid (lean)
+  const timeStr = state.mode === 'mock' ? `${Math.floor(elapsed/60)}:${String(elapsed%60).padStart(2,'0')}` : null;
+  const bits = [];
+  bits.push(`<div class="result-stat"><div class="value" style="color:var(--correct)">${state.roundCorrect}</div><div class="label">Correct</div></div>`);
+  bits.push(`<div class="result-stat"><div class="value" style="color:var(--wrong)">${state.roundWrong}</div><div class="label">Wrong</div></div>`);
+  if (state.mode === 'mock' && timeStr) {
+    bits.push(`<div class="result-stat"><div class="value" style="color:var(--accent)">${timeStr}</div><div class="label">Time</div></div>`);
+  } else {
+    bits.push(`<div class="result-stat"><div class="value" style="color:var(--accent)">${state.mastered.length}</div><div class="label">Mastered</div></div>`);
+  }
+  document.getElementById('results-grid').innerHTML = bits.join('');
+
+  // Review section
   const reviewSection = document.getElementById('review-section');
   const reviewList = document.getElementById('review-list');
-  if (state.roundWrongNums.length > 0) {
-    reviewSection.classList.remove('hidden');
-    reviewList.innerHTML = state.roundWrongNums.map(num => {
-      const q = getQuestion(num);
-      return `<div class="review-item" onclick="toggleReviewDetail(this, ${num})"><div class="q-num"><span>Q${num}</span><span class="expand-hint">Tap to review</span></div><div class="q-preview">${q.question.substring(0, 80)}${q.question.length > 80 ? '...' : ''}</div></div>`;
-    }).join('');
-  } else {
+  const reviewHeading = document.getElementById('review-heading');
+  const flagged = state.mode === 'mock' ? state.mockFlags.filter(n => !state.roundWrongNums.includes(n)) : [];
+  const wrong = state.roundWrongNums;
+
+  if (wrong.length === 0 && flagged.length === 0) {
     reviewSection.classList.add('hidden');
+  } else {
+    reviewSection.classList.remove('hidden');
+    const wrongHtml = wrong.length ? `
+      <h3 id="review-heading" style="color:var(--wrong)">Wrong answers (${wrong.length})</h3>
+      ${wrong.map(num => reviewItemHtml(num, 'wrong')).join('')}
+    ` : '';
+    const flagHtml = flagged.length ? `
+      <h3 style="color:var(--primary);margin-top:16px">Flagged for review (${flagged.length})</h3>
+      ${flagged.map(num => reviewItemHtml(num, 'flag')).join('')}
+    ` : '';
+    reviewList.innerHTML = wrongHtml + flagHtml;
+    const staticH3 = reviewSection.querySelector(':scope > h3');
+    if (staticH3) staticH3.remove();
   }
+
+  // Action buttons
+  const actions = document.getElementById('complete-actions');
+  const btns = [];
+  if (!allMastered && state.mode === 'full' && state.wrongQueue.length > 0) {
+    btns.push(`<button class="btn btn-primary" onclick="startNextRound()">Next Round &rarr;</button>`);
+  }
+  if (state.mode === 'mock') {
+    btns.push(`<button class="btn btn-primary" onclick="startMockTest()">Take Another Mock Test</button>`);
+  } else if (state.mode === 'quick') {
+    btns.push(`<button class="btn btn-primary" onclick="startQuickQuiz()">Another Quick Quiz</button>`);
+  } else if (state.mode === 'hardest' && getHardestQuestionNums().length > 0) {
+    btns.push(`<button class="btn btn-primary" onclick="startHardestQuestions()">Practise Hardest Again</button>`);
+  } else if (state.mode === 'bookmarked' && state.bookmarked.length > 0) {
+    btns.push(`<button class="btn btn-primary" onclick="startBookmarkedReview()">Review Bookmarks Again</button>`);
+  } else if (state.mode === 'topic' && state.topic) {
+    btns.push(`<button class="btn btn-primary" onclick="startTopicPractice('${state.topic}')">More ${((TOPIC_DEFS.find(t=>t.id===state.topic)||{}).label||'Topic')}</button>`);
+  }
+  btns.push(`<button class="btn btn-secondary" onclick="goHome()">Home</button>`);
+  actions.innerHTML = btns.join('');
+
+  saveState();
+}
+
+function reviewItemHtml(num, kind) {
+  const q = getQuestion(num);
+  if (!q) return '';
+  const border = kind === 'wrong' ? 'var(--wrong)' : 'var(--primary)';
+  return `<div class="review-item" style="border-left-color:${border}" tabindex="0" onclick="toggleReviewDetail(this, ${num})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewDetail(this, ${num})}"><div class="q-num"><span>Q${num}</span><span class="expand-hint">Tap to review</span></div><div class="q-preview">${escapeHTML(q.question.substring(0, 80))}${q.question.length > 80 ? '\u2026' : ''}</div></div>`;
 }
 
 function goHome() {
   stopTimer();
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
   document.getElementById('timer-bar').classList.add('hidden');
   showScreen('welcome-screen');
   updateWelcome();
 }
 
+// ========== Study mode ==========
 let studyQueue = [];
 let studyIdx = 0;
 
@@ -738,15 +1231,13 @@ function startStudyMode() {
   if (state.bookmarked.length === 0) return;
   studyQueue = shuffle([...state.bookmarked]);
   studyIdx = 0;
+  state.mode = 'study';
+  saveState();
   showScreen('study-screen');
   showStudyCard();
 }
-
 function showStudyCard() {
-  if (studyIdx >= studyQueue.length) {
-    goHome();
-    return;
-  }
+  if (studyIdx >= studyQueue.length) { goHome(); return; }
   const q = getQuestion(studyQueue[studyIdx]);
   const letters = 'ABCDEFGH';
   const total = studyQueue.length;
@@ -759,23 +1250,22 @@ function showStudyCard() {
     const isCorrect = q.correct.includes(i);
     return `<div class="study-option ${isCorrect ? 'study-correct' : ''}"><div class="opt-letter">${letters[i]}</div><div style="flex:1">${renderOptionContent(opt)}</div></div>`;
   }).join('');
+  const explanation = EXPLANATIONS[q.number]
+    ? `<div class="explanation"><strong>Why</strong>${escapeHTML(EXPLANATIONS[q.number])}</div>`
+    : '';
 
   document.getElementById('study-card').innerHTML = `
     <div class="q-header">
       <span class="q-number">Q${q.number}</span>
       ${q.correct.length > 1 ? `<span class="q-multi-badge">Select ${q.correct.length}</span>` : ''}
-      <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleStudyBookmark(${q.number})" title="${isBookmarked ? 'Remove bookmark' : 'Bookmark'}">${isBookmarked ? '&#9733;' : '&#9734;'}</button>
+      <button class="icon-btn bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleStudyBookmark(${q.number})" title="${isBookmarked ? 'Remove bookmark' : 'Bookmark'}" aria-pressed="${isBookmarked}">${isBookmarked ? '&#9733;' : '&#9734;'}</button>
     </div>
-    <p class="q-text">${q.question}</p>
+    <p class="q-text">${escapeHTML(q.question)}</p>
     <div class="options" style="gap:8px">${optsHtml}</div>
+    ${explanation}
   `;
 }
-
-function nextStudyCard() {
-  studyIdx++;
-  showStudyCard();
-}
-
+function nextStudyCard() { studyIdx++; showStudyCard(); }
 function toggleStudyBookmark(num) {
   const idx = state.bookmarked.indexOf(num);
   if (idx > -1) state.bookmarked.splice(idx, 1);
@@ -784,6 +1274,7 @@ function toggleStudyBookmark(num) {
   showStudyCard();
 }
 
+// ========== Review detail ==========
 function toggleReviewDetail(el, num) {
   if (el.classList.contains('expanded')) {
     el.classList.remove('expanded');
@@ -800,21 +1291,104 @@ function toggleReviewDetail(el, num) {
     const isCorrect = q.correct.includes(i);
     return `<div class="review-opt ${isCorrect ? 'correct-opt' : ''}"><span class="opt-letter">${letters[i]}</span><span>${renderOptionContent(opt)}${isCorrect ? ' &#10003;' : ''}</span></div>`;
   }).join('');
+  const explanation = EXPLANATIONS[num]
+    ? `<div class="explanation" style="margin-top:10px"><strong>Why</strong>${escapeHTML(EXPLANATIONS[num])}</div>`
+    : '';
   const detail = document.createElement('div');
   detail.className = 'review-detail';
-  detail.innerHTML = `<div class="review-q-text">${q.question}</div>${optsHtml}`;
+  detail.innerHTML = `<div class="review-q-text">${escapeHTML(q.question)}</div>${optsHtml}${explanation}`;
   el.appendChild(detail);
 }
 
+// ========== Reset ==========
 function resetProgress() {
-  if (confirm('Reset all progress? This cannot be undone.')) {
+  if (confirm('Reset ALL progress? This will clear your mastered questions, bookmarks, wrong-count history, and mock test history. This cannot be undone.')) {
     localStorage.removeItem(STORAGE_KEY);
-    state = loadState();
+    state = defaultState();
+    saveState();
     updateWelcome();
+    toast('Progress reset');
   }
 }
 
+// ========== Keyboard shortcuts ==========
+function handleKeydown(e) {
+  if (e.target.matches('input, textarea, [contenteditable]')) return;
+  const ctrlLike = e.ctrlKey || e.metaKey || e.altKey;
+  if (ctrlLike) return;
+
+  const quizActive = document.getElementById('quiz-screen').classList.contains('active');
+  const studyActive = document.getElementById('study-screen').classList.contains('active');
+  const completeActive = document.getElementById('complete-screen').classList.contains('active');
+  const pauseOpen = !document.getElementById('pause-overlay').classList.contains('hidden');
+  const topicOpen = !document.getElementById('topic-overlay').classList.contains('hidden');
+  if (!document.body.classList.contains('has-keyboard')) document.body.classList.add('has-keyboard');
+
+  if (topicOpen) {
+    if (e.key === 'Escape') { e.preventDefault(); closeTopicPicker(); }
+    return;
+  }
+  if (pauseOpen) {
+    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ' || e.key.toLowerCase() === 'p') { e.preventDefault(); resumeQuiz(); }
+    return;
+  }
+
+  if (quizActive) {
+    const q = getQuestion(state.currentQueue[state.currentIdx]);
+    if (!q) return;
+    const keys = ['a','b','c','d','e','f','g','h'];
+    const key = e.key.toLowerCase();
+    const ki = keys.indexOf(key);
+    // Only treat A-D... as option picks if we have not used F/B for their special actions.
+    if (ki >= 0 && ki < q.options.length) {
+      if (key === 'b' && !answered) { /* fall through: ambiguous - treat as bookmark shortcut */ }
+      // We have a conflict: B is both option index 1 and bookmark. Prefer bookmark only after answered OR when 'b' is pressed with Shift? Simpler: only use keys when not answered; if answered, B toggles bookmark.
+      if (!answered) {
+        e.preventDefault();
+        if (q.correct.length > 1) {
+          selectOption(ki); // toggle in multi
+        } else {
+          selectOption(ki);
+        }
+        return;
+      }
+    }
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (!answered) {
+        if (q.correct.length > 1 && selectedOptions.size > 0) submitMultiAnswer();
+      } else {
+        nextQuestion();
+      }
+      return;
+    }
+    if (key === 'b') { e.preventDefault(); toggleBookmark(); return; }
+    if (key === 'f' && state.mode === 'mock') { e.preventDefault(); toggleFlag(); return; }
+    if (key === 'p') { e.preventDefault(); if (!document.getElementById('pause-btn').classList.contains('hidden')) pauseQuiz(); return; }
+    if (e.key === 'Escape') { e.preventDefault(); exitQuiz(); return; }
+  }
+
+  if (studyActive) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight' || e.key.toLowerCase() === 'n') {
+      e.preventDefault(); nextStudyCard(); return;
+    }
+    if (e.key === 'Escape') { e.preventDefault(); goHome(); return; }
+  }
+
+  if (completeActive) {
+    if (e.key === 'Escape') { e.preventDefault(); goHome(); return; }
+  }
+}
+
+// Handle the A-vs-bookmark conflict: "B" should pick option B when unanswered, toggle bookmark when answered.
+// (Implemented above via `if (!answered)` returning early for A-D.)
+
+document.addEventListener('keydown', handleKeydown);
+
+// ========== Init ==========
+initTheme();
 updateWelcome();
+
 </script>
 </body>
 </html>
