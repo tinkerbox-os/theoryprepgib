@@ -1132,10 +1132,21 @@ function checkAnswer() {
     cue.className = 'advance-cue';
     cue.innerHTML = `<span class="advance-label">Next question</span><span class="advance-bar"><span style="--advance-ms:${ms}ms"></span></span>`;
     (fb.querySelector('.fb-body') || fb).appendChild(cue);
-    const skip = () => { if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; } nextQuestion(); };
-    fb.onclick = skip;
+    const pauseAuto = () => {
+      if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+      const fill = fb.querySelector('.advance-bar > span');
+      if (fill) fill.style.animationPlayState = 'paused';
+      const label = fb.querySelector('.advance-label');
+      if (label) label.textContent = 'Paused';
+      fb.onclick = null;
+      fb.style.cursor = '';
+      fb.title = '';
+      nextBtn.classList.remove('hidden');
+      nextBtn.focus();
+    };
+    fb.onclick = pauseAuto;
     fb.style.cursor = 'pointer';
-    fb.title = 'Tap to continue';
+    fb.title = 'Tap to pause';
     autoAdvanceTimer = setTimeout(() => { autoAdvanceTimer = null; nextQuestion(); }, ms);
   } else {
     nextBtn.classList.remove('hidden');
