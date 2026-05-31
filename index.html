@@ -90,6 +90,12 @@ header h1{font-size:1.15rem;font-weight:700;color:var(--primary);line-height:1.2
 .btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border);font-weight:500}
 .btn-ghost:hover{color:var(--primary);border-color:var(--primary)}
 .actions{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+.action-bar{position:sticky;bottom:0;margin:18px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--bg);background:color-mix(in srgb,var(--bg) 84%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-top:1px solid var(--border);z-index:20;display:flex;flex-direction:column;gap:8px}
+.action-primary{display:flex;gap:10px}
+.action-primary .btn{flex:1}
+.action-secondary{display:flex;gap:10px;justify-content:center}
+.action-secondary .btn{flex:0 1 auto;padding:8px 22px;font-size:.88rem}
+@media(max-width:500px){.action-bar{margin-left:-12px;margin-right:-12px}}
 .screen{display:none}
 .screen.active{display:block;animation:fadeSlide .3s ease-out}
 .welcome-hero{text-align:center;padding:12px 0 0}
@@ -414,11 +420,15 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
     <div class="options" id="options-container" role="radiogroup" aria-label="Answer options"></div>
     <div class="feedback hidden" id="feedback" aria-live="polite"></div>
   </div>
-  <div class="actions">
-    <button class="btn btn-primary hidden" id="next-btn" onclick="nextQuestion()">Next Question &rarr;</button>
-    <button class="btn btn-secondary hidden" id="submit-multi-btn" onclick="submitMultiAnswer()">Check Answer</button>
-    <button class="btn btn-ghost hidden" id="pause-btn" onclick="pauseQuiz()">Pause</button>
-    <button class="btn btn-ghost" onclick="exitQuiz()">Exit</button>
+  <div class="action-bar">
+    <div class="action-primary">
+      <button class="btn btn-primary hidden" id="next-btn" onclick="nextQuestion()">Next Question &rarr;</button>
+      <button class="btn btn-secondary hidden" id="submit-multi-btn" onclick="submitMultiAnswer()">Check Answer</button>
+    </div>
+    <div class="action-secondary">
+      <button class="btn btn-ghost hidden" id="pause-btn" onclick="pauseQuiz()">Pause</button>
+      <button class="btn btn-ghost" onclick="exitQuiz()">Exit</button>
+    </div>
   </div>
 </div>
 
@@ -440,9 +450,13 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
   </div>
   <div class="progress-container" style="margin:0 0 16px"><div class="progress-bar" id="study-progress"></div></div>
   <div class="card" id="study-card"></div>
-  <div class="actions">
-    <button class="btn btn-primary" id="study-next-btn" onclick="nextStudyCard()">Next &rarr;</button>
-    <button class="btn btn-secondary" onclick="exitQuiz()" style="font-size:.85rem">Exit</button>
+  <div class="action-bar">
+    <div class="action-primary">
+      <button class="btn btn-primary" id="study-next-btn" onclick="nextStudyCard()">Next &rarr;</button>
+    </div>
+    <div class="action-secondary">
+      <button class="btn btn-ghost" onclick="exitQuiz()">Exit</button>
+    </div>
   </div>
 </div>
 
@@ -459,7 +473,7 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
       <h3 id="review-heading">Questions to Review</h3>
       <div id="review-list"></div>
     </div>
-    <div class="actions" style="margin-top:24px" id="complete-actions"></div>
+    <div class="action-bar" id="complete-actions"></div>
   </div>
 </div>
 
@@ -1227,7 +1241,8 @@ function resumeQuiz() {
   if (state.mode === 'mock' && timerSeconds > 0) runTimerInterval();
 }
 async function exitQuiz() {
-  if (state.mode === 'mock' && state.currentIdx < state.currentQueue.length) {
+  const inProgress = state.currentQueue.length > 0 && state.currentIdx < state.currentQueue.length;
+  if (state.mode === 'mock' && inProgress) {
     const ok = await showConfirm({
       title: 'Exit the mock test?',
       message: 'Your current attempt will be discarded. You can start a new mock test anytime from the home screen.',
@@ -1240,6 +1255,18 @@ async function exitQuiz() {
     state.currentQueue = [];
     state.currentIdx = 0;
     saveState();
+  } else if (inProgress && state.mode !== 'study') {
+    const resumable = state.mode !== 'bookmarked';
+    const ok = await showConfirm({
+      title: 'Exit this session?',
+      message: resumable
+        ? 'You\u2019ll return to the home screen. You can pick up where you left off from \u201CContinue Practice.\u201D'
+        : 'You\u2019ll return to the home screen and this review session will end.',
+      confirmText: 'Exit',
+      cancelText: 'Keep Going',
+      danger: true
+    });
+    if (!ok) return;
   }
   stopTimer();
   document.getElementById('timer-bar').classList.add('hidden');
