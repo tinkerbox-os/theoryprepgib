@@ -114,9 +114,48 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
 .mode-btn.primary p{color:rgba(255,255,255,.85)}
 .mode-btn.primary:hover{filter:brightness(1.05)}
 .score-history{background:var(--card);border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:var(--shadow)}
+.score-history.clickable{cursor:pointer;transition:box-shadow .2s,transform .2s;-webkit-tap-highlight-color:transparent}
+@media(hover:hover){.score-history.clickable:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}}
 .score-history-head{display:flex;align-items:center;justify-content:space-between;font-size:.82rem;color:var(--text-secondary);margin-bottom:8px}
 .score-history-head strong{color:var(--text);font-size:.9rem}
-.sparkline{display:block;width:100%;height:60px}
+.score-history-foot{display:flex;justify-content:flex-end;margin-top:8px;font-size:.78rem;color:var(--primary);font-weight:600}
+.sparkline{display:block;width:100%;height:auto;aspect-ratio:300/60;overflow:visible}
+/* Sub-screen header (history / browse) */
+.sub-head{display:flex;align-items:center;gap:12px;padding:6px 0 2px}
+.sub-head h2{font-size:1.4rem;font-weight:800;color:var(--text)}
+.sub-head-sub{color:var(--text-secondary);font-size:.85rem;margin:2px 0 14px}
+.back-btn{background:var(--card);border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.back-btn:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary)}
+.back-btn:focus-visible{outline:none;box-shadow:var(--ring)}
+.empty-state{text-align:center;color:var(--text-secondary);font-size:.9rem;padding:40px 20px;background:var(--card);border-radius:12px;box-shadow:var(--shadow)}
+/* Test history items */
+.history-item{background:var(--card);border-radius:12px;margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
+.history-item-head{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.history-item-head:focus-visible{outline:none;box-shadow:var(--ring)}
+.history-score{font-weight:800;font-size:1.15rem;min-width:54px;text-align:center;padding:6px 4px;border-radius:10px}
+.history-score.pass{background:var(--correct-bg);color:var(--correct)}
+.history-score.fail{background:var(--wrong-bg);color:var(--wrong)}
+.history-meta{flex:1;min-width:0}
+.history-date{font-weight:600;color:var(--text);font-size:.92rem}
+.history-sub{color:var(--text-secondary);font-size:.8rem;margin-top:2px}
+.history-chevron{color:var(--text-secondary);font-size:.8rem;transition:transform .2s;flex-shrink:0}
+.history-item.expanded .history-chevron{transform:rotate(180deg)}
+.history-detail{display:none;padding:0 16px 14px;border-top:1px solid var(--border-soft)}
+.history-item.expanded .history-detail{display:block;animation:fadeSlide .25s ease-out}
+.history-detail-note{color:var(--text-secondary);font-size:.85rem;padding:14px 2px 4px;font-style:italic}
+.history-detail-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--wrong);margin:14px 0 8px}
+.history-detail-label.flag{color:var(--primary)}
+/* Browse / question bank */
+.browse-controls{position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0 10px}
+.browse-search{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.95rem;font-family:inherit;-webkit-appearance:none}
+.browse-search:focus{outline:none;box-shadow:var(--ring);border-color:var(--primary)}
+.browse-filters{display:flex;gap:7px;overflow-x:auto;padding:10px 0 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.browse-filters::-webkit-scrollbar{display:none}
+.filter-chip{flex:0 0 auto;padding:6px 12px;border-radius:100px;border:1px solid var(--border);background:var(--card);color:var(--text-secondary);font-size:.8rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;-webkit-tap-highlight-color:transparent;font-family:inherit}
+.filter-chip:hover{border-color:var(--primary);color:var(--primary)}
+.filter-chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.filter-chip:focus-visible{outline:none;box-shadow:var(--ring)}
+.browse-count{color:var(--text-secondary);font-size:.8rem;margin:6px 2px 12px;font-weight:500}
 .complete-screen{text-align:center;padding:24px 0}
 .complete-screen h2{font-size:1.6rem;font-weight:800;margin:14px 0 6px;color:var(--text)}
 .complete-screen p{color:var(--text-secondary);margin-bottom:8px}
@@ -294,6 +333,20 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
         <p>Drill specific areas: signs, motorways, weather, stopping distances&hellip;</p>
       </span>
     </button>
+    <button class="mode-btn" onclick="showBrowse()">
+      <span class="mode-icon">&#x1F4D1;</span>
+      <span class="mode-body">
+        <h3>Browse All Questions</h3>
+        <p>Read through the whole question bank with answers, like the PDF</p>
+      </span>
+    </button>
+    <button class="mode-btn hidden" id="history-btn" onclick="showTestHistory()">
+      <span class="mode-icon">&#x1F4C8;</span>
+      <span class="mode-body">
+        <h3 id="history-title">Test History</h3>
+        <p>Review past mock tests and the questions you missed</p>
+      </span>
+    </button>
     <button class="mode-btn hidden" id="hardest-btn" onclick="startHardestQuestions()">
       <span class="mode-icon">&#x1F525;</span>
       <span class="mode-body">
@@ -393,6 +446,28 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
     </div>
     <div class="actions" style="margin-top:24px" id="complete-actions"></div>
   </div>
+</div>
+
+<div id="history-screen" class="screen">
+  <div class="sub-head">
+    <button class="back-btn" onclick="goHome()" aria-label="Back to home">&#8592;</button>
+    <h2>Test History</h2>
+  </div>
+  <div class="sub-head-sub" id="history-summary"></div>
+  <div id="history-list"></div>
+</div>
+
+<div id="browse-screen" class="screen">
+  <div class="sub-head">
+    <button class="back-btn" onclick="goHome()" aria-label="Back to home">&#8592;</button>
+    <h2>Question Bank</h2>
+  </div>
+  <div class="browse-controls">
+    <input type="search" id="browse-search" class="browse-search" placeholder="Search by number or keyword&hellip;" oninput="renderBrowseList()" autocomplete="off">
+    <div class="browse-filters" id="browse-filters"></div>
+  </div>
+  <div class="browse-count" id="browse-count"></div>
+  <div id="browse-list"></div>
 </div>
 
 <div class="pause-overlay hidden" id="topic-overlay">
@@ -610,9 +685,9 @@ function updateWelcome() {
     const pct = Math.round((m / total) * 100);
     progressSummary.classList.remove('hidden');
     progressSummary.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;justify-content:center">
-        <span style="font-weight:700;font-size:1.15rem;color:var(--primary)">${m} / ${total}</span>
-        <span style="color:var(--text-secondary);font-size:.85rem">questions mastered (${pct}%)</span>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;flex-wrap:wrap;justify-content:center">
+        <span style="font-weight:800;font-size:1.25rem;color:var(--primary);line-height:1">${m} <span style="font-weight:600;color:var(--text-secondary);font-size:.95rem">/ ${total}</span></span>
+        <span style="color:var(--text-secondary);font-size:.85rem;line-height:1">questions mastered &middot; ${pct}%</span>
       </div>
       <div class="progress-container" style="margin:0"><div class="progress-bar" style="width:${pct}%"></div></div>
     `;
@@ -633,6 +708,14 @@ function updateWelcome() {
     cont.classList.add('hidden');
   }
   if (reset) reset.style.display = '';
+
+  const historyBtn = document.getElementById('history-btn');
+  if (historyBtn) {
+    const hc = (state.mockHistory || []).length;
+    historyBtn.classList.toggle('hidden', hc === 0);
+    document.getElementById('history-title').textContent = `Test History (${hc})`;
+  }
+
   document.getElementById('start-desc').textContent = m > 0
     ? `Start a fresh round through all ${total} questions (progress is preserved)`
     : `Go through all ${total} questions. Missed ones repeat until mastered.`;
@@ -678,29 +761,37 @@ function renderScoreHistory() {
   if (hist.length < 2) { host.classList.add('hidden'); return; }
   host.classList.remove('hidden');
   const last = hist.slice(-10);
-  const w = 300, h = 50, pad = 4;
+  const w = 300, h = 60, padX = 10, padY = 12;
   const max = 100, min = 0;
-  const step = (w - pad * 2) / Math.max(1, last.length - 1);
-  const y = v => h - pad - ((v - min) / (max - min)) * (h - pad * 2);
-  const pts = last.map((p, i) => `${pad + i * step},${y(p.score)}`).join(' ');
+  const step = last.length > 1 ? (w - padX * 2) / (last.length - 1) : 0;
+  const x = i => last.length > 1 ? padX + i * step : w / 2;
+  const y = v => h - padY - ((v - min) / (max - min)) * (h - padY * 2);
+  const pts = last.map((p, i) => `${x(i)},${y(p.score)}`).join(' ');
   const circles = last.map((p, i) => {
-    const cx = pad + i * step;
-    const cy = y(p.score);
     const col = p.score >= 80 ? 'var(--correct)' : 'var(--wrong)';
-    return `<circle cx="${cx}" cy="${cy}" r="3" fill="${col}" />`;
+    return `<circle cx="${x(i)}" cy="${y(p.score)}" r="3.5" fill="${col}" stroke="var(--card)" stroke-width="1.5" />`;
   }).join('');
   const latest = last[last.length - 1];
   const avg = Math.round(last.reduce((a,b)=>a+b.score,0) / last.length);
+  const lineEl = last.length > 1
+    ? `<polyline points="${pts}" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />`
+    : '';
+  host.classList.add('clickable');
+  host.setAttribute('role', 'button');
+  host.setAttribute('tabindex', '0');
+  host.onclick = showTestHistory;
+  host.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showTestHistory(); } };
   host.innerHTML = `
     <div class="score-history-head">
       <strong>Mock test history</strong>
       <span>Latest: <strong style="color:${latest.score>=80?'var(--correct)':'var(--wrong)'}">${latest.score}%</strong> &middot; Avg ${avg}%</span>
     </div>
-    <svg class="sparkline" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
-      <line x1="${pad}" y1="${y(80)}" x2="${w-pad}" y2="${y(80)}" stroke="var(--border)" stroke-dasharray="3 3" stroke-width="1" />
-      <polyline points="${pts}" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <svg class="sparkline" viewBox="0 0 ${w} ${h}">
+      <line x1="${padX}" y1="${y(80)}" x2="${w-padX}" y2="${y(80)}" stroke="var(--border)" stroke-dasharray="4 3" stroke-width="1" />
+      ${lineEl}
       ${circles}
     </svg>
+    <div class="score-history-foot">View all tests &rarr;</div>
   `;
 }
 
@@ -1224,7 +1315,11 @@ function showComplete(allMastered) {
   // Record mock test to history
   if (state.mode === 'mock' && total > 0) {
     state.mockHistory = state.mockHistory || [];
-    state.mockHistory.push({ date: Date.now(), score: pct, correct: state.roundCorrect, total });
+    state.mockHistory.push({
+      date: Date.now(), score: pct, correct: state.roundCorrect, total,
+      wrongNums: [...state.roundWrongNums],
+      flagged: [...(state.mockFlags || [])].filter(n => !state.roundWrongNums.includes(n))
+    });
     state.mockHistory = state.mockHistory.slice(-20);
     state.timerSeconds = null;
   }
@@ -1349,9 +1444,10 @@ function showComplete(allMastered) {
 function reviewItemHtml(num, kind) {
   const q = getQuestion(num);
   if (!q) return '';
-  const border = kind === 'wrong' ? 'var(--wrong)' : 'var(--primary)';
+  const border = kind === 'wrong' ? 'var(--wrong)' : (kind === 'browse' ? 'var(--border)' : 'var(--primary)');
+  const hint = kind === 'browse' ? 'Tap for answer' : 'Tap to review';
   const previewText = getQuestionText(q);
-  return `<div class="review-item" style="border-left-color:${border}" tabindex="0" onclick="toggleReviewDetail(this, ${num})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewDetail(this, ${num})}"><div class="q-num"><span>Q${num}</span><span class="expand-hint">Tap to review</span></div><div class="q-preview">${escapeHTML(previewText.substring(0, 80))}${previewText.length > 80 ? '\u2026' : ''}</div></div>`;
+  return `<div class="review-item" style="border-left-color:${border}" data-hint="${hint}" tabindex="0" onclick="toggleReviewDetail(this, ${num})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewDetail(this, ${num})}"><div class="q-num"><span>Q${num}</span><span class="expand-hint">${hint}</span></div><div class="q-preview">${escapeHTML(previewText.substring(0, 80))}${previewText.length > 80 ? '\u2026' : ''}</div></div>`;
 }
 
 function goHome() {
@@ -1422,7 +1518,7 @@ function toggleReviewDetail(el, num) {
     el.classList.remove('expanded');
     const detail = el.querySelector('.review-detail');
     if (detail) detail.remove();
-    el.querySelector('.expand-hint').textContent = 'Tap to review';
+    el.querySelector('.expand-hint').textContent = el.dataset.hint || 'Tap to review';
     return;
   }
   el.classList.add('expanded');
@@ -1444,6 +1540,112 @@ function toggleReviewDetail(el, num) {
   el.appendChild(detail);
 }
 
+// ========== Test history screen ==========
+function showTestHistory() {
+  renderTestHistory();
+  showScreen('history-screen');
+  window.scrollTo(0, 0);
+}
+function renderTestHistory() {
+  const host = document.getElementById('history-list');
+  const summary = document.getElementById('history-summary');
+  const hist = (state.mockHistory || []).slice().reverse();
+  if (hist.length === 0) {
+    summary.textContent = '';
+    host.innerHTML = `<div class="empty-state">You haven't completed any mock tests yet.<br>Take a mock test and your results will appear here.</div>`;
+    return;
+  }
+  const passes = hist.filter(h => h.score >= 80).length;
+  const avg = Math.round(hist.reduce((a, b) => a + b.score, 0) / hist.length);
+  summary.textContent = `${hist.length} test${hist.length !== 1 ? 's' : ''} \u00b7 ${passes} passed \u00b7 ${avg}% average`;
+
+  host.innerHTML = hist.map(entry => {
+    const pass = entry.score >= 80;
+    const d = new Date(entry.date);
+    const dateStr = d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+    const timeStr = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    const wrongCount = entry.total - entry.correct;
+
+    let detailHtml;
+    if (entry.wrongNums === undefined) {
+      detailHtml = `<div class="history-detail-note">Question details weren't recorded for this test.</div>`;
+    } else if (entry.wrongNums.length === 0) {
+      detailHtml = `<div class="history-detail-note">Perfect score \u2014 every question correct! \uD83C\uDF89</div>`;
+    } else {
+      detailHtml = `<div class="history-detail-label">Wrong answers (${entry.wrongNums.length})</div>`
+        + entry.wrongNums.map(num => reviewItemHtml(num, 'wrong')).join('');
+    }
+    if (entry.flagged && entry.flagged.length) {
+      detailHtml += `<div class="history-detail-label flag">Flagged for review (${entry.flagged.length})</div>`
+        + entry.flagged.map(num => reviewItemHtml(num, 'flag')).join('');
+    }
+
+    return `<div class="history-item">
+      <div class="history-item-head" tabindex="0" role="button" aria-expanded="false" onclick="toggleHistoryItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleHistoryItem(this)}">
+        <div class="history-score ${pass ? 'pass' : 'fail'}">${entry.score}%</div>
+        <div class="history-meta">
+          <div class="history-date">${dateStr} &middot; ${timeStr}</div>
+          <div class="history-sub">${entry.correct}/${entry.total} correct &middot; ${wrongCount} wrong &middot; ${pass ? 'Passed' : 'Not yet'}</div>
+        </div>
+        <span class="history-chevron">&#9662;</span>
+      </div>
+      <div class="history-detail">${detailHtml}</div>
+    </div>`;
+  }).join('');
+}
+function toggleHistoryItem(headEl) {
+  const item = headEl.closest('.history-item');
+  const open = item.classList.toggle('expanded');
+  headEl.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+// ========== Browse / question bank screen ==========
+let browseFilter = 'all';
+function showBrowse() {
+  browseFilter = 'all';
+  const search = document.getElementById('browse-search');
+  if (search) search.value = '';
+  renderBrowseFilters();
+  renderBrowseList();
+  showScreen('browse-screen');
+  window.scrollTo(0, 0);
+}
+function renderBrowseFilters() {
+  const host = document.getElementById('browse-filters');
+  const counts = {};
+  QUESTIONS.forEach(q => counts[getTopic(q)] = (counts[getTopic(q)] || 0) + 1);
+  const chips = [{ id: 'all', label: 'All', icon: '' }].concat(
+    TOPIC_DEFS.map(t => ({ id: t.id, label: t.label, icon: t.icon }))
+  );
+  host.innerHTML = chips.map(c => {
+    const active = browseFilter === c.id ? 'active' : '';
+    return `<button class="filter-chip ${active}" onclick="setBrowseFilter('${c.id}')">${c.icon ? c.icon + ' ' : ''}${escapeHTML(c.label)}</button>`;
+  }).join('');
+}
+function setBrowseFilter(id) {
+  browseFilter = id;
+  renderBrowseFilters();
+  renderBrowseList();
+}
+function renderBrowseList() {
+  const term = (document.getElementById('browse-search').value || '').trim().toLowerCase();
+  let qs = QUESTIONS.filter(q => browseFilter === 'all' || getTopic(q) === browseFilter);
+  if (term) {
+    qs = qs.filter(q => {
+      const text = getQuestionText(q).toLowerCase();
+      const opts = q.options.map(o => (typeof o === 'string' && !o.startsWith('IMG:')) ? o.toLowerCase() : '').join(' ');
+      return ('q' + q.number).includes(term) || String(q.number).includes(term) || text.includes(term) || opts.includes(term);
+    });
+  }
+  document.getElementById('browse-count').textContent = `${qs.length} question${qs.length !== 1 ? 's' : ''}`;
+  const host = document.getElementById('browse-list');
+  if (qs.length === 0) {
+    host.innerHTML = `<div class="empty-state">No questions match your search.</div>`;
+    return;
+  }
+  host.innerHTML = qs.map(q => reviewItemHtml(q.number, 'browse')).join('');
+}
+
 // ========== Reset ==========
 async function resetProgress() {
   const ok = await showConfirm({
@@ -1463,6 +1665,9 @@ async function resetProgress() {
 
 // ========== Keyboard shortcuts ==========
 function handleKeydown(e) {
+  const browseActive = document.getElementById('browse-screen').classList.contains('active');
+  const historyActive = document.getElementById('history-screen').classList.contains('active');
+  if ((browseActive || historyActive) && e.key === 'Escape') { e.preventDefault(); goHome(); return; }
   if (e.target.matches('input, textarea, [contenteditable]')) return;
   const ctrlLike = e.ctrlKey || e.metaKey || e.altKey;
   if (ctrlLike) return;
