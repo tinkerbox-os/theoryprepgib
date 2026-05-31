@@ -181,6 +181,14 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
 .review-item .q-num{font-weight:700;color:var(--primary);font-size:.85rem;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .review-item .q-num .expand-hint{font-size:.7rem;color:var(--text-secondary);font-weight:400}
 .review-item .q-preview{font-size:.85rem;color:var(--text-secondary);margin-top:2px}
+.review-row{display:flex;align-items:center;gap:12px}
+.review-item-main{flex:1;min-width:0}
+.review-thumb{width:56px;height:56px;object-fit:contain;background:#fff;border-radius:8px;padding:3px;border:1px solid var(--border-soft);flex-shrink:0}
+.browse-bm{flex-shrink:0;background:none;border:none;cursor:pointer;font-size:1.35rem;line-height:1;color:var(--text-secondary);padding:4px;border-radius:8px;-webkit-tap-highlight-color:transparent;transition:color .15s,transform .15s}
+.browse-bm:hover{color:var(--warn);transform:scale(1.1)}
+.browse-bm.active{color:var(--warn)}
+.browse-bm:focus-visible{outline:none;box-shadow:var(--ring)}
+.bm-tag{color:var(--warn);font-size:.8rem;margin-left:2px}
 .review-detail{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
 .review-detail .review-q-text{font-size:.9rem;font-weight:600;margin-bottom:10px;line-height:1.5;color:var(--text)}
 .review-detail .review-opt{padding:8px 12px;border-radius:8px;font-size:.85rem;margin-bottom:6px;border:1px solid var(--border);display:flex;align-items:flex-start;gap:8px;color:var(--text)}
@@ -1447,7 +1455,35 @@ function reviewItemHtml(num, kind) {
   const border = kind === 'wrong' ? 'var(--wrong)' : (kind === 'browse' ? 'var(--border)' : 'var(--primary)');
   const hint = kind === 'browse' ? 'Tap for answer' : 'Tap to review';
   const previewText = getQuestionText(q);
-  return `<div class="review-item" style="border-left-color:${border}" data-hint="${hint}" tabindex="0" onclick="toggleReviewDetail(this, ${num})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewDetail(this, ${num})}"><div class="q-num"><span>Q${num}</span><span class="expand-hint">${hint}</span></div><div class="q-preview">${escapeHTML(previewText.substring(0, 80))}${previewText.length > 80 ? '\u2026' : ''}</div></div>`;
+  const signSrc = getQuestionSign(q);
+  const thumb = signSrc ? `<img class="review-thumb" src="${signSrc}" alt="Sign for Q${num}" loading="lazy">` : '';
+  const isBm = state.bookmarked.includes(num);
+  const bmBtn = kind === 'browse'
+    ? `<button class="browse-bm ${isBm ? 'active' : ''}" onclick="event.stopPropagation();toggleBrowseBookmark(${num},this)" aria-label="${isBm ? 'Remove bookmark' : 'Bookmark question'}" aria-pressed="${isBm ? 'true' : 'false'}" title="${isBm ? 'Bookmarked' : 'Bookmark'}">${isBm ? '\u2605' : '\u2606'}</button>`
+    : '';
+  const bmTag = (kind !== 'browse' && isBm) ? ' <span class="bm-tag" title="Bookmarked">\u2605</span>' : '';
+  return `<div class="review-item" style="border-left-color:${border}" data-hint="${hint}" tabindex="0" onclick="toggleReviewDetail(this, ${num})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleReviewDetail(this, ${num})}">
+    <div class="review-row">
+      <div class="review-item-main">
+        <div class="q-num"><span>Q${num}${bmTag}</span><span class="expand-hint">${hint}</span></div>
+        <div class="q-preview">${escapeHTML(previewText.substring(0, 80))}${previewText.length > 80 ? '\u2026' : ''}</div>
+      </div>
+      ${thumb}
+      ${bmBtn}
+    </div>
+  </div>`;
+}
+function toggleBrowseBookmark(num, btn) {
+  const i = state.bookmarked.indexOf(num);
+  const wasBookmarked = i > -1;
+  if (wasBookmarked) { state.bookmarked.splice(i, 1); toast('Bookmark removed'); }
+  else { state.bookmarked.push(num); toast('Bookmarked'); }
+  saveState();
+  btn.classList.toggle('active', !wasBookmarked);
+  btn.innerHTML = wasBookmarked ? '\u2606' : '\u2605';
+  btn.setAttribute('aria-pressed', wasBookmarked ? 'false' : 'true');
+  btn.setAttribute('aria-label', wasBookmarked ? 'Bookmark question' : 'Remove bookmark');
+  btn.setAttribute('title', wasBookmarked ? 'Bookmark' : 'Bookmarked');
 }
 
 function goHome() {
