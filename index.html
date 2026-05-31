@@ -1058,7 +1058,8 @@ function showCurrentQuestion() {
   document.getElementById('feedback').classList.add('hidden');
   document.getElementById('feedback').innerHTML = '';
   document.getElementById('next-btn').classList.add('hidden');
-  document.getElementById('submit-multi-btn').classList.toggle('hidden', !isMulti);
+  // Check Answer stays hidden until the user picks at least one option.
+  document.getElementById('submit-multi-btn').classList.add('hidden');
 }
 
 function selectOption(idx) {
@@ -1075,6 +1076,7 @@ function selectOption(idx) {
       el.classList.toggle('selected', on);
       el.setAttribute('aria-checked', on ? 'true' : 'false');
     });
+    document.getElementById('submit-multi-btn').classList.toggle('hidden', selectedOptions.size === 0);
   } else {
     selectedOptions = new Set([idx]);
     checkAnswer();
