@@ -70,6 +70,10 @@ header h1{font-size:1.15rem;font-weight:700;color:var(--primary);line-height:1.2
 .feedback.wrong{background:var(--wrong-bg);color:var(--wrong)}
 .feedback .fb-icon{font-size:1.1rem;line-height:1.2;flex-shrink:0}
 .feedback .fb-body{flex:1}
+.advance-bar{margin-top:10px;height:4px;border-radius:100px;background:color-mix(in srgb, var(--correct) 25%, transparent);overflow:hidden}
+.advance-bar::after{content:"";display:block;height:100%;width:100%;background:var(--correct);border-radius:100px;transform-origin:left center;transform:scaleX(0);animation:advanceFill var(--advance-ms,1000ms) linear forwards}
+@keyframes advanceFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.advance-bar{display:none}}
 .explanation{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--primary-soft);color:var(--text);font-size:.85rem;font-weight:400;line-height:1.5;border-left:3px solid var(--primary)}
 .explanation strong{color:var(--primary);display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;gap:8px;font-family:inherit}
@@ -1083,6 +1087,9 @@ function checkAnswer() {
 
   const fb = document.getElementById('feedback');
   fb.classList.remove('hidden', 'correct', 'wrong');
+  fb.onclick = null;
+  fb.style.cursor = '';
+  fb.title = '';
   const letters = 'ABCDEFGH';
 
   if (isCorrect) {
@@ -1117,7 +1124,16 @@ function checkAnswer() {
   const isLast = state.currentIdx >= state.currentQueue.length - 1;
   if (isCorrect && isSingle && !isLast && state.mode !== 'mock') {
     nextBtn.classList.add('hidden');
-    autoAdvanceTimer = setTimeout(() => { autoAdvanceTimer = null; nextQuestion(); }, 850);
+    const ms = 1000;
+    const bar = document.createElement('div');
+    bar.className = 'advance-bar';
+    bar.style.setProperty('--advance-ms', ms + 'ms');
+    fb.appendChild(bar);
+    const skip = () => { if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; } nextQuestion(); };
+    fb.onclick = skip;
+    fb.style.cursor = 'pointer';
+    fb.title = 'Tap to continue';
+    autoAdvanceTimer = setTimeout(() => { autoAdvanceTimer = null; nextQuestion(); }, ms);
   } else {
     nextBtn.classList.remove('hidden');
     nextBtn.focus();
