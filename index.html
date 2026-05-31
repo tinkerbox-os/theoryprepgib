@@ -1127,11 +1127,11 @@ function checkAnswer() {
   const isLast = state.currentIdx >= state.currentQueue.length - 1;
   if (isCorrect && isSingle && !isLast && state.mode !== 'mock') {
     nextBtn.classList.add('hidden');
-    const ms = 1000;
+    const ms = 1200;
     const cue = document.createElement('div');
     cue.className = 'advance-cue';
     cue.innerHTML = `<span class="advance-label">Next question</span><span class="advance-bar"><span style="--advance-ms:${ms}ms"></span></span>`;
-    fb.appendChild(cue);
+    (fb.querySelector('.fb-body') || fb).appendChild(cue);
     const skip = () => { if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; } nextQuestion(); };
     fb.onclick = skip;
     fb.style.cursor = 'pointer';
