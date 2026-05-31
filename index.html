@@ -70,17 +70,6 @@ header h1{font-size:1.15rem;font-weight:700;color:var(--primary);line-height:1.2
 .feedback.wrong{background:var(--wrong-bg);color:var(--wrong)}
 .feedback .fb-icon{font-size:1.1rem;line-height:1.2;flex-shrink:0}
 .feedback .fb-body{flex:1}
-.advance-cue{display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 4px;border-radius:10px;-webkit-tap-highlight-color:transparent}
-.advance-cue .advance-label{font-size:.72rem;font-weight:700;color:var(--correct);white-space:nowrap;text-transform:uppercase;letter-spacing:.5px}
-.advance-cue.paused .advance-label{color:var(--text-secondary)}
-.advance-cue .advance-hint{font-size:.66rem;font-weight:600;color:var(--text-secondary);white-space:nowrap;opacity:.8}
-.advance-bar{flex:1;height:6px;border-radius:100px;background:rgba(22,163,74,.22);overflow:hidden}
-[data-theme="dark"] .advance-bar{background:rgba(52,211,153,.25)}
-.advance-cue.paused .advance-bar{background:var(--border)}
-.advance-bar>span{display:block;height:100%;width:100%;background:var(--correct);border-radius:100px;transform-origin:left center;transform:scaleX(0)}
-.advance-cue.paused .advance-bar>span{background:var(--text-secondary)}
-@keyframes advanceFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-@media(prefers-reduced-motion:reduce){.advance-bar>span{animation:none!important;transform:scaleX(1);opacity:.45}}
 .explanation{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--primary-soft);color:var(--text);font-size:.85rem;font-weight:400;line-height:1.5;border-left:3px solid var(--primary)}
 .explanation strong{color:var(--primary);display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;gap:8px;font-family:inherit}
@@ -425,11 +414,6 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
     <div class="feedback hidden" id="feedback" aria-live="polite"></div>
   </div>
   <div class="action-bar">
-    <div class="advance-cue hidden" id="advance-cue" role="button" tabindex="0" title="Tap to pause auto-advance">
-      <span class="advance-label" id="advance-label">Next question</span>
-      <span class="advance-bar"><span id="advance-fill"></span></span>
-      <span class="advance-hint" id="advance-hint">tap to pause</span>
-    </div>
     <div class="action-primary">
       <button class="btn btn-primary hidden" id="next-btn" onclick="nextQuestion()">Next Question &rarr;</button>
       <button class="btn btn-secondary hidden" id="submit-multi-btn" onclick="submitMultiAnswer()">Check Answer</button>
@@ -1069,19 +1053,6 @@ function showCurrentQuestion() {
   document.getElementById('next-btn').classList.add('hidden');
   // Check Answer stays hidden until the user picks at least one option.
   document.getElementById('submit-multi-btn').classList.add('hidden');
-  resetAdvanceCue();
-}
-
-function resetAdvanceCue() {
-  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
-  const cue = document.getElementById('advance-cue');
-  const fill = document.getElementById('advance-fill');
-  if (!cue) return;
-  cue.classList.add('hidden');
-  cue.classList.remove('paused');
-  cue.onclick = null;
-  cue.onkeydown = null;
-  if (fill) fill.style.animation = 'none';
 }
 
 function selectOption(idx) {
@@ -1159,41 +1130,9 @@ function checkAnswer() {
 
   document.getElementById('submit-multi-btn').classList.add('hidden');
   const nextBtn = document.getElementById('next-btn');
-  // Next Question button is always available in the sticky bar once answered.
+  // Always advance manually via the sticky Next Question button (no auto-advance).
   nextBtn.classList.remove('hidden');
-
-  // Auto-advance on correct single-answer (not multi, not last, not mock):
-  // show a countdown in the sticky bar, alongside Next Question, that the user can pause.
-  const isSingle = q.correct.length === 1;
-  const isLast = state.currentIdx >= state.currentQueue.length - 1;
-  if (isCorrect && isSingle && !isLast && state.mode !== 'mock') {
-    const ms = 1200;
-    const cue = document.getElementById('advance-cue');
-    const fill = document.getElementById('advance-fill');
-    const label = document.getElementById('advance-label');
-    const hint = document.getElementById('advance-hint');
-    cue.classList.remove('hidden', 'paused');
-    label.textContent = 'Next question';
-    if (hint) hint.textContent = 'tap to pause';
-    // restart the fill animation
-    fill.style.animation = 'none';
-    void fill.offsetWidth;
-    fill.style.animation = `advanceFill ${ms}ms linear forwards`;
-    const pauseAuto = () => {
-      if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
-      fill.style.animationPlayState = 'paused';
-      cue.classList.add('paused');
-      label.textContent = 'Paused';
-      if (hint) hint.textContent = 'tap Next when ready';
-      cue.onclick = null;
-      cue.onkeydown = null;
-    };
-    cue.onclick = pauseAuto;
-    cue.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pauseAuto(); } };
-    autoAdvanceTimer = setTimeout(() => { autoAdvanceTimer = null; nextQuestion(); }, ms);
-  } else {
-    nextBtn.focus();
-  }
+  nextBtn.focus();
   saveState();
 }
 
