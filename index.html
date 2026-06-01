@@ -103,22 +103,39 @@ details.welcome-features-wrap>summary::after{content:"\25BE";display:inline-bloc
 details.welcome-features-wrap[open]>summary::after{transform:rotate(180deg)}
 details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeSlide .25s ease-out}
 .feature{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,var(--primary-soft),var(--accent-soft));border-radius:10px;padding:12px 14px;cursor:default;border:1px solid var(--border-soft)}
-.feature-icon{font-size:1.25rem;flex-shrink:0;line-height:1}
+.feature-icon{flex-shrink:0;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.65)}
+[data-theme="dark"] .feature-icon{background:rgba(255,255,255,.08)}
+.feature-icon svg{width:18px;height:18px;display:block}
 .feature-body{display:flex;flex-direction:column}
 .feature-title{font-weight:600;font-size:.8rem;color:var(--text);line-height:1.3}
 .feature-desc{color:var(--text-secondary);font-size:.72rem;line-height:1.4;margin-top:2px}
 .mode-select{display:flex;flex-direction:column;gap:10px;margin:16px 0}
-.mode-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:12px;width:100%;font-family:inherit;color:inherit}
-.mode-btn:hover{border-color:var(--primary);background:var(--primary-soft);transform:translateY(-1px)}
+.mode-btn{padding:13px 15px;border-radius:14px;border:1px solid var(--border);background:var(--card);cursor:pointer;text-align:left;transition:transform .15s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease;display:flex;align-items:center;gap:13px;width:100%;font-family:inherit;color:inherit;box-shadow:var(--shadow);-webkit-tap-highlight-color:transparent}
+@media(hover:hover){.mode-btn:hover{border-color:transparent;background:var(--card-elevated);box-shadow:var(--shadow-lg);transform:translateY(-2px)}}
+.mode-btn:active{transform:translateY(0) scale(.992)}
 .mode-btn:focus-visible{outline:none;box-shadow:var(--ring)}
-.mode-btn .mode-icon{font-size:1.5rem;flex-shrink:0;line-height:1}
+.mode-btn .mode-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex-shrink:0;background:var(--mi-bg,var(--primary-soft));color:var(--mi-fg,var(--primary))}
+.mode-btn .mode-icon svg{width:22px;height:22px;display:block}
+.mode-icon.mi-blue{background:var(--primary-soft);color:var(--primary)}
+.mode-icon.mi-purple{background:var(--accent-soft);color:var(--accent)}
+.mode-icon.mi-amber{background:var(--warn-bg);color:var(--warn-text)}
+[data-theme="dark"] .mode-icon.mi-amber{color:var(--warn)}
+.mode-icon.mi-green{background:var(--correct-bg);color:var(--correct)}
+.mode-icon.mi-red{background:var(--wrong-bg);color:var(--wrong)}
+.mode-icon.mi-slate{background:var(--border-soft);color:var(--text-secondary)}
+.mode-icon.mi-emoji{background:var(--border-soft);font-size:1.4rem;line-height:1}
 .mode-btn .mode-body{flex:1;min-width:0}
-.mode-btn h3{font-size:.98rem;font-weight:700;color:var(--primary);margin-bottom:2px}
-.mode-btn p{font-size:.82rem;color:var(--text-secondary);line-height:1.35}
-.mode-btn.primary{background:linear-gradient(135deg,var(--primary),var(--accent));border-color:transparent;color:#fff}
-.mode-btn.primary h3,.mode-btn.primary p{color:#fff}
-.mode-btn.primary p{color:rgba(255,255,255,.85)}
-.mode-btn.primary:hover{filter:brightness(1.05)}
+.mode-btn h3{font-size:.98rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.mode-btn p{font-size:.8rem;color:var(--text-secondary);line-height:1.35}
+.mode-btn .mode-go{flex-shrink:0;color:var(--text-secondary);opacity:.4;display:flex;align-items:center;transition:opacity .2s ease,transform .2s ease}
+.mode-btn .mode-go svg{width:18px;height:18px;display:block}
+@media(hover:hover){.mode-btn:hover .mode-go{opacity:.85;transform:translateX(2px)}}
+.mode-btn.primary{background:linear-gradient(135deg,var(--primary),var(--accent));border-color:transparent;color:#fff;box-shadow:0 10px 24px -8px color-mix(in srgb,var(--primary) 75%,transparent)}
+.mode-btn.primary h3{color:#fff}
+.mode-btn.primary p{color:rgba(255,255,255,.88)}
+.mode-btn.primary .mode-icon{background:rgba(255,255,255,.2);color:#fff}
+.mode-btn.primary .mode-go{color:#fff;opacity:.85}
+@media(hover:hover){.mode-btn.primary:hover{filter:brightness(1.04)}}
 .score-history{background:var(--card);border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:var(--shadow)}
 .score-history.clickable{cursor:pointer;transition:box-shadow .2s,transform .2s;-webkit-tap-highlight-color:transparent}
 @media(hover:hover){.score-history.clickable:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}}
@@ -308,84 +325,94 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
   <details class="welcome-features-wrap" id="features-disclosure">
     <summary><span>How this works</span></summary>
     <div class="welcome-features">
-      <div class="feature"><div class="feature-icon">&#x1F3AF;</div><div class="feature-body"><div class="feature-title">Smart Review</div><div class="feature-desc">Wrong answers come back until you get them right</div></div></div>
-      <div class="feature"><div class="feature-icon">&#x1F4CA;</div><div class="feature-body"><div class="feature-title">Track Progress</div><div class="feature-desc">See your mastery grow with each round</div></div></div>
-      <div class="feature"><div class="feature-icon">&#x1F504;</div><div class="feature-body"><div class="feature-title">Spaced Rounds</div><div class="feature-desc">Missed questions repeat in the next round</div></div></div>
-      <div class="feature"><div class="feature-icon">&#x1F4BE;</div><div class="feature-body"><div class="feature-title">Auto-Save</div><div class="feature-desc">Progress saved in your browser automatically</div></div></div>
+      <div class="feature"><div class="feature-icon" style="color:var(--primary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg></div><div class="feature-body"><div class="feature-title">Smart Review</div><div class="feature-desc">Wrong answers come back until you get them right</div></div></div>
+      <div class="feature"><div class="feature-icon" style="color:var(--accent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="feature-body"><div class="feature-title">Track Progress</div><div class="feature-desc">See your mastery grow with each round</div></div></div>
+      <div class="feature"><div class="feature-icon" style="color:var(--correct)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><div class="feature-body"><div class="feature-title">Spaced Rounds</div><div class="feature-desc">Missed questions repeat in the next round</div></div></div>
+      <div class="feature"><div class="feature-icon" style="color:var(--primary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></div><div class="feature-body"><div class="feature-title">Auto-Save</div><div class="feature-desc">Progress saved in your browser automatically</div></div></div>
     </div>
   </details>
   <div class="card hidden" id="mastery-progress" style="text-align:center;padding:16px 20px"></div>
   <div class="score-history hidden" id="score-history"></div>
   <div class="mode-select">
     <button class="mode-btn hidden" id="continue-btn" onclick="continuePractice()">
-      <span class="mode-icon">&#x25B6;&#xFE0F;</span>
+      <span class="mode-icon mi-blue"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5.6v12.8a1 1 0 0 0 1.54.84l9.6-6.4a1 1 0 0 0 0-1.68l-9.6-6.4A1 1 0 0 0 7 5.6z"/></svg></span>
       <span class="mode-body">
         <h3>Continue Practice</h3>
         <p id="continue-desc">Resume where you left off</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn primary" onclick="startFullPractice()">
-      <span class="mode-icon">&#x1F680;</span>
+      <span class="mode-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
       <span class="mode-body">
         <h3>Start Practice</h3>
         <p id="start-desc">Go through all 268 questions. Missed ones repeat until mastered.</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn" onclick="startMockTest()">
-      <span class="mode-icon">&#x1F4DD;</span>
+      <span class="mode-icon mi-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></span>
       <span class="mode-body">
         <h3>Mock Test &middot; 50 questions</h3>
         <p>Simulates the real exam with a 45-minute timer &middot; 80% to pass</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn" onclick="startQuickQuiz()">
-      <span class="mode-icon">&#x26A1;</span>
+      <span class="mode-icon mi-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
       <span class="mode-body">
         <h3>Quick Quiz &middot; 20 questions</h3>
         <p>Random selection focused on questions you haven&rsquo;t mastered yet</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn" onclick="openTopicPicker()">
-      <span class="mode-icon">&#x1F4DA;</span>
+      <span class="mode-icon mi-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
       <span class="mode-body">
         <h3>Practice by Topic</h3>
         <p>Drill specific areas: signs, motorways, weather, stopping distances&hellip;</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn" onclick="showBrowse()">
-      <span class="mode-icon">&#x1F4D1;</span>
+      <span class="mode-icon mi-slate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
       <span class="mode-body">
         <h3>Browse All Questions</h3>
         <p>Read through the whole question bank with answers, like the PDF</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn hidden" id="history-btn" onclick="showTestHistory()">
-      <span class="mode-icon">&#x1F4C8;</span>
+      <span class="mode-icon mi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
       <span class="mode-body">
         <h3 id="history-title">Test History</h3>
         <p>Review past quizzes, practice rounds and mock tests &mdash; and the questions you missed</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn hidden" id="hardest-btn" onclick="startHardestQuestions()">
-      <span class="mode-icon">&#x1F525;</span>
+      <span class="mode-icon mi-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
       <span class="mode-body">
         <h3 id="hardest-title">Hardest Questions</h3>
         <p>Drill the questions you&rsquo;ve gotten wrong most often</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn hidden" id="bookmarked-btn" onclick="startBookmarkedReview()">
-      <span class="mode-icon">&#x2B50;</span>
+      <span class="mode-icon mi-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
       <span class="mode-body">
         <h3 id="bookmarked-title">Review Bookmarked (0)</h3>
         <p>Quiz yourself on questions you&rsquo;ve starred</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
     <button class="mode-btn hidden" id="study-btn" onclick="startStudyMode()">
-      <span class="mode-icon">&#x1F4D6;</span>
+      <span class="mode-icon mi-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
       <span class="mode-body">
         <h3 id="study-title">Study Bookmarked (0)</h3>
         <p>Flashcard mode &mdash; see questions with answers revealed</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>
   </div>
   <div class="actions">
@@ -949,11 +976,12 @@ function openTopicPicker() {
   list.innerHTML = TOPIC_DEFS.map(t => {
     const n = counts[t.id] || 0;
     return `<button class="mode-btn" onclick="startTopicPractice('${t.id}')">
-      <span class="mode-icon">${t.icon}</span>
+      <span class="mode-icon mi-emoji">${t.icon}</span>
       <span class="mode-body">
-        <h3>${t.label}</h3>
+        <h3>${escapeHTML(t.label)}</h3>
         <p>${n} question${n!==1?'s':''} \u00b7 up to 20 per session</p>
       </span>
+      <span class="mode-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
     </button>`;
   }).join('');
   document.getElementById('topic-overlay').classList.remove('hidden');
