@@ -143,6 +143,11 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
 .history-score.fail{background:var(--wrong-bg);color:var(--wrong)}
 .history-meta{flex:1;min-width:0}
 .history-date{font-weight:600;color:var(--text);font-size:.92rem}
+.history-type{display:inline-block;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:2px 7px;border-radius:100px;background:var(--primary-soft);color:var(--primary);vertical-align:middle;margin-right:5px}
+.history-type.type-mock{background:var(--accent-soft);color:var(--accent)}
+.history-type.type-quick{background:var(--warn-bg);color:var(--warn-text)}
+[data-theme="dark"] .history-type.type-quick{color:var(--warn)}
+.history-type.type-full{background:var(--correct-bg);color:var(--correct)}
 .history-sub{color:var(--text-secondary);font-size:.8rem;margin-top:2px}
 .history-chevron{color:var(--text-secondary);font-size:.8rem;transition:transform .2s;flex-shrink:0}
 .history-item.expanded .history-chevron{transform:rotate(180deg)}
@@ -167,7 +172,7 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
 .complete-screen p{color:var(--text-secondary);margin-bottom:8px}
 .score-ring-wrap{display:flex;justify-content:center;margin:10px 0 18px}
 .score-ring{position:relative;width:160px;height:160px}
-.score-ring svg{transform:rotate(-90deg)}
+.score-ring svg{width:100%;height:100%;display:block;transform:rotate(-90deg)}
 .score-ring .ring-track{fill:none;stroke:var(--border-soft);stroke-width:12}
 .score-ring .ring-prog{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s ease-out}
 .score-ring .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
@@ -358,7 +363,7 @@ details.welcome-features-wrap .welcome-features{margin:8px 0 4px;animation:fadeS
       <span class="mode-icon">&#x1F4C8;</span>
       <span class="mode-body">
         <h3 id="history-title">Test History</h3>
-        <p>Review past mock tests and the questions you missed</p>
+        <p>Review past quizzes, practice rounds and mock tests &mdash; and the questions you missed</p>
       </span>
     </button>
     <button class="mode-btn hidden" id="hardest-btn" onclick="startHardestQuestions()">
@@ -770,6 +775,15 @@ function updateWelcome() {
   renderScoreHistory();
 }
 
+const MODE_LABELS = { mock: 'Mock Test', quick: 'Quick Quiz', full: 'Practice', hardest: 'Hardest Questions', bookmarked: 'Bookmarked', topic: 'Topic' };
+function modeLabel(mode, topic) {
+  if (mode === 'topic') {
+    const t = TOPIC_DEFS.find(td => td.id === topic);
+    return t ? t.label : 'Topic';
+  }
+  return MODE_LABELS[mode] || 'Practice';
+}
+
 function getHardestQuestionNums() {
   const entries = Object.entries(state.wrongCount || {})
     .filter(([, n]) => n > 0)
@@ -805,7 +819,7 @@ function renderScoreHistory() {
   host.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showTestHistory(); } };
   host.innerHTML = `
     <div class="score-history-head">
-      <strong>Mock test history</strong>
+      <strong>Recent scores</strong>
       <span>Latest: <strong style="color:${latest.score>=80?'var(--correct)':'var(--wrong)'}">${latest.score}%</strong> &middot; Avg ${avg}%</span>
     </div>
     <svg class="sparkline" viewBox="0 0 ${w} ${h}">
@@ -1344,17 +1358,20 @@ function showComplete(allMastered) {
   const verdictWrap = document.getElementById('verdict-pill-wrap');
   verdictWrap.innerHTML = '';
 
-  // Record mock test to history
-  if (state.mode === 'mock' && total > 0) {
+  // Record every completed test (all modes) to history
+  if (total > 0 && state.mode !== 'study') {
     state.mockHistory = state.mockHistory || [];
     state.mockHistory.push({
-      date: Date.now(), score: pct, correct: state.roundCorrect, total,
+      date: Date.now(), mode: state.mode, label: modeLabel(state.mode, state.topic),
+      score: pct, correct: state.roundCorrect, total,
       wrongNums: [...state.roundWrongNums],
-      flagged: [...(state.mockFlags || [])].filter(n => !state.roundWrongNums.includes(n))
+      flagged: state.mode === 'mock'
+        ? [...(state.mockFlags || [])].filter(n => !state.roundWrongNums.includes(n))
+        : []
     });
-    state.mockHistory = state.mockHistory.slice(-20);
-    state.timerSeconds = null;
+    state.mockHistory = state.mockHistory.slice(-50);
   }
+  if (state.mode === 'mock') state.timerSeconds = null;
   // Clear current queue so "Continue" doesn't show a finished session
   state.currentQueue = [];
   state.currentIdx = 0;
@@ -1612,19 +1629,25 @@ function renderTestHistory() {
   const hist = (state.mockHistory || []).slice().reverse();
   if (hist.length === 0) {
     summary.textContent = '';
-    host.innerHTML = `<div class="empty-state">You haven't completed any mock tests yet.<br>Take a mock test and your results will appear here.</div>`;
+    host.innerHTML = `<div class="empty-state">You haven't completed any tests yet.<br>Finish a quiz, practice round or mock test and your results will appear here.</div>`;
     return;
   }
-  const passes = hist.filter(h => h.score >= 80).length;
   const avg = Math.round(hist.reduce((a, b) => a + b.score, 0) / hist.length);
-  summary.textContent = `${hist.length} test${hist.length !== 1 ? 's' : ''} \u00b7 ${passes} passed \u00b7 ${avg}% average`;
+  const mockCount = hist.filter(h => (h.mode || 'mock') === 'mock').length;
+  const mockSuffix = mockCount > 0
+    ? ` \u00b7 ${hist.filter(h => (h.mode || 'mock') === 'mock' && h.score >= 80).length}/${mockCount} mocks passed`
+    : '';
+  summary.textContent = `${hist.length} test${hist.length !== 1 ? 's' : ''} \u00b7 ${avg}% average${mockSuffix}`;
 
   host.innerHTML = hist.map(entry => {
-    const pass = entry.score >= 80;
+    const mode = entry.mode || 'mock';
+    const isMock = mode === 'mock';
+    const good = entry.score >= 80;
     const d = new Date(entry.date);
     const dateStr = d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
     const timeStr = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
     const wrongCount = entry.total - entry.correct;
+    const label = entry.label || modeLabel(mode, entry.topic);
 
     let detailHtml;
     if (entry.wrongNums === undefined) {
@@ -1640,12 +1663,13 @@ function renderTestHistory() {
         + entry.flagged.map(num => reviewItemHtml(num, 'flag')).join('');
     }
 
+    const verdict = isMock ? (good ? 'Passed' : 'Not yet') : `${entry.score}%`;
     return `<div class="history-item">
       <div class="history-item-head" tabindex="0" role="button" aria-expanded="false" onclick="toggleHistoryItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleHistoryItem(this)}">
-        <div class="history-score ${pass ? 'pass' : 'fail'}">${entry.score}%</div>
+        <div class="history-score ${good ? 'pass' : 'fail'}">${entry.score}%</div>
         <div class="history-meta">
-          <div class="history-date">${dateStr} &middot; ${timeStr}</div>
-          <div class="history-sub">${entry.correct}/${entry.total} correct &middot; ${wrongCount} wrong &middot; ${pass ? 'Passed' : 'Not yet'}</div>
+          <div class="history-date"><span class="history-type type-${mode}">${escapeHTML(label)}</span> ${dateStr} &middot; ${timeStr}</div>
+          <div class="history-sub">${entry.correct}/${entry.total} correct &middot; ${wrongCount} wrong &middot; ${verdict}</div>
         </div>
         <span class="history-chevron">&#9662;</span>
       </div>
